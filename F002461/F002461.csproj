@@ -1,0 +1,300 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D0BD0B89-776F-4097-85AC-E8FF29C629A4}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>F002461</RootNamespace>
+    <AssemblyName>F002461</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>Lib\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="libnodave.net">
+      <HintPath>Lib\libnodave.net.dll</HintPath>
+    </Reference>
+    <Reference Include="MDCS">
+      <HintPath>Lib\MDCS.dll</HintPath>
+    </Reference>
+    <Reference Include="MDCS.XmlSerializers">
+      <HintPath>Lib\MDCS.XmlSerializers.dll</HintPath>
+    </Reference>
+    <Reference Include="MESWebAPI">
+      <HintPath>Lib\MESWebAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="NationalInstruments.Common, Version=19.0.40.49152, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Lib\NationalInstruments.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="NationalInstruments.DAQmx">
+      <HintPath>Lib\NationalInstruments.DAQmx.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UploadTestData">
+      <HintPath>Lib\UploadTestData.dll</HintPath>
+    </Reference>
+    <Reference Include="WinTcpS7_1K">
+      <HintPath>Lib\WinTcpS7_1K.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\clsDaqmx.cs" />
+    <Compile Include="Common\clsExecProcess.cs" />
+    <Compile Include="Common\clsIniFile.cs" />
+    <Compile Include="Common\clsIPMAC.cs" />
+    <Compile Include="Common\clsMDCS.cs" />
+    <Compile Include="Common\clsNI6001.cs" />
+    <Compile Include="Common\clsStructure.cs" />
+    <Compile Include="Common\clsUtil.cs" />
+    <Compile Include="Common\CPLCDave.cs" />
+    <Compile Include="Common\UsbEnumerator.cs" />
+    <Compile Include="Common\Win32.cs" />
+    <Compile Include="Forms\frmConfirmOK.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmConfirmOK.Designer.cs">
+      <DependentUpon>frmConfirmOK.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmConfirmYESNO.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmConfirmYESNO.Designer.cs">
+      <DependentUpon>frmConfirmYESNO.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmFail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmFail.Designer.cs">
+      <DependentUpon>frmFail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmMCF.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmMCF.Designer.cs">
+      <DependentUpon>frmMCF.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FrmMES.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmMES.Designer.cs">
+      <DependentUpon>FrmMES.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPass.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmPass.Designer.cs">
+      <DependentUpon>frmPass.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmProgress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmProgress.Designer.cs">
+      <DependentUpon>frmProgress.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSetupUSB.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmSetupUSB.Designer.cs">
+      <DependentUpon>frmSetupUSB.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain.Designer.cs">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Forms\frmConfirmOK.resx">
+      <DependentUpon>frmConfirmOK.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmConfirmYESNO.resx">
+      <DependentUpon>frmConfirmYESNO.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmFail.resx">
+      <DependentUpon>frmFail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmMCF.resx">
+      <DependentUpon>frmMCF.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmMES.resx">
+      <DependentUpon>FrmMES.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmPass.resx">
+      <DependentUpon>frmPass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmSetupUSB.resx">
+      <DependentUpon>frmSetupUSB.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMain.resx">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="BAT\ADBConnected.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="BAT\CheckManualBITResult.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="BAT\CheckSDCard.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="BAT\CheckSKU.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="BAT\FastbootDevice.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="BAT\Keybox.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="BAT\RebootBootloader.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="BAT\RebootEDL.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="EDA51\EDA51-0_Option.ini" />
+    <None Include="EDA51\EDA51-1_Option.ini" />
+    <None Include="EDA56\EDA56-0_Option.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="EDA56\EDA56-1_Option.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Option.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="Setup.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SKUMatrix.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\close_20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\maximize_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\minimize_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SKUOption.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="Resources\menu_35.png" />
+    <None Include="Resources\HoneywellLog_128.png" />
+    <None Include="Resources\HoneywellLog_150.png" />
+    <Content Include="Resources\normal_16.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
