@@ -225,8 +225,6 @@ goto :end
 
 :UL
 ::UL-11A081011CK
-::UL-11A081011RK
-::UL-11A081012RK
 ::UL-00A081011RK
 set WWAN=%sku:~3,2%
 echo WWAN flag %WWAN%

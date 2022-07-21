@@ -165,7 +165,7 @@ namespace F002461
         private bool m_b_PLCRuning = false;
         private int m_i_WatchDog = 0;
 
-        private object SaveLogLocker = new object();
+        private static readonly object SaveLogLocker = new object();
 
         #endregion
 
@@ -182,15 +182,48 @@ namespace F002461
             this.DoubleBuffered = true;
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
 
-
-
-
         }
 
         #endregion
 
         #region Menu
 
+        private void PortMapping_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_b_Setting = true;
+
+            if (m_st_OptionData.TestMode == "1")
+            {
+                timerAutoTest.Enabled = false;
+                timerKillProcess.Enabled = false;
+
+                if (m_timer_WatchDog != null)
+                {
+                    m_timer_WatchDog.Dispose();
+                    m_timer_WatchDog = null;
+                }
+            }
+            else
+            {
+                timerMonitor.Enabled = false;
+                timerDeviceConnect.Enabled = false;
+                timerKillProcess.Enabled = false;
+            }
+
+            frmSetupUSB frm = new frmSetupUSB();
+            frm.m_str_Model = m_str_Model;
+            frm.ShowDialog();
+        }
+
+        private void DeleteCOMArbiterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void HWSerNumEmulationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
 
         #endregion
 
@@ -7029,7 +7062,7 @@ namespace F002461
                 this.WindowState = FormWindowState.Maximized;
                 this.btnMaximize.Image = Resources.normal_16;
                 this.panelMenu.Width = 250;
-                this.panelLog.Height = 200;
+                this.panelLog.Height = 160;
             }
             else
             {
@@ -7048,12 +7081,14 @@ namespace F002461
 
         private void lblTitleBar_MouseDown(object sender, MouseEventArgs e)
         {
-            this.panelMenu.Width = 200;
+            if (this.panelMenu.Width > 200)
+            {
+                this.panelMenu.Width = 200;
+            }
             this.panelLog.Height = 145;
 
             Win32.ReleaseCapture();
             Win32.SendMessage(this.Handle, 0x112, 0xf012, 0);
-   
         }
 
         private void lblTitleBar_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -7123,6 +7158,8 @@ namespace F002461
 
         }
 
+        
+
 
         #endregion
 
@@ -7139,35 +7176,6 @@ namespace F002461
 
         #endregion
 
-        private void PortMapping_ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            m_b_Setting = true;
-
-            if (m_st_OptionData.TestMode == "1")
-            {
-                timerAutoTest.Enabled = false;
-                timerKillProcess.Enabled = false;
-
-                if (m_timer_WatchDog != null)
-                {
-                    m_timer_WatchDog.Dispose();
-                    m_timer_WatchDog = null;
-                }
-            }
-            else
-            {
-                timerMonitor.Enabled = false;
-                timerDeviceConnect.Enabled = false;
-                timerKillProcess.Enabled = false;
-            }
-
-            frmSetupUSB frm = new frmSetupUSB();
-            frm.m_str_Model = m_str_Model;
-            frm.ShowDialog();
-        }
-
-      
-    
-    
+        
     }
 }

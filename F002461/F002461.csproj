@@ -242,12 +242,14 @@
     </None>
     <None Include="EDA51\EDA51-0_Option.ini" />
     <None Include="EDA51\EDA51-1_Option.ini" />
+    <None Include="EDA51\Option.ini" />
     <None Include="EDA56\EDA56-0_Option.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="EDA56\EDA56-1_Option.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="EDA56\Option.ini" />
     <None Include="Option.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -280,9 +282,6 @@
     <None Include="Resources\minimize_16.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="SKUOption.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="Resources\menu_35.png" />
     <None Include="Resources\HoneywellLog_128.png" />
     <None Include="Resources\HoneywellLog_150.png" />

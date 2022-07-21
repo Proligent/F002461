@@ -12,8 +12,6 @@ namespace F002461
      *  REV     AUTHOR      DATE            COMMENTS
      *  A       CalvinXie   2022/06/19      First Version.
      *  
-     * 
-     * 
      ********************************************************************/
 
     static class Program
@@ -42,7 +40,6 @@ namespace F002461
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new frmMain());
-
                 mutex.ReleaseMutex();
             }
             else

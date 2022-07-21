@@ -100,6 +100,8 @@
             this.timerKillProcess = new System.Windows.Forms.Timer(this.components);
             this.timerCopyImage = new System.Windows.Forms.Timer(this.components);
             this.timerAutoTest = new System.Windows.Forms.Timer(this.components);
+            this.deleteCOMArbiterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hWSerNumEmulationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelTitleBar.SuspendLayout();
             this.panelMain.SuspendLayout();
             this.panelDesktop.SuspendLayout();
@@ -145,7 +147,7 @@
             this.panelTitleBar.Location = new System.Drawing.Point(0, 0);
             this.panelTitleBar.Margin = new System.Windows.Forms.Padding(0);
             this.panelTitleBar.Name = "panelTitleBar";
-            this.panelTitleBar.Size = new System.Drawing.Size(1365, 47);
+            this.panelTitleBar.Size = new System.Drawing.Size(1365, 40);
             this.panelTitleBar.TabIndex = 0;
             // 
             // btnMinimize
@@ -158,7 +160,7 @@
             this.btnMinimize.Location = new System.Drawing.Point(1224, 0);
             this.btnMinimize.Margin = new System.Windows.Forms.Padding(0);
             this.btnMinimize.Name = "btnMinimize";
-            this.btnMinimize.Size = new System.Drawing.Size(47, 47);
+            this.btnMinimize.Size = new System.Drawing.Size(47, 40);
             this.btnMinimize.TabIndex = 3;
             this.btnMinimize.UseVisualStyleBackColor = false;
             this.btnMinimize.Click += new System.EventHandler(this.btnMinimize_Click);
@@ -173,7 +175,7 @@
             this.btnMaximize.Location = new System.Drawing.Point(1271, 0);
             this.btnMaximize.Margin = new System.Windows.Forms.Padding(0);
             this.btnMaximize.Name = "btnMaximize";
-            this.btnMaximize.Size = new System.Drawing.Size(47, 47);
+            this.btnMaximize.Size = new System.Drawing.Size(47, 40);
             this.btnMaximize.TabIndex = 2;
             this.btnMaximize.UseVisualStyleBackColor = false;
             this.btnMaximize.Click += new System.EventHandler(this.btnMaximize_Click);
@@ -188,7 +190,7 @@
             this.btnClose.Location = new System.Drawing.Point(1318, 0);
             this.btnClose.Margin = new System.Windows.Forms.Padding(0);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(47, 47);
+            this.btnClose.Size = new System.Drawing.Size(47, 40);
             this.btnClose.TabIndex = 1;
             this.btnClose.UseVisualStyleBackColor = false;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
@@ -201,7 +203,7 @@
             this.lblTitleBar.Margin = new System.Windows.Forms.Padding(0);
             this.lblTitleBar.Name = "lblTitleBar";
             this.lblTitleBar.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblTitleBar.Size = new System.Drawing.Size(1245, 47);
+            this.lblTitleBar.Size = new System.Drawing.Size(1245, 40);
             this.lblTitleBar.TabIndex = 1;
             this.lblTitleBar.Text = "F002461-Flash";
             this.lblTitleBar.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -214,10 +216,10 @@
             this.panelMain.Controls.Add(this.panelMenu);
             this.panelMain.Controls.Add(this.menuStrip1);
             this.panelMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelMain.Location = new System.Drawing.Point(0, 47);
+            this.panelMain.Location = new System.Drawing.Point(0, 40);
             this.panelMain.Margin = new System.Windows.Forms.Padding(0);
             this.panelMain.Name = "panelMain";
-            this.panelMain.Size = new System.Drawing.Size(1365, 977);
+            this.panelMain.Size = new System.Drawing.Size(1365, 984);
             this.panelMain.TabIndex = 1;
             // 
             // panelDesktop
@@ -228,7 +230,7 @@
             this.panelDesktop.Location = new System.Drawing.Point(267, 30);
             this.panelDesktop.Margin = new System.Windows.Forms.Padding(0);
             this.panelDesktop.Name = "panelDesktop";
-            this.panelDesktop.Size = new System.Drawing.Size(1098, 947);
+            this.panelDesktop.Size = new System.Drawing.Size(1098, 954);
             this.panelDesktop.TabIndex = 2;
             this.panelDesktop.Resize += new System.EventHandler(this.panelDesktop_Resize);
             // 
@@ -240,8 +242,8 @@
             this.panelUnits.Location = new System.Drawing.Point(0, 0);
             this.panelUnits.Margin = new System.Windows.Forms.Padding(0);
             this.panelUnits.Name = "panelUnits";
-            this.panelUnits.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.panelUnits.Size = new System.Drawing.Size(1098, 754);
+            this.panelUnits.Padding = new System.Windows.Forms.Padding(4);
+            this.panelUnits.Size = new System.Drawing.Size(1098, 761);
             this.panelUnits.TabIndex = 2;
             // 
             // panelUnitBottom
@@ -252,7 +254,7 @@
             this.panelUnitBottom.Location = new System.Drawing.Point(4, 379);
             this.panelUnitBottom.Margin = new System.Windows.Forms.Padding(0);
             this.panelUnitBottom.Name = "panelUnitBottom";
-            this.panelUnitBottom.Size = new System.Drawing.Size(1090, 371);
+            this.panelUnitBottom.Size = new System.Drawing.Size(1090, 378);
             this.panelUnitBottom.TabIndex = 1;
             // 
             // panelUnit4
@@ -265,8 +267,8 @@
             this.panelUnit4.Location = new System.Drawing.Point(545, 0);
             this.panelUnit4.Margin = new System.Windows.Forms.Padding(0);
             this.panelUnit4.Name = "panelUnit4";
-            this.panelUnit4.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.panelUnit4.Size = new System.Drawing.Size(545, 371);
+            this.panelUnit4.Padding = new System.Windows.Forms.Padding(4);
+            this.panelUnit4.Size = new System.Drawing.Size(545, 378);
             this.panelUnit4.TabIndex = 1;
             // 
             // panelUnit4Log
@@ -276,7 +278,7 @@
             this.panelUnit4Log.Location = new System.Drawing.Point(4, 84);
             this.panelUnit4Log.Margin = new System.Windows.Forms.Padding(0);
             this.panelUnit4Log.Name = "panelUnit4Log";
-            this.panelUnit4Log.Size = new System.Drawing.Size(535, 281);
+            this.panelUnit4Log.Size = new System.Drawing.Size(535, 288);
             this.panelUnit4Log.TabIndex = 3;
             // 
             // rtbUnit4Log
@@ -285,10 +287,10 @@
             this.rtbUnit4Log.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtbUnit4Log.Font = new System.Drawing.Font("Courier New", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rtbUnit4Log.Location = new System.Drawing.Point(0, 0);
-            this.rtbUnit4Log.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rtbUnit4Log.Margin = new System.Windows.Forms.Padding(4);
             this.rtbUnit4Log.Name = "rtbUnit4Log";
             this.rtbUnit4Log.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.rtbUnit4Log.Size = new System.Drawing.Size(535, 281);
+            this.rtbUnit4Log.Size = new System.Drawing.Size(535, 288);
             this.rtbUnit4Log.TabIndex = 1;
             this.rtbUnit4Log.Text = "";
             // 
@@ -363,8 +365,8 @@
             this.panelUnit3.Location = new System.Drawing.Point(0, 0);
             this.panelUnit3.Margin = new System.Windows.Forms.Padding(0);
             this.panelUnit3.Name = "panelUnit3";
-            this.panelUnit3.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.panelUnit3.Size = new System.Drawing.Size(545, 371);
+            this.panelUnit3.Padding = new System.Windows.Forms.Padding(4);
+            this.panelUnit3.Size = new System.Drawing.Size(545, 378);
             this.panelUnit3.TabIndex = 0;
             // 
             // panelUnit3Log
@@ -374,7 +376,7 @@
             this.panelUnit3Log.Location = new System.Drawing.Point(4, 84);
             this.panelUnit3Log.Margin = new System.Windows.Forms.Padding(0);
             this.panelUnit3Log.Name = "panelUnit3Log";
-            this.panelUnit3Log.Size = new System.Drawing.Size(535, 281);
+            this.panelUnit3Log.Size = new System.Drawing.Size(535, 288);
             this.panelUnit3Log.TabIndex = 2;
             // 
             // rtbUnit3Log
@@ -383,10 +385,10 @@
             this.rtbUnit3Log.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtbUnit3Log.Font = new System.Drawing.Font("Courier New", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rtbUnit3Log.Location = new System.Drawing.Point(0, 0);
-            this.rtbUnit3Log.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rtbUnit3Log.Margin = new System.Windows.Forms.Padding(4);
             this.rtbUnit3Log.Name = "rtbUnit3Log";
             this.rtbUnit3Log.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.rtbUnit3Log.Size = new System.Drawing.Size(535, 281);
+            this.rtbUnit3Log.Size = new System.Drawing.Size(535, 288);
             this.rtbUnit3Log.TabIndex = 1;
             this.rtbUnit3Log.Text = "";
             // 
@@ -472,7 +474,7 @@
             this.panelUnit2.Location = new System.Drawing.Point(545, 0);
             this.panelUnit2.Margin = new System.Windows.Forms.Padding(0);
             this.panelUnit2.Name = "panelUnit2";
-            this.panelUnit2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelUnit2.Padding = new System.Windows.Forms.Padding(4);
             this.panelUnit2.Size = new System.Drawing.Size(545, 375);
             this.panelUnit2.TabIndex = 1;
             // 
@@ -492,7 +494,7 @@
             this.rtbUnit2Log.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtbUnit2Log.Font = new System.Drawing.Font("Courier New", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rtbUnit2Log.Location = new System.Drawing.Point(0, 0);
-            this.rtbUnit2Log.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rtbUnit2Log.Margin = new System.Windows.Forms.Padding(4);
             this.rtbUnit2Log.Name = "rtbUnit2Log";
             this.rtbUnit2Log.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
             this.rtbUnit2Log.Size = new System.Drawing.Size(535, 285);
@@ -570,7 +572,7 @@
             this.panelUnit1.Location = new System.Drawing.Point(0, 0);
             this.panelUnit1.Margin = new System.Windows.Forms.Padding(0);
             this.panelUnit1.Name = "panelUnit1";
-            this.panelUnit1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelUnit1.Padding = new System.Windows.Forms.Padding(4);
             this.panelUnit1.Size = new System.Drawing.Size(545, 375);
             this.panelUnit1.TabIndex = 0;
             // 
@@ -590,7 +592,7 @@
             this.rtbUnit1Log.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtbUnit1Log.Font = new System.Drawing.Font("Courier New", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rtbUnit1Log.Location = new System.Drawing.Point(0, 0);
-            this.rtbUnit1Log.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rtbUnit1Log.Margin = new System.Windows.Forms.Padding(4);
             this.rtbUnit1Log.Name = "rtbUnit1Log";
             this.rtbUnit1Log.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
             this.rtbUnit1Log.Size = new System.Drawing.Size(535, 285);
@@ -662,10 +664,10 @@
             // 
             this.panelLog.Controls.Add(this.rtbTestLog);
             this.panelLog.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelLog.Location = new System.Drawing.Point(0, 754);
+            this.panelLog.Location = new System.Drawing.Point(0, 761);
             this.panelLog.Margin = new System.Windows.Forms.Padding(0);
             this.panelLog.Name = "panelLog";
-            this.panelLog.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelLog.Padding = new System.Windows.Forms.Padding(4);
             this.panelLog.Size = new System.Drawing.Size(1098, 193);
             this.panelLog.TabIndex = 1;
             // 
@@ -675,7 +677,7 @@
             this.rtbTestLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtbTestLog.Font = new System.Drawing.Font("Courier New", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rtbTestLog.Location = new System.Drawing.Point(4, 4);
-            this.rtbTestLog.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rtbTestLog.Margin = new System.Windows.Forms.Padding(4);
             this.rtbTestLog.Name = "rtbTestLog";
             this.rtbTestLog.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
             this.rtbTestLog.Size = new System.Drawing.Size(1090, 185);
@@ -688,9 +690,9 @@
             this.panelMenu.Controls.Add(this.panelHome);
             this.panelMenu.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelMenu.Location = new System.Drawing.Point(0, 30);
-            this.panelMenu.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelMenu.Margin = new System.Windows.Forms.Padding(4);
             this.panelMenu.Name = "panelMenu";
-            this.panelMenu.Size = new System.Drawing.Size(267, 947);
+            this.panelMenu.Size = new System.Drawing.Size(267, 954);
             this.panelMenu.TabIndex = 1;
             // 
             // panelHome
@@ -868,7 +870,7 @@
             this.picBoxLogo.Dock = System.Windows.Forms.DockStyle.Left;
             this.picBoxLogo.Image = global::F002461.Properties.Resources.HoneywellLog_128;
             this.picBoxLogo.Location = new System.Drawing.Point(0, 0);
-            this.picBoxLogo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.picBoxLogo.Margin = new System.Windows.Forms.Padding(4);
             this.picBoxLogo.Name = "picBoxLogo";
             this.picBoxLogo.Size = new System.Drawing.Size(200, 133);
             this.picBoxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
@@ -923,6 +925,9 @@
             // 
             // functionToolStripMenuItem
             // 
+            this.functionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.deleteCOMArbiterToolStripMenuItem,
+            this.hWSerNumEmulationToolStripMenuItem});
             this.functionToolStripMenuItem.Name = "functionToolStripMenuItem";
             this.functionToolStripMenuItem.Size = new System.Drawing.Size(77, 24);
             this.functionToolStripMenuItem.Text = "Function";
@@ -953,6 +958,20 @@
             // 
             this.timerAutoTest.Interval = 1000;
             // 
+            // deleteCOMArbiterToolStripMenuItem
+            // 
+            this.deleteCOMArbiterToolStripMenuItem.Name = "deleteCOMArbiterToolStripMenuItem";
+            this.deleteCOMArbiterToolStripMenuItem.Size = new System.Drawing.Size(229, 26);
+            this.deleteCOMArbiterToolStripMenuItem.Text = "DeleteCOMArbiter";
+            this.deleteCOMArbiterToolStripMenuItem.Click += new System.EventHandler(this.DeleteCOMArbiterToolStripMenuItem_Click);
+            // 
+            // hWSerNumEmulationToolStripMenuItem
+            // 
+            this.hWSerNumEmulationToolStripMenuItem.Name = "hWSerNumEmulationToolStripMenuItem";
+            this.hWSerNumEmulationToolStripMenuItem.Size = new System.Drawing.Size(229, 26);
+            this.hWSerNumEmulationToolStripMenuItem.Text = "HWSerNumEmulation";
+            this.hWSerNumEmulationToolStripMenuItem.Click += new System.EventHandler(this.HWSerNumEmulationToolStripMenuItem_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -961,7 +980,7 @@
             this.Controls.Add(this.panelMain);
             this.Controls.Add(this.panelTitleBar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimumSize = new System.Drawing.Size(1365, 1024);
             this.Name = "frmMain";
             this.Text = "Flash";
@@ -1077,6 +1096,8 @@
         private System.Windows.Forms.Timer timerCopyImage;
         private System.Windows.Forms.Timer timerAutoTest;
         private System.Windows.Forms.ToolStripMenuItem PortMapping_ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteCOMArbiterToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem hWSerNumEmulationToolStripMenuItem;
     }
 }
 
