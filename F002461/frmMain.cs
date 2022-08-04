@@ -134,13 +134,14 @@ namespace F002461
 
         #region Variable
 
+        private bool m_bCollapse;
         private string m_str_Model = "";
         private OptionData m_st_OptionData = new OptionData();
         private MCFData m_st_MCFData = new MCFData();
         private MESData m_st_MESData = new MESData();
         private Dictionary<string, UnitDevice> m_dic_UnitDevice = new Dictionary<string, UnitDevice>();
         private Dictionary<string, TestSaveData> m_dic_TestSaveData = new Dictionary<string, TestSaveData>();
-        private Dictionary<string, bool> m_dic_TestStatus = new Dictionary<string, bool>();  // true:Running false:Not Running
+        private Dictionary<string, bool> m_dic_TestStatus = new Dictionary<string, bool>();  // true:Running    false:Not Running
 
         private const string FASTBOOTMODE = "FASTBOOT";
         private const string EDLMODE = "EDL";
@@ -174,7 +175,7 @@ namespace F002461
         public frmMain()
         {
             InitializeComponent();
-            CollapseMenu(false);
+            CollapseMenu(true);
 
             // Form
             this.Text = string.Empty;
@@ -217,12 +218,26 @@ namespace F002461
 
         private void DeleteCOMArbiterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            if (DeleteCOMNameArbiterReg() == false)
+            {
+                MessageBox.Show("Delete COM Name Arbiter Reg Fail.");
+            }
+            else
+            {
+                MessageBox.Show("Delete COMName Arbiter Reg Successfully.");
+            }
         }
 
         private void HWSerNumEmulationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            if (HWSerNumEmulationReg() == false)
+            {
+                MessageBox.Show("HWSerNumEmulationReg Fail.");
+            }
+            else
+            {
+                MessageBox.Show("HWSerNumEmulationReg Successfully.");
+            }
         }
 
         #endregion
@@ -236,11 +251,8 @@ namespace F002461
                 if (m_b_RunReslut == true)
                 {
                     // Image copy finished
-
                     timerCopyImage.Enabled = false;
-                    timerCopyImage.Enabled = false;
-                    timerCopyImage.Enabled = false;
-
+                  
                     #region Copy Bat file from server to local
 
                     if (m_st_OptionData.FlashMode == FASTBOOTMODE)
@@ -275,7 +287,7 @@ namespace F002461
 
                     if (m_b_Setting == true)
                     {
-                        DisplayMessage("Re run the test tool after config port mapping ......");
+                        DisplayMessage("Re-run the test tool after config port mapping ......");
                         return;
                     }
 
@@ -336,7 +348,7 @@ namespace F002461
         {
             timerMonitor.Enabled = false;
 
-            //DisplayMessage("StartTime:" + System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            //DisplayMessage("StartTime:" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 
             MonitorDeviceByPhysicalAddress(PANEL_1);
             Dly(2);
@@ -347,7 +359,7 @@ namespace F002461
             MonitorDeviceByPhysicalAddress(PANEL_4);
             Dly(2);
 
-            //DisplayMessage("EndTime:" + System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            //DisplayMessage("EndTime:" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 
             timerMonitor.Enabled = true;
         }
@@ -1279,7 +1291,7 @@ namespace F002461
 
                     bool bRes = false;
                     string strValue = "";
-                    for (int i = 0; i < 10; i++)
+                    for (int i = 0; i < 3; i++)
                     {
                         bRes = obj_SaveMDCS.GetMDCSVariable(m_st_OptionData.MDCSPreStationDeviceName, m_st_OptionData.MDCSPreStationVarName, str_SN, ref strValue, ref str_ErrorMessage);
                         if (bRes == false)
@@ -2161,7 +2173,7 @@ namespace F002461
                 {
                     return false;
                 }
-                System.Diagnostics.Process.Start("regedit.exe", "/s " + strReqName);
+                Process.Start("regedit.exe", "/s " + strReqName);
             }
             catch (Exception ex)
             {
@@ -2181,7 +2193,7 @@ namespace F002461
                 {
                     return false;
                 }
-                System.Diagnostics.Process.Start("regedit.exe", "/s " + strReqName);
+                Process.Start("regedit.exe", "/s " + strReqName);
             }
             catch (Exception ex)
             {
@@ -6933,11 +6945,11 @@ namespace F002461
 
             try
             {
-                if (System.IO.Directory.Exists(str_Path) == false)
+                if (Directory.Exists(str_Path) == false)
                 {
-                    System.IO.Directory.CreateDirectory(str_Path);
-                    System.Threading.Thread.Sleep(500);
-                    if (System.IO.Directory.Exists(str_Path) == false)
+                    Directory.CreateDirectory(str_Path);
+                    Thread.Sleep(500);
+                    if (Directory.Exists(str_Path) == false)
                     {
                         return false;
                     }
@@ -6947,7 +6959,7 @@ namespace F002461
                 {
                     StreamWriter sr = File.CreateText(str_PathFileName);
                     sr.Close();
-                    System.Threading.Thread.Sleep(500);
+                    Thread.Sleep(500);
                     if (File.Exists(str_PathFileName) == false)
                     {
                         return false;
@@ -6955,7 +6967,7 @@ namespace F002461
                 }
 
                 // 大于2M
-                System.IO.FileInfo fileInfo = new System.IO.FileInfo(str_PathFileName);
+                FileInfo fileInfo = new System.IO.FileInfo(str_PathFileName);
                 if (fileInfo.Length / (1024 * 1024) > 2)
                 {
                     string str_NewFileName = str_Path + "\\" + "Test_" + System.DateTime.Now.ToString("yyyyMMddHHmmss") + ".log";
@@ -6995,7 +7007,7 @@ namespace F002461
                     }
                     else
                     {
-                        System.Threading.Thread.Sleep(100);
+                        Thread.Sleep(100);
                         continue;
                     }
                 }
@@ -7061,7 +7073,15 @@ namespace F002461
                 // Maximized
                 this.WindowState = FormWindowState.Maximized;
                 this.btnMaximize.Image = Resources.normal_16;
-                this.panelMenu.Width = 250;
+                if (m_bCollapse)
+                {
+                    this.panelMenu.Width = 80;
+                }
+                else
+                {
+                    this.panelMenu.Width = 250;
+                }
+                
                 this.panelLog.Height = 160;
             }
             else
@@ -7069,7 +7089,15 @@ namespace F002461
                 // Normal
                 this.WindowState = FormWindowState.Normal;
                 this.btnMaximize.Image = Resources.maximize_16;
-                this.panelMenu.Width = 200;
+                if (m_bCollapse)
+                {
+                    this.panelMenu.Width = 80;
+                }
+                else
+                {
+                    this.panelMenu.Width = 200;
+                }
+
                 this.panelLog.Height = 145;
             }
         }
@@ -7111,11 +7139,13 @@ namespace F002461
 
         private void picBoxLogo_Click(object sender, EventArgs e)
         {
+            m_bCollapse = true;
             CollapseMenu(true);
         }
 
         private void btnHome_Click(object sender, EventArgs e)
         {
+            m_bCollapse = false;
             CollapseMenu(false);
         }
 
@@ -7123,13 +7153,10 @@ namespace F002461
         {
             this.lblTitleBar.Width = this.Width - 105;
 
-
-
         }
 
         private void panelDesktop_Resize(object sender, EventArgs e)
         {
-
             int InnerHeight = this.panelUnits.Height - (this.panelUnits.Padding.Top + this.panelUnits.Padding.Bottom);
             int InnerWidth = this.panelUnits.Width - (this.panelUnits.Padding.Left + this.panelUnits.Padding.Right);
 
@@ -7150,12 +7177,7 @@ namespace F002461
             this.panelUnit4.Width = InnerWidth / 2;
             this.panelUnit4.Height = InnerHeight / 2;
 
-            //this.rtbUnit1Log.Text = "Panel Unit1 Height: " + this.panelUnit1.Height + "\r\n" + "Panel Unit1 Width: " + this.panelUnit1.Width;
-            //this.rtbUnit2Log.Text = "Panel Unit2 Height: " + this.panelUnit2.Height + "\r\n" + "Panel Unit2 Width: " + this.panelUnit2.Width;
-            //this.rtbUnit3Log.Text = "Panel Unit3 Height: " + this.panelUnit3.Height + "\r\n" + "Panel Unit3 Width: " + this.panelUnit3.Width;
-            //this.rtbUnit4Log.Text = "Panel Unit4 Height: " + this.panelUnit4.Height + "\r\n" + "Panel Unit4 Width: " + this.panelUnit4.Width;
-            //this.rtbTestLog.Text = "PanelUnitTop Height: " + this.panelUnitTop.Height + "\r\n" + "PanelUnitBottom Height: " + this.panelUnitBottom.Height;
-
+          
         }
 
         
@@ -7176,6 +7198,8 @@ namespace F002461
 
         #endregion
 
-        
+
+
+     
     }
 }
