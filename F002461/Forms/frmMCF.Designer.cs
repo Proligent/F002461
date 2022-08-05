@@ -43,9 +43,10 @@
             // lblModel
             // 
             this.lblModel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblModel.Location = new System.Drawing.Point(28, 23);
+            this.lblModel.Location = new System.Drawing.Point(37, 31);
+            this.lblModel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblModel.Name = "lblModel";
-            this.lblModel.Size = new System.Drawing.Size(68, 24);
+            this.lblModel.Size = new System.Drawing.Size(91, 32);
             this.lblModel.TabIndex = 0;
             this.lblModel.Text = "Model:";
             this.lblModel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -53,17 +54,20 @@
             // textBox_Model
             // 
             this.textBox_Model.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_Model.Location = new System.Drawing.Point(120, 20);
+            this.textBox_Model.Location = new System.Drawing.Point(160, 27);
+            this.textBox_Model.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox_Model.Name = "textBox_Model";
-            this.textBox_Model.Size = new System.Drawing.Size(209, 29);
+            this.textBox_Model.Size = new System.Drawing.Size(277, 34);
             this.textBox_Model.TabIndex = 1;
+            this.textBox_Model.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_Model_KeyDown);
             // 
             // label1
             // 
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(28, 67);
+            this.label1.Location = new System.Drawing.Point(37, 89);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(68, 24);
+            this.label1.Size = new System.Drawing.Size(91, 32);
             this.label1.TabIndex = 0;
             this.label1.Text = "SKU:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -71,17 +75,20 @@
             // textBox_SKU
             // 
             this.textBox_SKU.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_SKU.Location = new System.Drawing.Point(120, 64);
+            this.textBox_SKU.Location = new System.Drawing.Point(160, 85);
+            this.textBox_SKU.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox_SKU.Name = "textBox_SKU";
-            this.textBox_SKU.Size = new System.Drawing.Size(209, 29);
+            this.textBox_SKU.Size = new System.Drawing.Size(277, 34);
             this.textBox_SKU.TabIndex = 1;
+            this.textBox_SKU.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_SKU_KeyDown);
             // 
             // label2
             // 
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(28, 114);
+            this.label2.Location = new System.Drawing.Point(37, 152);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(85, 24);
+            this.label2.Size = new System.Drawing.Size(113, 32);
             this.label2.TabIndex = 0;
             this.label2.Text = "OS PN:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -89,17 +96,20 @@
             // textBox_OSPN
             // 
             this.textBox_OSPN.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_OSPN.Location = new System.Drawing.Point(120, 111);
+            this.textBox_OSPN.Location = new System.Drawing.Point(160, 148);
+            this.textBox_OSPN.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox_OSPN.Name = "textBox_OSPN";
-            this.textBox_OSPN.Size = new System.Drawing.Size(209, 29);
+            this.textBox_OSPN.Size = new System.Drawing.Size(277, 34);
             this.textBox_OSPN.TabIndex = 1;
+            this.textBox_OSPN.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_OSPN_KeyDown);
             // 
             // label3
             // 
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(28, 160);
+            this.label3.Location = new System.Drawing.Point(37, 213);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(85, 24);
+            this.label3.Size = new System.Drawing.Size(113, 32);
             this.label3.TabIndex = 0;
             this.label3.Text = "OS Ver:";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -107,36 +117,42 @@
             // textBox_OSVersion
             // 
             this.textBox_OSVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_OSVersion.Location = new System.Drawing.Point(120, 157);
+            this.textBox_OSVersion.Location = new System.Drawing.Point(160, 209);
+            this.textBox_OSVersion.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox_OSVersion.Name = "textBox_OSVersion";
-            this.textBox_OSVersion.Size = new System.Drawing.Size(209, 29);
+            this.textBox_OSVersion.Size = new System.Drawing.Size(277, 34);
             this.textBox_OSVersion.TabIndex = 1;
+            this.textBox_OSVersion.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_OSVersion_KeyDown);
             // 
             // btnOK
             // 
             this.btnOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOK.Location = new System.Drawing.Point(120, 226);
+            this.btnOK.Location = new System.Drawing.Point(160, 301);
+            this.btnOK.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(80, 45);
+            this.btnOK.Size = new System.Drawing.Size(107, 60);
             this.btnOK.TabIndex = 2;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
+            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // btnCancel
             // 
             this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.Location = new System.Drawing.Point(249, 226);
+            this.btnCancel.Location = new System.Drawing.Point(332, 301);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(80, 45);
+            this.btnCancel.Size = new System.Drawing.Size(107, 60);
             this.btnCancel.TabIndex = 2;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // frmMCF
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(363, 278);
+            this.ClientSize = new System.Drawing.Size(484, 371);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.textBox_OSVersion);
@@ -147,9 +163,11 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblModel);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "frmMCF";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Scan Sheet";
+            this.Load += new System.EventHandler(this.FrmMCF_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

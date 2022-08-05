@@ -134,7 +134,7 @@ namespace F002461
 
         #region Variable
 
-        private bool m_bCollapse;
+        private bool m_bCollapse = true;
         private string m_str_Model = "";
         private OptionData m_st_OptionData = new OptionData();
         private MCFData m_st_MCFData = new MCFData();
@@ -5429,27 +5429,27 @@ namespace F002461
 
             #region Clear COM Port Inuse
 
-            DisplayMessage("Clear COM Port inuse status.");
-            if (DeleteCOMNameArbiterReg() == false)
-            {
-                DisplayMessage("Clear COM Port inuse status fail.");
-                return false;
-            }
-            DisplayMessage("Clear COM Port inuse status successfully.");
-            Dly(0.5);
+            //DisplayMessage("Clear COM Port inuse status.");
+            //if (DeleteCOMNameArbiterReg() == false)
+            //{
+            //    DisplayMessage("Clear COM Port inuse status fail.");
+            //    return false;
+            //}
+            //DisplayMessage("Clear COM Port inuse status successfully.");
+            //Dly(0.5);
 
             #endregion
 
             #region HWSerNumEmulationReg
 
-            DisplayMessage("HWSerNumEmulationReg.");
-            if (HWSerNumEmulationReg() == false)
-            {
-                DisplayMessage("HWSerNumEmulationReg fail.");
-                return false;
-            }
-            DisplayMessage("HWSerNumEmulationReg successfully.");
-            Dly(0.5);
+            //DisplayMessage("HWSerNumEmulationReg.");
+            //if (HWSerNumEmulationReg() == false)
+            //{
+            //    DisplayMessage("HWSerNumEmulationReg fail.");
+            //    return false;
+            //}
+            //DisplayMessage("HWSerNumEmulationReg successfully.");
+            //Dly(0.5);
 
             #endregion
 
@@ -5574,7 +5574,7 @@ namespace F002461
                     }
                 }
 
-                // EDA51 Flash
+                // EDA51, EDA52 Flash
                 if (PLCConnect() == false)
                 {
                     DisplayMessage("Failed to connect PLC......");
@@ -7197,6 +7197,49 @@ namespace F002461
         }
 
         #endregion
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            this.Text = Program.g_str_ToolNumber + " : " + Program.g_str_ToolRev;
+
+            if (InitRun() == false)
+            {
+                return;
+            }
+
+            if (m_st_OptionData.TestMode == "1")
+            {
+                this.Text = Program.g_str_ToolNumber + " : " + Program.g_str_ToolRev + " [Auto Test] " + m_st_MCFData.SKU + " " + m_st_MESData.EID + " " + m_st_MESData.WorkOrder;
+            }
+            else
+            {
+                this.Text = Program.g_str_ToolNumber + " : " + Program.g_str_ToolRev + " [Manual Test] " + m_st_MCFData.SKU + " " + m_st_MESData.EID + " " + m_st_MESData.WorkOrder;
+            }
+
+            return;
+        }
+
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            bgFlashWorkerCancel();
+            KillFastboot();
+            KillAdb();
+
+            if (m_st_OptionData.TestMode == "1")
+            {
+                if (m_str_Model.Contains("CT40"))
+                {
+                    string strErrorMessage = "";
+                    USBPlugInit(ref strErrorMessage);
+                    ReleaseNI6001();
+                    PLCRelease();
+                }
+                else if (m_str_Model.Contains("EDA51"))
+                {
+                    PLCRelease();
+                }
+            }
+        }
 
 
 

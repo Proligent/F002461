@@ -68,6 +68,17 @@ if "%AndroidVer%"=="Q" (
 	)
 	goto :end
 )
+if "%AndroidVer%"=="R" (
+	if "%WWAN%"=="1" ( 
+		echo EDA51-1-R_Option.ini > %OptionFile%
+		goto :end
+	)
+	if "%WWAN%"=="0" ( 
+		echo EDA51-0-R_Option.ini > %OptionFile%
+		goto :end
+	)
+	goto :end
+)						
 goto :end
 
 :EDA61K
@@ -225,6 +236,8 @@ goto :end
 
 :UL
 ::UL-11A081011CK
+::UL-11A081011RK
+::UL-11A081012RK								
 ::UL-00A081011RK
 set WWAN=%sku:~3,2%
 echo WWAN flag %WWAN%
