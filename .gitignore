@@ -350,3 +350,4 @@ MigrationBackup/
 .ionide/
 
 /*.suo
+/F002461/bin/x86/Release/F002461.exe

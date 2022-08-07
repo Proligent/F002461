@@ -181,7 +181,8 @@ namespace F002461
             this.Text = string.Empty;
             this.ControlBox = false;
             this.DoubleBuffered = true;
-            this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
+            //this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
+            this.MaximizedBounds = Screen.PrimaryScreen.WorkingArea;
 
         }
 
