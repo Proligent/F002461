@@ -44,7 +44,7 @@ namespace F002461
             }
             else
             {
-                MessageBox.Show("F002461 Already Exist !!!");
+                MessageBox.Show("F002461 Already Running !!!");
             }
 
         }

@@ -39,21 +39,19 @@
             // 
             this.lblNote.BackColor = System.Drawing.Color.White;
             this.lblNote.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.lblNote.Font = new System.Drawing.Font("Courier New", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNote.Location = new System.Drawing.Point(7, 13);
-            this.lblNote.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblNote.Font = new System.Drawing.Font("Century Gothic", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNote.Location = new System.Drawing.Point(5, 10);
             this.lblNote.Name = "lblNote";
-            this.lblNote.Size = new System.Drawing.Size(651, 116);
+            this.lblNote.Size = new System.Drawing.Size(488, 87);
             this.lblNote.TabIndex = 0;
             this.lblNote.Text = "Note:";
             // 
             // label1
             // 
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
-            this.label1.Location = new System.Drawing.Point(105, 152);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(79, 114);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(92, 32);
+            this.label1.Size = new System.Drawing.Size(69, 24);
             this.label1.TabIndex = 1;
             this.label1.Text = "Panel:";
             // 
@@ -67,19 +65,17 @@
             "2",
             "3",
             "4"});
-            this.comboBox_Panel.Location = new System.Drawing.Point(206, 148);
-            this.comboBox_Panel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBox_Panel.Location = new System.Drawing.Point(154, 111);
             this.comboBox_Panel.Name = "comboBox_Panel";
-            this.comboBox_Panel.Size = new System.Drawing.Size(280, 37);
+            this.comboBox_Panel.Size = new System.Drawing.Size(211, 32);
             this.comboBox_Panel.TabIndex = 2;
             // 
             // btnOK
             // 
             this.btnOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
-            this.btnOK.Location = new System.Drawing.Point(276, 214);
-            this.btnOK.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnOK.Location = new System.Drawing.Point(207, 160);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(117, 52);
+            this.btnOK.Size = new System.Drawing.Size(88, 39);
             this.btnOK.TabIndex = 3;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
@@ -90,26 +86,24 @@
             this.rtb_InfoList.BackColor = System.Drawing.SystemColors.Control;
             this.rtb_InfoList.Font = new System.Drawing.Font("Courier New", 12F);
             this.rtb_InfoList.ForeColor = System.Drawing.Color.Black;
-            this.rtb_InfoList.Location = new System.Drawing.Point(13, 285);
-            this.rtb_InfoList.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rtb_InfoList.Location = new System.Drawing.Point(10, 214);
             this.rtb_InfoList.Name = "rtb_InfoList";
             this.rtb_InfoList.ReadOnly = true;
             this.rtb_InfoList.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.rtb_InfoList.Size = new System.Drawing.Size(645, 185);
+            this.rtb_InfoList.Size = new System.Drawing.Size(485, 140);
             this.rtb_InfoList.TabIndex = 4;
             this.rtb_InfoList.Text = "";
             // 
             // frmSetupUSB
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(671, 482);
+            this.ClientSize = new System.Drawing.Size(503, 362);
             this.Controls.Add(this.rtb_InfoList);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.comboBox_Panel);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblNote);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.Name = "frmSetupUSB";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
