@@ -75,7 +75,8 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>Lib\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="libnodave.net">
+    <Reference Include="libnodave.net, Version=0.0.0.0, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>Lib\libnodave.net.dll</HintPath>
     </Reference>
     <Reference Include="MDCS">
