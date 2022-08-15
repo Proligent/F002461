@@ -186,6 +186,50 @@ namespace F002461
 
         }
 
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            lblTitleBar.Text = Program.g_str_ToolNumber + " : " + Program.g_str_ToolRev;
+
+            if (InitRun() == false)
+            {
+                return;
+            }
+
+            if (m_st_OptionData.TestMode == "1")
+            {
+                lblTitleBar.Text = Program.g_str_ToolNumber + " : " + Program.g_str_ToolRev + " [Auto Test] " + m_st_MCFData.SKU + " " + m_st_MESData.EID + " " + m_st_MESData.WorkOrder;
+            }
+            else
+            {
+                lblTitleBar.Text = Program.g_str_ToolNumber + " : " + Program.g_str_ToolRev + " [Manual Test] " + m_st_MCFData.SKU + " " + m_st_MESData.EID + " " + m_st_MESData.WorkOrder;
+            }
+
+            return;
+        }
+
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            bgFlashWorkerCancel();
+            KillFastboot();
+            KillAdb();
+
+            if (m_st_OptionData.TestMode == "1")
+            {
+                if (m_str_Model.Contains("CT40"))
+                {
+                    string strErrorMessage = "";
+                    USBPlugInit(ref strErrorMessage);
+                    ReleaseNI6001();
+                    PLCRelease();
+                }
+                else if (m_str_Model.Contains("EDA51"))
+                {
+                    PLCRelease();
+                }
+            }
+        }
+
+
         #endregion
 
         #region Menu
@@ -5430,27 +5474,27 @@ namespace F002461
 
             #region Clear COM Port Inuse
 
-            //DisplayMessage("Clear COM Port inuse status.");
-            //if (DeleteCOMNameArbiterReg() == false)
-            //{
-            //    DisplayMessage("Clear COM Port inuse status fail.");
-            //    return false;
-            //}
-            //DisplayMessage("Clear COM Port inuse status successfully.");
-            //Dly(0.5);
+            DisplayMessage("Clear COM Port inuse status.");
+            if (DeleteCOMNameArbiterReg() == false)
+            {
+                DisplayMessage("Clear COM Port inuse status fail.");
+                return false;
+            }
+            DisplayMessage("Clear COM Port inuse status successfully.");
+            Dly(0.5);
 
             #endregion
 
             #region HWSerNumEmulationReg
 
-            //DisplayMessage("HWSerNumEmulationReg.");
-            //if (HWSerNumEmulationReg() == false)
-            //{
-            //    DisplayMessage("HWSerNumEmulationReg fail.");
-            //    return false;
-            //}
-            //DisplayMessage("HWSerNumEmulationReg successfully.");
-            //Dly(0.5);
+            DisplayMessage("HWSerNumEmulationReg.");
+            if (HWSerNumEmulationReg() == false)
+            {
+                DisplayMessage("HWSerNumEmulationReg fail.");
+                return false;
+            }
+            DisplayMessage("HWSerNumEmulationReg successfully.");
+            Dly(0.5);
 
             #endregion
 
@@ -5465,9 +5509,9 @@ namespace F002461
 
             #endregion
 
-            #region setup.ini
+            #region Setup.ini
 
-            DisplayMessage("Read setup ini file.");
+            DisplayMessage("Read Setup.ini file.");
             if (ReadSetupFile(ref strErrorMessage) == false)
             {
                 DisplayMessage("Failed to read setup.ini file." + strErrorMessage);
@@ -5492,16 +5536,16 @@ namespace F002461
 
             #endregion
 
-            #region ScanMCF
+            #region ScanMCF (Obsolete)
 
-            DisplayMessage("Scan Sheet.");
-            if (ScanMCF() == false)
-            {
-                DisplayMessage("Failed to Scan Sheet.");
-                return false;
-            }
-            DisplayMessage("Model:" + m_str_Model);
-            DisplayMessage("SKU:" + m_st_MCFData.SKU);
+            //DisplayMessage("Scan Sheet.");
+            //if (ScanMCF() == false)
+            //{
+            //    DisplayMessage("Failed to Scan Sheet.");
+            //    return false;
+            //}
+            //DisplayMessage("Model:" + m_str_Model);
+            //DisplayMessage("SKU:" + m_st_MCFData.SKU);
 
             #endregion
 
@@ -7199,48 +7243,7 @@ namespace F002461
 
         #endregion
 
-        private void frmMain_Load(object sender, EventArgs e)
-        {
-            this.Text = Program.g_str_ToolNumber + " : " + Program.g_str_ToolRev;
-
-            if (InitRun() == false)
-            {
-                return;
-            }
-
-            if (m_st_OptionData.TestMode == "1")
-            {
-                this.Text = Program.g_str_ToolNumber + " : " + Program.g_str_ToolRev + " [Auto Test] " + m_st_MCFData.SKU + " " + m_st_MESData.EID + " " + m_st_MESData.WorkOrder;
-            }
-            else
-            {
-                this.Text = Program.g_str_ToolNumber + " : " + Program.g_str_ToolRev + " [Manual Test] " + m_st_MCFData.SKU + " " + m_st_MESData.EID + " " + m_st_MESData.WorkOrder;
-            }
-
-            return;
-        }
-
-        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            bgFlashWorkerCancel();
-            KillFastboot();
-            KillAdb();
-
-            if (m_st_OptionData.TestMode == "1")
-            {
-                if (m_str_Model.Contains("CT40"))
-                {
-                    string strErrorMessage = "";
-                    USBPlugInit(ref strErrorMessage);
-                    ReleaseNI6001();
-                    PLCRelease();
-                }
-                else if (m_str_Model.Contains("EDA51"))
-                {
-                    PLCRelease();
-                }
-            }
-        }
+        
 
 
 
