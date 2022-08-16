@@ -127,6 +127,9 @@ namespace F002461
             public string Panel;
             public string PhysicalAddress;
             public string SN;
+            public string SKU;
+            public string Model;
+            public string WorkOrder;
             public string Status;
         }
 
@@ -687,6 +690,9 @@ namespace F002461
                 stUnit1.Panel = strPanel;
                 stUnit1.PhysicalAddress = strPhysicalAddress;
                 stUnit1.SN = "";
+                stUnit1.SKU = "";
+                stUnit1.Model = "";
+                stUnit1.WorkOrder = "";
                 stUnit1.Status = "0";
                 m_dic_UnitDevice[strPanel] = stUnit1;
 
@@ -731,7 +737,7 @@ namespace F002461
                         DisplayUnit(strPanel, strSN, Color.White);
                         DisplayUnitStatus(strPanel, STATUS_CONNECTED, Color.MediumSpringGreen);
 
-                        RunFlashWorker(strPanel);   // Start RunTest
+                        RunFlashWorker(strPanel);   // Async RunTest
 
                         strErrorMessage = "";
                         bRes = true;
@@ -925,6 +931,14 @@ namespace F002461
                 this.Invoke((MethodInvoker)delegate { ClearUnitLog(strPanel); });
 
                 #endregion
+
+                #region Get Property( SKU, WorkOrder and EID)
+
+
+
+
+                #endregion
+
 
                 #region Test Check Pre Station Result
 
@@ -4569,50 +4583,67 @@ namespace F002461
                 {
                     m_dic_TestStatus[strPanel] = true;
 
+                    #region Check Product (Obsolete)
+
+                    //if (m_str_Model.Contains("CT40"))   // CT40
+                    //{
+                    //    // 有产品检测, 0: have product, 1: Idle
+                    //    if (UnitLocationCheckAction(strPanel, "0", ref strErrorMessage) == true)
+                    //    {
+                    //        // 有产品
+                    //        if (FeedbackStatus(strPanel, CPLCDave.FeedbackStatus.HAVEPRODUCT, ref strErrorMessage) == false)
+                    //        {
+                    //            DisplayMessage("Panel:" + strPanel + " start FeedbackStatus HAVEPRODUCT fail." + strErrorMessage);
+                    //            SaveLogFile("Panel:" + strPanel + " start FeedbackStatus HAVEPRODUCT fail." + strErrorMessage);
+                    //            m_dic_TestStatus[strPanel] = false;
+                    //            return;
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+                    //        // 无产品
+                    //        if (FeedbackStatus(strPanel, CPLCDave.FeedbackStatus.READY, ref strErrorMessage) == false)
+                    //        {
+                    //            DisplayMessage("Panel:" + strPanel + " FeedbackStatus READY fail." + strErrorMessage);
+                    //            SaveLogFile("Panel:" + strPanel + " FeedbackStatus READY fail." + strErrorMessage);
+                    //            m_dic_TestStatus[strPanel] = false;
+                    //            return;
+                    //        }
+                    //    }
+                    //}
+                    //else    // EDA51            
+                    //{
+                    //    #region Give Ready Signal
+
+                    //    DisplayMessage("Panel:" + strPanel + " Give Robot Ready Signal");
+                    //    if (FeedbackStatus(strPanel, CPLCDave.FeedbackStatus.READY, ref strErrorMessage) == false)
+                    //    {
+                    //        DisplayMessage("Panel:" + strPanel + " FeedbackStatus READY Fail:" + strErrorMessage);
+                    //        SaveLogFile("Panel:" + strPanel + " FeedbackStatus READY Fail:" + strErrorMessage);
+                    //        m_dic_TestStatus[strPanel] = false;
+                    //        return;
+                    //    }
+
+                    //    #endregion
+                    //}
+
+                    #endregion
+
                     #region Check Product
+      
+                    #region Give Ready Signal
 
-                    if (m_str_Model.Contains("CT40"))   // CT40
+                    DisplayMessage("Panel:" + strPanel + " Give Robot Ready Signal");
+                    if (FeedbackStatus(strPanel, CPLCDave.FeedbackStatus.READY, ref strErrorMessage) == false)
                     {
-                        // 有产品检测, 0: have product, 1: Idle
-                        if (UnitLocationCheckAction(strPanel, "0", ref strErrorMessage) == true)
-                        {
-                            // 有产品
-                            if (FeedbackStatus(strPanel, CPLCDave.FeedbackStatus.HAVEPRODUCT, ref strErrorMessage) == false)
-                            {
-                                DisplayMessage("Panel:" + strPanel + " start FeedbackStatus HAVEPRODUCT fail." + strErrorMessage);
-                                SaveLogFile("Panel:" + strPanel + " start FeedbackStatus HAVEPRODUCT fail." + strErrorMessage);
-                                m_dic_TestStatus[strPanel] = false;
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            // 无产品
-                            if (FeedbackStatus(strPanel, CPLCDave.FeedbackStatus.READY, ref strErrorMessage) == false)
-                            {
-                                DisplayMessage("Panel:" + strPanel + " FeedbackStatus READY fail." + strErrorMessage);
-                                SaveLogFile("Panel:" + strPanel + " FeedbackStatus READY fail." + strErrorMessage);
-                                m_dic_TestStatus[strPanel] = false;
-                                return;
-                            }
-                        }
-                    }
-                    else    // EDA51            
-                    {
-                        #region Give Ready Signal
-
-                        DisplayMessage("Panel:" + strPanel + " Give Robot Ready Signal");
-                        if (FeedbackStatus(strPanel, CPLCDave.FeedbackStatus.READY, ref strErrorMessage) == false)
-                        {
-                            DisplayMessage("Panel:" + strPanel + " FeedbackStatus READY Fail:" + strErrorMessage);
-                            SaveLogFile("Panel:" + strPanel + " FeedbackStatus READY Fail:" + strErrorMessage);
-                            m_dic_TestStatus[strPanel] = false;
-                            return;
-                        }
-
-                        #endregion
+                        DisplayMessage("Panel:" + strPanel + " FeedbackStatus READY Fail:" + strErrorMessage);
+                        SaveLogFile("Panel:" + strPanel + " FeedbackStatus READY Fail:" + strErrorMessage);
+                        m_dic_TestStatus[strPanel] = false;
+                        return;
                     }
 
+                    #endregion
+                  
                     #endregion
 
                     #region Wait Test
@@ -4645,7 +4676,7 @@ namespace F002461
 
                     #endregion
 
-                    #region Run Test
+                    #region RunTest
 
                     bool bRunRes = true;
 
@@ -4653,22 +4684,22 @@ namespace F002461
 
                     #region Plug USB
 
-                    if (m_str_Model.Contains("CT40"))
-                    {
-                        // Plug USB
-                        if (bRunRes == true)
-                        {
-                            bRunRes = USBPlugAction(strPanel, "1", ref strErrorMessage);
-                            if (bRunRes == false)
-                            {
-                                DisplayMessage("Panel:" + strPanel + " USBPlug In fail." + strErrorMessage);
-                                SaveLogFile("Panel:" + strPanel + " USBPlug In fail." + strErrorMessage);
-                                m_dic_TestStatus[strPanel] = false;
-                                bRunRes = false;
-                                //return;
-                            }
-                        }
-                    }
+                    //if (m_str_Model.Contains("CT40"))
+                    //{
+                    //    // Plug USB
+                    //    if (bRunRes == true)
+                    //    {
+                    //        bRunRes = USBPlugAction(strPanel, "1", ref strErrorMessage);
+                    //        if (bRunRes == false)
+                    //        {
+                    //            DisplayMessage("Panel:" + strPanel + " USBPlug In fail." + strErrorMessage);
+                    //            SaveLogFile("Panel:" + strPanel + " USBPlug In fail." + strErrorMessage);
+                    //            m_dic_TestStatus[strPanel] = false;
+                    //            bRunRes = false;
+                    //            //return;
+                    //        }
+                    //    }
+                    //}
 
                     #endregion
 
@@ -4690,7 +4721,7 @@ namespace F002461
 
                     #endregion
 
-                    #region Update Status
+                    #region Update Status (Failed to detect device)
 
                     if (bRunRes == false)
                     {
@@ -4714,43 +4745,43 @@ namespace F002461
 
                         #endregion
 
-                        if (m_str_Model.Contains("CT40"))   // CT40
-                        {
-                            if (UnitLocationCheckAction(strPanel, "0", ref strErrorMessage) == true)
-                            {
-                                // 有产品
-                                if (FeedbackStatus(strPanel, CPLCDave.FeedbackStatus.HAVEPRODUCT, ref strErrorMessage) == false)
-                                {
-                                    DisplayMessage("Panel:" + strPanel + " run FeedbackStatus HAVEPRODUCT fail." + strErrorMessage);
-                                    SaveLogFile("Panel:" + strPanel + " run FeedbackStatus HAVEPRODUCT fail." + strErrorMessage);
-                                }
-                            }
-                            else
-                            {
-                                // 无产品
-                                if (FeedbackStatus(strPanel, CPLCDave.FeedbackStatus.ERROR, ref strErrorMessage) == false)
-                                {
-                                    DisplayMessage("Panel:" + strPanel + " FeedbackStatus ERROR fail." + strErrorMessage);
-                                    SaveLogFile("Panel:" + strPanel + " FeedbackStatus ERROR fail." + strErrorMessage);
-                                }
-                            }
+                        //if (m_str_Model.Contains("CT40"))   // CT40
+                        //{
+                        //    if (UnitLocationCheckAction(strPanel, "0", ref strErrorMessage) == true)
+                        //    {
+                        //        // 有产品
+                        //        if (FeedbackStatus(strPanel, CPLCDave.FeedbackStatus.HAVEPRODUCT, ref strErrorMessage) == false)
+                        //        {
+                        //            DisplayMessage("Panel:" + strPanel + " run FeedbackStatus HAVEPRODUCT fail." + strErrorMessage);
+                        //            SaveLogFile("Panel:" + strPanel + " run FeedbackStatus HAVEPRODUCT fail." + strErrorMessage);
+                        //        }
+                        //    }
+                        //    else
+                        //    {
+                        //        // 无产品
+                        //        if (FeedbackStatus(strPanel, CPLCDave.FeedbackStatus.ERROR, ref strErrorMessage) == false)
+                        //        {
+                        //            DisplayMessage("Panel:" + strPanel + " FeedbackStatus ERROR fail." + strErrorMessage);
+                        //            SaveLogFile("Panel:" + strPanel + " FeedbackStatus ERROR fail." + strErrorMessage);
+                        //        }
+                        //    }
 
-                            if (USBPlugAction(strPanel, "0", ref strErrorMessage) == false)
-                            {
-                                DisplayMessage("Panel:" + strPanel + " USB Plug Out fail." + strErrorMessage);
-                                SaveLogFile("Panel:" + strPanel + " USB Plug Out fail." + strErrorMessage);
-                                if (FeedbackStatus(strPanel, CPLCDave.FeedbackStatus.ERROR, ref strErrorMessage) == false)
-                                {
-                                    DisplayMessage("Panel:" + strPanel + " FeedbackStatus ERROR fail." + strErrorMessage);
-                                    SaveLogFile("Panel:" + strPanel + " FeedbackStatus ERROR fail." + strErrorMessage);
-                                }
-                            }
-                            else
-                            {
-                                DisplayMessage("Panel:" + strPanel + " USB Plug Out success.");
-                                SaveLogFile("Panel:" + strPanel + " USB Plug Out success.");
-                            }
-                        }
+                        //    if (USBPlugAction(strPanel, "0", ref strErrorMessage) == false)
+                        //    {
+                        //        DisplayMessage("Panel:" + strPanel + " USB Plug Out fail." + strErrorMessage);
+                        //        SaveLogFile("Panel:" + strPanel + " USB Plug Out fail." + strErrorMessage);
+                        //        if (FeedbackStatus(strPanel, CPLCDave.FeedbackStatus.ERROR, ref strErrorMessage) == false)
+                        //        {
+                        //            DisplayMessage("Panel:" + strPanel + " FeedbackStatus ERROR fail." + strErrorMessage);
+                        //            SaveLogFile("Panel:" + strPanel + " FeedbackStatus ERROR fail." + strErrorMessage);
+                        //        }
+                        //    }
+                        //    else
+                        //    {
+                        //        DisplayMessage("Panel:" + strPanel + " USB Plug Out success.");
+                        //        SaveLogFile("Panel:" + strPanel + " USB Plug Out success.");
+                        //    }
+                        //}
 
                         // Feedback Test Result, CT40 and EDA51
                         if (FeedbackResult(strPanel, ref strErrorMessage) == false)
@@ -5604,7 +5635,7 @@ namespace F002461
             if (m_st_OptionData.TestMode == "1")
             {
                 #region CT40
-                // CT40 G2H
+                // CT40
                 //if (m_str_Model.Contains("CT40"))
                 //{
                 //    if (InitNI6001() == false)
@@ -5660,6 +5691,51 @@ namespace F002461
             //timerCopyImage.Tick += new EventHandler(timerCopyImage_Tick);
 
             #endregion
+
+            #region Timer to Connect
+
+            if (m_st_OptionData.TestMode == "1")
+            {
+                // Auto Test
+                #region Timer
+
+                // 3s
+                m_timer_WatchDog = new System.Threading.Timer(Thread_Timer_WatchDog, null, 1000, 3000);
+
+                timerAutoTest.Interval = 5000;
+                timerAutoTest.Enabled = true;
+                timerAutoTest.Tick += new EventHandler(timerAutoTest_Tick);
+
+                timerKillProcess.Interval = 20000;
+                timerKillProcess.Enabled = true;
+                timerKillProcess.Tick += new EventHandler(timerKillProcess_Tick);
+
+                #endregion
+            }
+            else
+            {
+                // Manual Test
+                #region Timer
+
+                timerMonitor.Interval = 10000;
+                timerMonitor.Enabled = true;
+                timerMonitor.Tick += new EventHandler(timerMonitorRun_Tick);
+
+                timerDeviceConnect.Interval = 15000;
+                timerDeviceConnect.Enabled = true;
+                timerDeviceConnect.Tick += new EventHandler(timerMonitorDeviceConnect_Tick);
+
+                timerKillProcess.Interval = 20000;
+                timerKillProcess.Enabled = true;
+                timerKillProcess.Tick += new EventHandler(timerKillProcess_Tick);
+
+                #endregion
+            }
+
+            DisplayMessage("Timer enabled sucessfully.");
+
+            #endregion
+
 
             return true;
         }
