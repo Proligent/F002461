@@ -5522,17 +5522,17 @@ namespace F002461
 
             #region ScanMES
 
-            if (m_st_OptionData.MES_Enable == "1")
-            {
-                DisplayMessage("MES input.");
-                if (ScanMES() == false)
-                {
-                    DisplayMessage("Failed to MES input.");
-                    return false;
-                }
-                DisplayMessage("EID:" + m_st_MESData.EID);
-                DisplayMessage("WorkOrder:" + m_st_MESData.WorkOrder);
-            }
+            //if (m_st_OptionData.MES_Enable == "1")
+            //{
+            //    DisplayMessage("MES input.");
+            //    if (ScanMES() == false)
+            //    {
+            //        DisplayMessage("Failed to MES input.");
+            //        return false;
+            //    }
+            //    DisplayMessage("EID:" + m_st_MESData.EID);
+            //    DisplayMessage("WorkOrder:" + m_st_MESData.WorkOrder);
+            //}
 
             #endregion
 
@@ -5551,44 +5551,44 @@ namespace F002461
 
             #region SKUMatrix
 
-            DisplayMessage("Parse SKU matrix.");
-            if (SKUMatrix(ref strOptionFileName, ref strErrorMessage) == false)
-            {
-                DisplayMessage("Failed to match SKU matrix.");
-                return false;
-            }
-            DisplayMessage("Option:" + strOptionFileName);
+            //DisplayMessage("Parse SKU matrix.");
+            //if (SKUMatrix(ref strOptionFileName, ref strErrorMessage) == false)
+            //{
+            //    DisplayMessage("Failed to match SKU matrix.");
+            //    return false;
+            //}
+            //DisplayMessage("Option:" + strOptionFileName);
 
             #endregion
 
             #region Model_Option.ini
 
-            DisplayMessage("Read model_option ini file." + strOptionFileName);
-            strErrorMessage = "";
-            if (ReadOptionFile(strOptionFileName, ref strErrorMessage) == false)
-            {
-                DisplayMessage("Failed to read model_option.ini file." + strErrorMessage);
-                return false;
-            }
+            //DisplayMessage("Read model_option ini file." + strOptionFileName);
+            //strErrorMessage = "";
+            //if (ReadOptionFile(strOptionFileName, ref strErrorMessage) == false)
+            //{
+            //    DisplayMessage("Failed to read model_option.ini file." + strErrorMessage);
+            //    return false;
+            //}
 
             #endregion
 
             #region Check MES Data
 
-            if (m_st_OptionData.MES_Enable == "1")
-            {
-                DisplayMessage("MES check data.");
+            //if (m_st_OptionData.MES_Enable == "1")
+            //{
+            //    DisplayMessage("MES check data.");
 
-                if (MESCheckData(ref strErrorMessage) == false)
-                {
-                    DisplayMessage("Failed to MES check data." + strErrorMessage);
-                    return false;
-                }
-            }
+            //    if (MESCheckData(ref strErrorMessage) == false)
+            //    {
+            //        DisplayMessage("Failed to MES check data." + strErrorMessage);
+            //        return false;
+            //    }
+            //}
 
             #endregion
 
-            #region Init data
+            #region Init Data
 
             DisplayMessage("Init data.");
             if (InitData() == false)
@@ -5603,23 +5603,25 @@ namespace F002461
 
             if (m_st_OptionData.TestMode == "1")
             {
+                #region CT40
                 // CT40 G2H
-                if (m_str_Model.Contains("CT40"))
-                {
-                    if (InitNI6001() == false)
-                    {
-                        DisplayMessage("Failed to init NI Card.");
-                        return false;
-                    }
+                //if (m_str_Model.Contains("CT40"))
+                //{
+                //    if (InitNI6001() == false)
+                //    {
+                //        DisplayMessage("Failed to init NI Card.");
+                //        return false;
+                //    }
 
-                    if (USBPlugInit(ref strErrorMessage) == false)
-                    {
-                        DisplayMessage("Failed to init USB Plug out init location." + strErrorMessage);
-                        return false;
-                    }
-                }
+                //    if (USBPlugInit(ref strErrorMessage) == false)
+                //    {
+                //        DisplayMessage("Failed to init USB Plug out init location." + strErrorMessage);
+                //        return false;
+                //    }
+                //}
+                #endregion
 
-                // EDA51, EDA52 Flash
+                // EDA51, EDA52 Production Line
                 if (PLCConnect() == false)
                 {
                     DisplayMessage("Failed to connect PLC......");
@@ -5631,31 +5633,31 @@ namespace F002461
 
             #endregion
 
-            #region Copy OS image
+            #region Copy OS Image
 
-            if (m_st_OptionData.ImageCopyMode == "1")
-            {
-                DisplayMessage("Copy image.");
+            //if (m_st_OptionData.ImageCopyMode == "1")
+            //{
+            //    DisplayMessage("Copy image.");
 
-                Thread thread = new Thread(this.CopyProcess);
-                thread.Start();
-                m_b_Running = true;
-                m_b_RunReslut = false;
-            }
-            else
-            {
-                DisplayMessage("Skiped to copy image.");
-                m_b_Running = false;
-                m_b_RunReslut = true;
-            }
+            //    Thread thread = new Thread(this.CopyProcess);
+            //    thread.Start();
+            //    m_b_Running = true;
+            //    m_b_RunReslut = false;
+            //}
+            //else
+            //{
+            //    DisplayMessage("Skiped to copy image.");
+            //    m_b_Running = false;
+            //    m_b_RunReslut = true;
+            //}
 
             #endregion
 
             #region Timer
 
-            timerCopyImage.Interval = 10000;
-            timerCopyImage.Enabled = true;
-            timerCopyImage.Tick += new EventHandler(timerCopyImage_Tick);
+            //timerCopyImage.Interval = 10000;
+            //timerCopyImage.Enabled = true;
+            //timerCopyImage.Tick += new EventHandler(timerCopyImage_Tick);
 
             #endregion
 
@@ -5703,6 +5705,12 @@ namespace F002461
             return true;
         }
 
+        /// <summary>
+        /// Parse sku to export model config file in SKUOption.txt
+        /// </summary>
+        /// <param name="strOptionFileName"></param>
+        /// <param name="strErrorMessage"></param>
+        /// <returns></returns>
         private bool SKUMatrix(ref string strOptionFileName, ref string strErrorMessage)
         {
             try
@@ -6366,9 +6374,9 @@ namespace F002461
                 m_st_OptionData.SDCard_Enable = objIniFile.ReadString("SDCard", "Enable");
                 if ((m_st_OptionData.SDCard_Enable != "0") && (m_st_OptionData.SDCard_Enable != "1"))
                 {
-                    //strErrorMessage = "Invalid SDCard Enable:" + m_st_OptionData.SDCard_Enable;
-                    //return false;
                     m_st_OptionData.SDCard_Enable = "1";
+                    //strErrorMessage = "Invalid SDCard Enable:" + m_st_OptionData.SDCard_Enable;
+                    //return false;             
                 }
 
                 #endregion
@@ -7243,10 +7251,5 @@ namespace F002461
 
         #endregion
 
-        
-
-
-
-     
     }
 }
