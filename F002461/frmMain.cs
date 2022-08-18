@@ -44,73 +44,13 @@ namespace F002461
             public string SDCard_Enable;
             public string Reboot_WaitTime;
 
-            #region Obsolete
-            //// Image
-            //public string ImageServerPath;
-            //public string ImageLocalPath;
-            //public string ImageCopyMode;
-
-            //// FlashMode
-            //public string FlashMode;
-
-            //// BITResult
-            //public string CheckManualBITResult_Enable;
-
-            //// Fastboot
-            //public string FASTBOOTEnable;
-            //public string FASTBOOTBatServerPath;
-            //public string FASTBOOTBatLocalPath;
-            //public string FASTBOOTBatFile;
-            //public int FASTBOOTTimeout;
-            //public string FASTBOOTSuccessFlag;
-
-            //// EDL
-            //public string EDLQFIL;
-            //public string EDLDeviceType;
-            //public string EDLFlashType;
-            //public string EDLELF;
-            //public string EDLPatch;
-            //public string EDLRawProgram;
-            //public string EDLReset;
-            //public int EDLTimeout;
-            //public string EDLSuccessFlag;
-
-            //// Keybox
-            //public string KeyboxEnable;
-            //public string KeyboxFilePath;
-            //public string KeyboxFile;
-            //public string KeyboxDevice;
-
-            //// SentienceKey
-            //public string SentienceKeyEnable;
-            //public string SentienceKeyHonEdgeProductName;
-            //public string SentienceKeyUploadEnable;
-            //public string SentienceKeyUploadServerPath;
-
-            //// Station
-            //public string StationName;
-
-            //// Check SKU
-            //public string SKUCheckEnable;
-
-            //// MDCS
-            //public string MDCSEnable;
-            //public string MDCSURL;
-            //public string MDCSDeviceName;
-            //public string MDCSPreStationResultCheck;
-            //public string MDCSPreStationDeviceName;
-            //public string MDCSPreStationVarName;
-            //public string MDCSPreStationVarValue;
-            #endregion
-
-            // Setup
+            // Setup.ini
+            public string ADBDeviceName;
+            public string QDLoaderPortName;
             public string DeviceAddress_Panel1;
             public string DeviceAddress_Panel2;
             public string DeviceAddress_Panel3;
-            public string DeviceAddress_Panel4;
-            public string ADBDeviceName;
-            public string QDLoaderPortName;
-
+            public string DeviceAddress_Panel4;      
         }
 
         private struct ModelOption
@@ -189,14 +129,14 @@ namespace F002461
 
         private struct UnitDeviceInfo
         {
-            public string Panel;
-            public string PhysicalAddress;
+            public string Panel;  
             public string SN;
             public string SKU;
             public string Model;
             public string EID;
             public string WorkOrder;
             public string Status;
+            public string PhysicalAddress;
         }
 
         #endregion
