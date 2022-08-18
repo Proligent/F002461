@@ -209,12 +209,12 @@ namespace F002461
             if (m_st_OptionData.TestMode == "1")
             {
                 //lblTitleBar.Text = Program.g_str_ToolNumber + " : " + Program.g_str_ToolRev + " [Auto Test] " + m_st_MCFData.SKU + " " + m_st_MESData.EID + " " + m_st_MESData.WorkOrder;
-                lblTitleBar.Text = Program.g_str_ToolNumber + " : " + Program.g_str_ToolRev + " [Auto Test] " + m_st_MESData.WorkOrder;
+                lblTitleBar.Text = "[Auto Test] " + Program.g_str_ToolNumber + " : " + Program.g_str_ToolRev;
             }
             else
             {
                 //lblTitleBar.Text = Program.g_str_ToolNumber + " : " + Program.g_str_ToolRev + " [Manual Test] " + m_st_MCFData.SKU + " " + m_st_MESData.EID + " " + m_st_MESData.WorkOrder;
-                lblTitleBar.Text = Program.g_str_ToolNumber + " : " + Program.g_str_ToolRev + " [Manual Test] " + m_st_MESData.WorkOrder;
+                lblTitleBar.Text = "[Manual Test] " + Program.g_str_ToolNumber + " : " + Program.g_str_ToolRev;
             }
 
             return;
