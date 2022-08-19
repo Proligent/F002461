@@ -29,6 +29,11 @@ namespace F002461
             // Option.ini
             public string TestMode;
             public string DAQDevice;
+            public string Area_Location;
+            public string MES_Enable;
+            public string SDCard_Enable;
+            public string Reboot_WaitTime;
+
             public string PLCIP;
             public string PLCPort;
             public int DB_Slot1_ReadDB;
@@ -39,11 +44,7 @@ namespace F002461
             public int DB_Slot3_WriteDB;
             public int DB_Slot4_ReadDB;
             public int DB_Slot4_WriteDB;
-            public string Area_Location;
-            public string MES_Enable;
-            public string SDCard_Enable;
-            public string Reboot_WaitTime;
-
+            
             // Setup.ini
             public string ADBDeviceName;
             public string QDLoaderPortName;
@@ -562,7 +563,7 @@ namespace F002461
                         }
                         else
                         {
-                            UnitDeviceInfo stUnit = new UnitDeviceInfo();
+                            UnitDeviceInfo stUnit = new UnitDeviceInfo();     
                             stUnit.Panel = m_dic_UnitDevice[strPanel].Panel;
                             stUnit.PhysicalAddress = m_dic_UnitDevice[strPanel].PhysicalAddress;
                             stUnit.SN = m_dic_UnitDevice[strPanel].SN;
@@ -956,14 +957,28 @@ namespace F002461
                     {
                         bUpdateMDCS = true;
                         bRes = true;
-                    }
-                
+                    }      
                 }
 
                 #endregion
 
                 #region Get WorkOrder Property
 
+                if (bRes == true)
+                {
+                    bRes = TestGetWorkOrder(strPanel, ref strErrorMessage);
+                    if (bRes == false)
+                    {
+                        bUpdateMDCS = false;
+                        bRes = false;
+                        strErrorMessage = "Failed to get WorkOrder property." + strErrorMessage;
+                    }
+                    else
+                    {
+                        bUpdateMDCS = true;
+                        bRes = true;
+                    }
+                }
 
 
                 #endregion
@@ -1378,7 +1393,7 @@ namespace F002461
 
             try
             {
-                if (m_st_OptionData.MDCSPreStationResultCheck == "1")
+                if (m_dic_ModelOption[strPanel].MDCSPreStationResultCheck == "1")
                 {
                     this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Check Pre Station Result."); });
 
@@ -1390,15 +1405,15 @@ namespace F002461
                     }
                     string str_ErrorMessage = "";
                     clsMDCS obj_SaveMDCS = new clsMDCS();
-                    obj_SaveMDCS.ServerName = m_st_OptionData.MDCSURL;
-                    obj_SaveMDCS.DeviceName = m_st_OptionData.MDCSPreStationDeviceName;
+                    obj_SaveMDCS.ServerName = m_dic_ModelOption[strPanel].MDCSURL;
+                    obj_SaveMDCS.DeviceName = m_dic_ModelOption[strPanel].MDCSPreStationDeviceName;
                     obj_SaveMDCS.UseModeProduction = true;
 
                     bool bRes = false;
                     string strValue = "";
                     for (int i = 0; i < 3; i++)
                     {
-                        bRes = obj_SaveMDCS.GetMDCSVariable(m_st_OptionData.MDCSPreStationDeviceName, m_st_OptionData.MDCSPreStationVarName, str_SN, ref strValue, ref str_ErrorMessage);
+                        bRes = obj_SaveMDCS.GetMDCSVariable(m_dic_ModelOption[strPanel].MDCSPreStationDeviceName, m_dic_ModelOption[strPanel].MDCSPreStationVarName, str_SN, ref strValue, ref str_ErrorMessage);
                         if (bRes == false)
                         {
                             bRes = false;
@@ -1408,7 +1423,7 @@ namespace F002461
                         }
                         else
                         {
-                            if (strValue != m_st_OptionData.MDCSPreStationVarValue)
+                            if (strValue != m_dic_ModelOption[strPanel].MDCSPreStationVarValue)
                             {
                                 bRes = false;
                                 strErrorMessage = "Compare value fail." + strValue;
@@ -1451,8 +1466,7 @@ namespace F002461
             strErrorMessage = "";
 
             try
-            {
-                
+            {         
                 this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Get SKU Property."); });
 
                 string strSKU = "";
@@ -1461,8 +1475,18 @@ namespace F002461
                     return false;
                 }
 
+           
+                UnitDeviceInfo stUnit = new UnitDeviceInfo();
+                stUnit = m_dic_UnitDevice[strPanel];
+                stUnit.Panel = m_dic_UnitDevice[strPanel].Panel;
+                stUnit.PhysicalAddress = m_dic_UnitDevice[strPanel].PhysicalAddress;
+                stUnit.SN = m_dic_UnitDevice[strPanel].SN;
+                stUnit.Status = "0";
+
+
+                m_dic_UnitDevice[strPanel] = stUnit;
+
                 this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get SKU: " + strSKU); });
-               
             }
             catch (Exception ex)
             {
@@ -2522,6 +2546,117 @@ namespace F002461
             return true;
         }
 
+        private bool ExcuteBat(string strPanel, string strBatDir, string strBatFile, string strBatParameter, int iTimeOut, string strSearchResult, ref string strResult, ref string strErrorMessage)
+        {
+            strErrorMessage = "";
+            strResult = "";
+            string strOutput = "";
+
+            Process process = null;
+            ProcessStartInfo startInfo = null;
+
+            if (strBatParameter != "")
+            {
+                process = new Process();
+                startInfo = new ProcessStartInfo(strBatFile, strBatParameter);
+                startInfo.WorkingDirectory = strBatDir;
+                startInfo.Arguments = strBatParameter;
+                startInfo.UseShellExecute = false;
+                startInfo.RedirectStandardInput = false;
+                startInfo.RedirectStandardOutput = true;
+                startInfo.CreateNoWindow = true;
+                process.StartInfo = startInfo;
+            }
+            else
+            {
+                process = new Process();
+                startInfo = new ProcessStartInfo(strBatFile);
+                startInfo.WorkingDirectory = strBatDir;
+                startInfo.UseShellExecute = false;
+                startInfo.RedirectStandardInput = false;
+                startInfo.RedirectStandardOutput = true;
+                startInfo.CreateNoWindow = true;
+                process.StartInfo = startInfo;
+            }
+
+            try
+            {
+                if (process.Start())
+                {
+                    #region StandardOutput OutputDataReceived
+
+                    process.OutputDataReceived += new DataReceivedEventHandler((sender, e) =>
+                    {
+                        string strData = e.Data;
+                        if (!String.IsNullOrEmpty(strData))
+                        {
+                            strOutput += strData;
+                            this.Invoke((MethodInvoker)delegate
+                            {
+                                DisplayUnitLog(strPanel, strData);
+                            });
+                        }
+                    });
+
+                    process.BeginOutputReadLine();
+
+                    if (iTimeOut == 0)
+                    {
+                        process.WaitForExit();
+                    }
+                    else
+                    {
+                        process.WaitForExit(iTimeOut);
+                    }
+
+                    #endregion
+                }
+
+                #region Check Result
+
+                // 输出有时会延迟
+                bool bRes = false;
+                for (int i = 0; i < 20; i++)
+                {
+                    bRes = strOutput.Contains(strSearchResult);
+                    if (bRes == true)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        Thread.Sleep(500);
+                        bRes = false;
+                        continue;
+                    }
+                }
+                if (bRes == false)
+                {
+                    strErrorMessage = "Check bat result:" + strSearchResult;
+                    return false;
+                }
+        
+                strResult = strOutput;
+
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                string strr = ex.Message;
+                strErrorMessage = "Execute Bat Exception:" + strr;
+                return false;
+            }
+            finally
+            {
+                if (process != null)
+                {
+                    process.Close();
+                }
+            }
+
+            return true;
+        }
+
         private bool ExcuteBat_Fastboot(string strPanel, string strBatDir, string strBatFile, string strBatParameter, int iTimeOut, string strSearchResult, ref string strErrorMessage)
         {
             strErrorMessage = "";
@@ -2948,10 +3083,12 @@ namespace F002461
         private bool GetSKUProperty(string strPanel, ref string strSKU, ref string strErrorMessage)
         {
             strErrorMessage = "";
-  
+            strSKU = "";
+
             try
             {
                 bool bRes = false;
+                string strResult = "";
                 string strSN = m_dic_UnitDevice[strPanel].SN;
                 string strBatDir = Application.StartupPath + "\\" + "BAT";
                 string strBatFile = strBatDir + "\\" + "GetSKU.bat";
@@ -2965,10 +3102,11 @@ namespace F002461
                 }
 
                 string strBatParameter = "";
-                strBatParameter = strSN + " " + m_st_MCFData.SKU;
+                strBatParameter = strSN;
                 for (int i = 0; i < 6; i++)
                 {
-                    bRes = ExcuteBat(strPanel, strBatDir, strBatFile, strBatParameter, iTimeout, strSearchResult, ref strErrorMessage);
+                    strResult = "";
+                    bRes = ExcuteBat(strPanel, strBatDir, strBatFile, strBatParameter, iTimeout, strSearchResult, ref strResult, ref strErrorMessage);
                     if (bRes == false)
                     {
                         bRes = false;
@@ -2981,13 +3119,24 @@ namespace F002461
                 }
                 if (bRes == false)
                 {
-                    strErrorMessage = "Failed to check ManualBITResult.";
+                    strErrorMessage = "Failed to get SKU.";
                     return false;
+                }
+
+                // Truncate SKU
+                string[] lines = strResult.Split(new char[]{'\r', '\n'});
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    if (lines[i] == "SKU:")
+                    {
+                        strSKU = lines[i + 1].Trim();
+                        break;
+                    }     
                 }
             }
             catch (Exception ex)
             {
-                strErrorMessage = "Check ManualBITResult exception:" + ex.Message;
+                strErrorMessage = "Get SKU exception:" + ex.Message;
                 string strr = ex.Message;
                 return false;
             }
