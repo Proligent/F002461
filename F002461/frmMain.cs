@@ -514,10 +514,15 @@ namespace F002461
                         // 不同产品
                         #region STATUS_CONNECTED
 
+                        // Init
                         UnitDeviceInfo stUnit = new UnitDeviceInfo();
                         stUnit.Panel = strPanel;
                         stUnit.PhysicalAddress = strPhysicalAddress;
                         stUnit.SN = strSN;
+                        stUnit.SKU = "";
+                        stUnit.Model = "";
+                        stUnit.EID= "";
+                        stUnit.WorkOrder= "";
                         stUnit.Status = "1";
                         m_dic_UnitDevice[strPanel] = stUnit;
 
@@ -526,7 +531,7 @@ namespace F002461
 
                         #endregion
 
-                        RunFlashWorker(strPanel);
+                        RunFlashWorker(strPanel); //Async RunTest
                     }
                 }
                 else
@@ -567,6 +572,10 @@ namespace F002461
                             stUnit.Panel = m_dic_UnitDevice[strPanel].Panel;
                             stUnit.PhysicalAddress = m_dic_UnitDevice[strPanel].PhysicalAddress;
                             stUnit.SN = m_dic_UnitDevice[strPanel].SN;
+                            stUnit.SKU = "";
+                            stUnit.Model = "";
+                            stUnit.EID = "";
+                            stUnit.WorkOrder = "";
                             stUnit.Status = "0";
                             m_dic_UnitDevice[strPanel] = stUnit;
 
@@ -598,6 +607,10 @@ namespace F002461
                             stUnit.Panel = m_dic_UnitDevice[strPanel].Panel;
                             stUnit.PhysicalAddress = m_dic_UnitDevice[strPanel].PhysicalAddress;
                             stUnit.SN = m_dic_UnitDevice[strPanel].SN;
+                            stUnit.SKU = "";
+                            stUnit.Model = "";
+                            stUnit.EID = "";
+                            stUnit.WorkOrder = "";
                             stUnit.Status = "0";
                             m_dic_UnitDevice[strPanel] = stUnit;
 
@@ -696,12 +709,14 @@ namespace F002461
                 strPhysicalAddress = m_dic_UnitDevice[strPanel].PhysicalAddress;
                 strDeviceName = m_st_OptionData.ADBDeviceName;
 
+                // Init
                 UnitDeviceInfo stUnit1 = new UnitDeviceInfo();
                 stUnit1.Panel = strPanel;
                 stUnit1.PhysicalAddress = strPhysicalAddress;
                 stUnit1.SN = "";
                 stUnit1.SKU = "";
                 stUnit1.Model = "";
+                stUnit1.EID = "";
                 stUnit1.WorkOrder = "";
                 stUnit1.Status = "0";
                 m_dic_UnitDevice[strPanel] = stUnit1;
@@ -737,10 +752,8 @@ namespace F002461
                             continue;
                         }
 
-                        UnitDeviceInfo stUnit = new UnitDeviceInfo();
-                        stUnit.Panel = strPanel;
-                        stUnit.PhysicalAddress = strPhysicalAddress;
-                        stUnit.SN = strSN;
+                        UnitDeviceInfo stUnit = m_dic_UnitDevice[strPanel];     
+                        stUnit.SN = strSN;                  
                         stUnit.Status = "1";
                         m_dic_UnitDevice[strPanel] = stUnit;
 
@@ -930,9 +943,10 @@ namespace F002461
 
                 #endregion
 
-                #region InitMDCSData
+                #region InitData
 
                 InitMDCSData(strPanel);
+                InitModelOptionData(strPanel);
 
                 #endregion
 
@@ -963,7 +977,7 @@ namespace F002461
                 #endregion
 
                 #region Get WorkOrder Property
-
+                // Remark: WorkOrder sometimes maybe not written in property, get from scansheet.
                 if (bRes == true)
                 {
                     bRes = TestGetWorkOrder(strPanel, ref strErrorMessage);
@@ -980,17 +994,33 @@ namespace F002461
                     }
                 }
 
-
                 #endregion
 
                 #region Get EID Property
 
-
+                if (bRes == true)
+                {
+                    bRes = TestGetEID(strPanel, ref strErrorMessage);
+                    if (bRes == false)
+                    {
+                        bUpdateMDCS = false;
+                        bRes = false;
+                        strErrorMessage = "Failed to get EID property." + strErrorMessage;
+                    }
+                    else
+                    {
+                        bUpdateMDCS = true;
+                        bRes = true;
+                    }
+                }
 
                 #endregion
 
+                #region Read Model_Option.ini
 
 
+
+                #endregion
 
                 #region Get ScanSheet
 
@@ -1470,34 +1500,88 @@ namespace F002461
                 this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Get SKU Property."); });
 
                 string strSKU = "";
+                string strModel = "";
                 if (GetSKUProperty(strPanel, ref strSKU, ref strErrorMessage) == false)
                 {
                     return false;
                 }
 
-           
-                UnitDeviceInfo stUnit = new UnitDeviceInfo();
-                stUnit = m_dic_UnitDevice[strPanel];
-                stUnit.Panel = m_dic_UnitDevice[strPanel].Panel;
-                stUnit.PhysicalAddress = m_dic_UnitDevice[strPanel].PhysicalAddress;
-                stUnit.SN = m_dic_UnitDevice[strPanel].SN;
-                stUnit.Status = "0";
+                int index = strSKU.IndexOf("-");
+                strModel = strSKU.Substring(0, index);
 
-
+                UnitDeviceInfo stUnit = m_dic_UnitDevice[strPanel];
+                stUnit.SKU = strSKU;
+                stUnit.Model = strModel;
                 m_dic_UnitDevice[strPanel] = stUnit;
 
                 this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get SKU: " + strSKU); });
             }
             catch (Exception ex)
             {
-                string strr = ex.Message;
-                strErrorMessage = "TestCheckManualBITResult Exception:" + strr;
+                strErrorMessage = "TestGetSKU Exception:" + ex.Message;
                 return false;
             }
 
             return true;
         }
 
+        private bool TestGetWorkOrder(string strPanel, ref string strErrorMessage)
+        {
+            strErrorMessage = "";
+
+            try
+            {
+                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Get WorkOrder Property."); });
+
+                string strWorkOrder = "";
+                if (GetWorkOrderProperty(strPanel, ref strWorkOrder, ref strErrorMessage) == false)
+                {
+                    return false;
+                }
+
+                UnitDeviceInfo stUnit = m_dic_UnitDevice[strPanel];
+                stUnit.WorkOrder = strWorkOrder;          
+                m_dic_UnitDevice[strPanel] = stUnit;
+
+                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get WorkOrder: " + strWorkOrder); });
+            }
+            catch (Exception ex)
+            {
+                strErrorMessage = "TestGetWorkOrder Exception:" + ex.Message;
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool TestGetEID(string strPanel, ref string strErrorMessage)
+        {
+            strErrorMessage = "";
+
+            try
+            {
+                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Get EID Property."); });
+
+                string strEID = "";
+                if (GetEIDProperty(strPanel, ref strEID, ref strErrorMessage) == false)
+                {
+                    return false;
+                }
+
+                UnitDeviceInfo stUnit = m_dic_UnitDevice[strPanel];
+                stUnit.EID = strEID;
+                m_dic_UnitDevice[strPanel] = stUnit;
+
+                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get EID: " + strEID); });
+            }
+            catch (Exception ex)
+            {
+                strErrorMessage = "TestGetEID Exception:" + ex.Message;
+                return false;
+            }
+
+            return true;
+        }
 
         private bool TestCheckSKU(string strPanel, ref string strErrorMessage)
         {
@@ -3119,7 +3203,7 @@ namespace F002461
                 }
                 if (bRes == false)
                 {
-                    strErrorMessage = "Failed to get SKU.";
+                    strErrorMessage = "Execute bat to get SKU fail.";
                     return false;
                 }
 
@@ -3127,17 +3211,160 @@ namespace F002461
                 string[] lines = strResult.Split(new char[]{'\r', '\n'});
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    if (lines[i] == "SKU:")
+                    if (lines[i].Trim() == "SKU:")
                     {
-                        strSKU = lines[i + 1].Trim();
+                        strSKU = lines[i+1].Trim();
                         break;
                     }     
+                }
+
+                if (string.IsNullOrWhiteSpace(strSKU) || strSKU.IndexOf("-") == 0)
+                {
+                    strErrorMessage = "Get SKU format error !!!";
+                    return false;
                 }
             }
             catch (Exception ex)
             {
                 strErrorMessage = "Get SKU exception:" + ex.Message;
-                string strr = ex.Message;
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool GetWorkOrderProperty(string strPanel, ref string strWorkOrder, ref string strErrorMessage)
+        {
+            strErrorMessage = "";
+            strWorkOrder = "";
+
+            try
+            {
+                bool bRes = false;
+                string strResult = "";
+                string strSN = m_dic_UnitDevice[strPanel].SN;
+                string strBatDir = Application.StartupPath + "\\" + "BAT";
+                string strBatFile = strBatDir + "\\" + "GetWorkOrder.bat";
+                int iTimeout = 15 * 1000;
+                string strSearchResult = "SUCCESS";
+
+                if (File.Exists(strBatFile) == false)
+                {
+                    strErrorMessage = "Check file exist fail." + strBatFile;
+                    return false;
+                }
+
+                string strBatParameter = "";
+                strBatParameter = strSN;
+                for (int i = 0; i < 6; i++)
+                {
+                    strResult = "";
+                    bRes = ExcuteBat(strPanel, strBatDir, strBatFile, strBatParameter, iTimeout, strSearchResult, ref strResult, ref strErrorMessage);
+                    if (bRes == false)
+                    {
+                        bRes = false;
+                        Dly(10);
+                        continue;
+                    }
+
+                    bRes = true;
+                    break;
+                }
+                if (bRes == false)
+                {
+                    strErrorMessage = "Execute bat to get WorkOrder fail.";
+                    return false;
+                }
+
+                // Truncate WorkOrder
+                string[] lines = strResult.Split(new char[] { '\r', '\n' });
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    if (lines[i].Trim() == "WorkOrder:")
+                    {
+                        strWorkOrder = lines[i+1].Trim();
+                        break;
+                    }
+                }
+
+                if (string.IsNullOrWhiteSpace(strWorkOrder))
+                {
+                    strErrorMessage = "Get WorkOrder is empty !!!";
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                strErrorMessage = "Get WorkOrder exception:" + ex.Message;
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool GetEIDProperty(string strPanel, ref string strEID, ref string strErrorMessage)
+        {
+            strErrorMessage = "";
+            strEID = "";
+
+            try
+            {
+                bool bRes = false;
+                string strResult = "";
+                string strSN = m_dic_UnitDevice[strPanel].SN;
+                string strBatDir = Application.StartupPath + "\\" + "BAT";
+                string strBatFile = strBatDir + "\\" + "GetEID.bat";
+                int iTimeout = 15 * 1000;
+                string strSearchResult = "SUCCESS";
+
+                if (File.Exists(strBatFile) == false)
+                {
+                    strErrorMessage = "Check file exist fail." + strBatFile;
+                    return false;
+                }
+
+                string strBatParameter = "";
+                strBatParameter = strSN;
+                for (int i = 0; i < 6; i++)
+                {
+                    strResult = "";
+                    bRes = ExcuteBat(strPanel, strBatDir, strBatFile, strBatParameter, iTimeout, strSearchResult, ref strResult, ref strErrorMessage);
+                    if (bRes == false)
+                    {
+                        bRes = false;
+                        Dly(10);
+                        continue;
+                    }
+
+                    bRes = true;
+                    break;
+                }
+                if (bRes == false)
+                {
+                    strErrorMessage = "Execute bat to get EID fail.";
+                    return false;
+                }
+
+                // Truncate EID
+                string[] lines = strResult.Split(new char[] { '\r', '\n' });
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    if (lines[i].Trim() == "EID:")
+                    {
+                        strEID = lines[i+1].Trim();
+                        break;
+                    }
+                }
+
+                if (string.IsNullOrWhiteSpace(strEID))
+                {
+                    strErrorMessage = "Get EID is empty !!!";
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                strErrorMessage = "Get strEID exception:" + ex.Message;
                 return false;
             }
 
@@ -3942,6 +4169,44 @@ namespace F002461
                 objSaveData.TestResult.TestStatus = "";
 
                 m_dic_TestSaveData[strPanel] = objSaveData;
+            }
+            catch (Exception ex)
+            {
+                string strr = ex.Message;
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool InitModelOptionData(string strPanel)
+        {
+            try
+            {
+                ModelOption objModelOption = m_dic_ModelOption[strPanel];
+
+                objModelOption.ImageServerPath = "";
+                objModelOption.ImageLocalPath = "";
+                objModelOption.ImageCopyMode = "";
+                objModelOption.FlashMode = "";
+                objModelOption.CheckManualBITResult_Enable = "";
+                objModelOption.FASTBOOTEnable = "";
+                objModelOption.FASTBOOTBatServerPath = "";
+                objModelOption.FASTBOOTBatLocalPath = "";
+                objModelOption.FASTBOOTBatFile = "";
+                objModelOption.FASTBOOTTimeout = 600;
+                objModelOption.FASTBOOTSuccessFlag = "";
+                objModelOption.EDLQFIL = "";
+                objModelOption.EDLDeviceType = "";
+                objModelOption.EDLFlashType = "";
+                objModelOption.EDLELF = "";
+                objModelOption.EDLPatch = "";
+                objModelOption.EDLRawProgram = "";
+                objModelOption.EDLReset = "";
+                objModelOption.EDLTimeout = 600;
+                objModelOption.EDLSuccessFlag = "";
+
+                m_dic_ModelOption[strPanel] = objModelOption;
             }
             catch (Exception ex)
             {
@@ -5955,7 +6220,6 @@ namespace F002461
          
             #endregion
 
-
             #region SKUMatrix
 
             //DisplayMessage("Parse SKU matrix.");
@@ -6883,6 +7147,10 @@ namespace F002461
                 stUnit1.Panel = PANEL_1;
                 stUnit1.PhysicalAddress = m_st_OptionData.DeviceAddress_Panel1;
                 stUnit1.SN = "";
+                stUnit1.SKU = "";
+                stUnit1.Model = "";
+                stUnit1.EID = "";
+                stUnit1.WorkOrder = "";
                 stUnit1.Status = "0";
                 m_dic_UnitDevice.Add(PANEL_1, stUnit1);
 
@@ -6891,6 +7159,10 @@ namespace F002461
                 stUnit2.Panel = PANEL_2;
                 stUnit2.PhysicalAddress = m_st_OptionData.DeviceAddress_Panel2;
                 stUnit2.SN = "";
+                stUnit2.SKU = "";
+                stUnit2.Model = "";
+                stUnit2.EID = "";
+                stUnit2.WorkOrder = "";
                 stUnit2.Status = "0";
                 m_dic_UnitDevice.Add(PANEL_2, stUnit2);
 
@@ -6899,16 +7171,126 @@ namespace F002461
                 stUnit3.Panel = PANEL_3;
                 stUnit3.PhysicalAddress = m_st_OptionData.DeviceAddress_Panel3;
                 stUnit3.SN = "";
+                stUnit3.SKU = "";
+                stUnit3.Model = "";
+                stUnit3.EID = "";
+                stUnit3.WorkOrder = "";
                 stUnit3.Status = "0";
                 m_dic_UnitDevice.Add(PANEL_3, stUnit3);
 
                 // Unit4
                 UnitDeviceInfo stUnit4 = new UnitDeviceInfo();
-                stUnit2.Panel = PANEL_4;
+                stUnit4.Panel = PANEL_4;
                 stUnit4.PhysicalAddress = m_st_OptionData.DeviceAddress_Panel4;
                 stUnit4.SN = "";
+                stUnit4.SKU = "";
+                stUnit4.Model = "";
+                stUnit4.EID = "";
+                stUnit4.WorkOrder = "";
                 stUnit4.Status = "0";
                 m_dic_UnitDevice.Add(PANEL_4, stUnit4);
+
+                #endregion
+
+                #region m_dic_ModelOption
+
+                m_dic_ModelOption.Clear();
+
+                // Unit1
+                ModelOption objModelOption1 = new ModelOption();
+                objModelOption1.ImageServerPath = "";
+                objModelOption1.ImageLocalPath = "";
+                objModelOption1.ImageCopyMode = "";
+                objModelOption1.FlashMode = "";
+                objModelOption1.CheckManualBITResult_Enable = "";
+                objModelOption1.FASTBOOTEnable = "";
+                objModelOption1.FASTBOOTBatServerPath = "";
+                objModelOption1.FASTBOOTBatLocalPath = "";
+                objModelOption1.FASTBOOTBatFile = "";
+                objModelOption1.FASTBOOTTimeout = 600;
+                objModelOption1.FASTBOOTSuccessFlag = "";
+                objModelOption1.EDLQFIL = "";
+                objModelOption1.EDLDeviceType = "";
+                objModelOption1.EDLFlashType = "";
+                objModelOption1.EDLELF = "";
+                objModelOption1.EDLPatch = "";
+                objModelOption1.EDLRawProgram = "";
+                objModelOption1.EDLReset = "";
+                objModelOption1.EDLTimeout = 600;
+                objModelOption1.EDLSuccessFlag = "";
+                m_dic_ModelOption.Add(PANEL_1, objModelOption1);
+
+                // Unit2
+                ModelOption objModelOption2 = new ModelOption();
+                objModelOption2.ImageServerPath = "";
+                objModelOption2.ImageLocalPath = "";
+                objModelOption2.ImageCopyMode = "";
+                objModelOption2.FlashMode = "";
+                objModelOption2.CheckManualBITResult_Enable = "";
+                objModelOption2.FASTBOOTEnable = "";
+                objModelOption2.FASTBOOTBatServerPath = "";
+                objModelOption2.FASTBOOTBatLocalPath = "";
+                objModelOption2.FASTBOOTBatFile = "";
+                objModelOption2.FASTBOOTTimeout = 600;
+                objModelOption2.FASTBOOTSuccessFlag = "";
+                objModelOption2.EDLQFIL = "";
+                objModelOption2.EDLDeviceType = "";
+                objModelOption2.EDLFlashType = "";
+                objModelOption2.EDLELF = "";
+                objModelOption2.EDLPatch = "";
+                objModelOption2.EDLRawProgram = "";
+                objModelOption2.EDLReset = "";
+                objModelOption2.EDLTimeout = 600;
+                objModelOption2.EDLSuccessFlag = "";
+                m_dic_ModelOption.Add(PANEL_2, objModelOption2);
+
+                // Unit3
+                ModelOption objModelOption3 = new ModelOption();
+                objModelOption3.ImageServerPath = "";
+                objModelOption3.ImageLocalPath = "";
+                objModelOption3.ImageCopyMode = "";
+                objModelOption3.FlashMode = "";
+                objModelOption3.CheckManualBITResult_Enable = "";
+                objModelOption3.FASTBOOTEnable = "";
+                objModelOption3.FASTBOOTBatServerPath = "";
+                objModelOption3.FASTBOOTBatLocalPath = "";
+                objModelOption3.FASTBOOTBatFile = "";
+                objModelOption3.FASTBOOTTimeout = 600;
+                objModelOption3.FASTBOOTSuccessFlag = "";
+                objModelOption3.EDLQFIL = "";
+                objModelOption3.EDLDeviceType = "";
+                objModelOption3.EDLFlashType = "";
+                objModelOption3.EDLELF = "";
+                objModelOption3.EDLPatch = "";
+                objModelOption3.EDLRawProgram = "";
+                objModelOption3.EDLReset = "";
+                objModelOption3.EDLTimeout = 600;
+                objModelOption3.EDLSuccessFlag = "";
+                m_dic_ModelOption.Add(PANEL_3, objModelOption3);
+
+                // Unit4
+                ModelOption objModelOption4 = new ModelOption();
+                objModelOption4.ImageServerPath = "";
+                objModelOption4.ImageLocalPath = "";
+                objModelOption4.ImageCopyMode = "";
+                objModelOption4.FlashMode = "";
+                objModelOption4.CheckManualBITResult_Enable = "";
+                objModelOption4.FASTBOOTEnable = "";
+                objModelOption4.FASTBOOTBatServerPath = "";
+                objModelOption4.FASTBOOTBatLocalPath = "";
+                objModelOption4.FASTBOOTBatFile = "";
+                objModelOption4.FASTBOOTTimeout = 600;
+                objModelOption4.FASTBOOTSuccessFlag = "";
+                objModelOption4.EDLQFIL = "";
+                objModelOption4.EDLDeviceType = "";
+                objModelOption4.EDLFlashType = "";
+                objModelOption4.EDLELF = "";
+                objModelOption4.EDLPatch = "";
+                objModelOption4.EDLRawProgram = "";
+                objModelOption4.EDLReset = "";
+                objModelOption4.EDLTimeout = 600;
+                objModelOption4.EDLSuccessFlag = "";
+                m_dic_ModelOption.Add(PANEL_4, objModelOption4);
 
                 #endregion
 

@@ -31,7 +31,7 @@ if %errorlevel% == 0 (
 	)
 )
  
-echo EID:
+echo WorkOrder:
 adb -s %1 shell su 0 mfg-tool -g EX_PART_NUMBER
 			
 goto :success
