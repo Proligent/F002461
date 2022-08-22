@@ -17,14 +17,14 @@ if %errorlevel% == 0 (
 	)
 )
 
-echo adb shell su 0 mfg-tool -g EX_PART_NUMBER(EID Property)
-adb -s %1 shell su 0 mfg-tool -g EX_PART_NUMBER 2>&1 | findstr /c:"error"
+echo adb shell getprop persist.sys.FLASH
+adb -s %1 shell getprop persist.sys.FLASH 2>&1 | findstr /c:"error"
 if %errorlevel% == 0 (
 	timeout /t 2 >null
-	adb -s %1 shell su 0 mfg-tool -g EX_PART_NUMBER 2>&1 | findstr /c:"error"
+	adb -s %1 shell getprop persist.sys.FLASH 2>&1 | findstr /c:"error"
 	if %errorlevel% == 0 (
 		timeout /t 2 >null
-		adb -s %1 shell su 0 mfg-tool -g EX_PART_NUMBER 2>&1 | findstr /c:"error"
+		adb -s %1 shell getprop persist.sys.FLASH 2>&1 | findstr /c:"error"
 		if %errorlevel% == 0 (
 			goto :failed
 		)
@@ -32,7 +32,7 @@ if %errorlevel% == 0 (
 )
  
 echo EID:
-adb -s %1 shell su 0 mfg-tool -g EX_PART_NUMBER
+adb -s %1 shell getprop persist.sys.FLASH
 			
 goto :success
 

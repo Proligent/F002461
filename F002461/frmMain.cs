@@ -114,19 +114,19 @@ namespace F002461
             public string MDCSPreStationVarValue;   
         }
 
-        private struct MCFData
-        {
-            public string Model;
-            public string SKU;
-            public string OSPN;
-            public string OSVersion;
-        }
+        //private struct MCFData
+        //{
+        //    public string Model;
+        //    public string SKU;
+        //    public string OSPN;
+        //    public string OSVersion;
+        //}
 
-        private struct MESData
-        {
-            public string EID;
-            public string WorkOrder;
-        }
+        //private struct MESData
+        //{
+        //    public string EID;
+        //    public string WorkOrder;
+        //}
 
         private struct UnitDeviceInfo
         {
@@ -150,8 +150,8 @@ namespace F002461
         private string m_str_Model = "";
         private string m_str_PdLine = "";
         private OptionData m_st_OptionData = new OptionData();
-        private MCFData m_st_MCFData = new MCFData();
-        private MESData m_st_MESData = new MESData();
+        //private MCFData m_st_MCFData = new MCFData();
+        //private MESData m_st_MESData = new MESData();
         private Dictionary<string, UnitDeviceInfo> m_dic_UnitDevice = new Dictionary<string, UnitDeviceInfo>();
         private Dictionary<string, ModelOption> m_dic_ModelOption = new Dictionary<string, ModelOption>();
         private Dictionary<string, TestSaveData> m_dic_TestSaveData = new Dictionary<string, TestSaveData>();
@@ -305,52 +305,52 @@ namespace F002461
 
         #region Timer
 
-        private void timerCopyImage_Tick(object sender, EventArgs e)
-        {
-            if (m_b_Running == false)
-            {
-                if (m_b_RunReslut == true)
-                {
-                    // Image copy finished
-                    timerCopyImage.Enabled = false;
+        //private void timerCopyImage_Tick(object sender, EventArgs e)
+        //{
+        //    if (m_b_Running == false)
+        //    {
+        //        if (m_b_RunReslut == true)
+        //        {
+        //            // Image copy finished
+        //            timerCopyImage.Enabled = false;
 
-                    #region Copy Bat file from server to local
+        //            #region Copy Bat file from server to local
 
-                    if (m_st_OptionData.FlashMode == FASTBOOTMODE)
-                    {
-                        string strErrorMessage = "";
-                        DisplayMessage("Copy bat file from server to local.");
-                        if (CopyBatFileFromServerToLocal(ref strErrorMessage) == false)
-                        {
-                            DisplayMessage("Failed to copy bat file from server." + strErrorMessage);
-                            return;
-                        }
-                        DisplayMessage("Copy bat file from server to local successfully.");
-                    }
+        //            if (m_st_OptionData.FlashMode == FASTBOOTMODE)
+        //            {
+        //                string strErrorMessage = "";
+        //                DisplayMessage("Copy bat file from server to local.");
+        //                if (CopyBatFileFromServerToLocal(ref strErrorMessage) == false)
+        //                {
+        //                    DisplayMessage("Failed to copy bat file from server." + strErrorMessage);
+        //                    return;
+        //                }
+        //                DisplayMessage("Copy bat file from server to local successfully.");
+        //            }
 
-                    #endregion
+        //            #endregion
 
-                    #region Copy Bat file
+        //            #region Copy Bat file to image path
 
-                    if (m_st_OptionData.FlashMode == FASTBOOTMODE)
-                    {
-                        string strErrorMessage = "";
-                        DisplayMessage("Copy bat file to image path.");
-                        if (CopyBatFile(ref strErrorMessage) == false)
-                        {
-                            DisplayMessage("Failed to copy bat file to image path." + strErrorMessage);
-                            return;
-                        }
-                        DisplayMessage("Copy bat file to image path successfully.");
-                    }
+        //            if (m_st_OptionData.FlashMode == FASTBOOTMODE)
+        //            {
+        //                string strErrorMessage = "";
+        //                DisplayMessage("Copy bat file to image path.");
+        //                if (CopyBatFile(ref strErrorMessage) == false)
+        //                {
+        //                    DisplayMessage("Failed to copy bat file to image path." + strErrorMessage);
+        //                    return;
+        //                }
+        //                DisplayMessage("Copy bat file to image path successfully.");
+        //            }
 
-                    #endregion
+        //            #endregion
 
-                    if (m_b_Setting == true)
-                    {
-                        DisplayMessage("Re-run the test tool after config port mapping ......");
-                        return;
-                    }
+        //            if (m_b_Setting == true)
+        //            {
+        //                DisplayMessage("Re-run the test tool after config port mapping ......");
+        //                return;
+        //            }
 
                     //if (m_st_OptionData.TestMode == "1")
                     //{
@@ -393,17 +393,17 @@ namespace F002461
 
                     //    #endregion
                     //}
-                }
-                else
-                {
-                    DisplayMessage("Failed to copy image.");
-                }
-            }
-            else
-            {
-                DisplayMessage("Copying ......");
-            }
-        }
+        //        }
+        //        else
+        //        {
+        //            DisplayMessage("Failed to copy image.");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        DisplayMessage("Copying ......");
+        //    }
+        //}
 
         private void timerMonitorRun_Tick(object sender, EventArgs e)
         {
@@ -425,21 +425,21 @@ namespace F002461
             timerMonitor.Enabled = true;
         }
 
-        private void timerMonitorDeviceConnect_Tick(object sender, EventArgs e)
-        {
-            timerDeviceConnect.Enabled = false;
+        //private void timerMonitorDeviceConnect_Tick(object sender, EventArgs e)
+        //{
+        //    timerDeviceConnect.Enabled = false;
 
-            MonitorDeviceConnected(PANEL_1);
-            Dly(2);
-            MonitorDeviceConnected(PANEL_2);
-            Dly(2);
-            MonitorDeviceConnected(PANEL_3);
-            Dly(2);
-            MonitorDeviceConnected(PANEL_4);
-            Dly(2);
+        //    MonitorDeviceConnected(PANEL_1);
+        //    Dly(2);
+        //    MonitorDeviceConnected(PANEL_2);
+        //    Dly(2);
+        //    MonitorDeviceConnected(PANEL_3);
+        //    Dly(2);
+        //    MonitorDeviceConnected(PANEL_4);
+        //    Dly(2);
 
-            timerDeviceConnect.Enabled = true;
-        }
+        //    timerDeviceConnect.Enabled = true;
+        //}
 
         private void timerKillProcess_Tick(object sender, EventArgs e)
         {
@@ -535,7 +535,8 @@ namespace F002461
 
                         #endregion
 
-                        RunFlashWorker(strPanel); //Async RunTest
+                        RunFlashWorker(strPanel); //Async 
+
                     }
                 }
                 else
@@ -555,93 +556,93 @@ namespace F002461
             return true;
         }
 
-        private bool MonitorDeviceConnected(string strPanel)
-        {
-            try
-            {
-                #region FASTBOOTMODE
+        //private bool MonitorDeviceConnected(string strPanel)
+        //{
+        //    try
+        //    {
+        //        #region FASTBOOTMODE
 
-                if (m_st_OptionData.FlashMode == FASTBOOTMODE)
-                {
-                    if (MonitorADBConnected(strPanel) == false)
-                    {
-                        string strStatus = m_dic_UnitDevice[strPanel].Status;
-                        if (strStatus == "P" || strStatus == "F")
-                        {
-                            // 测试完成设备会重启，不检测断开
-                        }
-                        else
-                        {
-                            UnitDeviceInfo stUnit = new UnitDeviceInfo();     
-                            stUnit.Panel = m_dic_UnitDevice[strPanel].Panel;
-                            stUnit.PhysicalAddress = m_dic_UnitDevice[strPanel].PhysicalAddress;
-                            stUnit.SN = m_dic_UnitDevice[strPanel].SN;
-                            stUnit.SKU = "";
-                            stUnit.Model = "";
-                            stUnit.EID = "";
-                            stUnit.WorkOrder = "";
-                            stUnit.OSPN = "";
-                            stUnit.OSVersion = "";
-                            stUnit.Status = "0";
-                            m_dic_UnitDevice[strPanel] = stUnit;
+        //        if (m_st_OptionData.FlashMode == FASTBOOTMODE)
+        //        {
+        //            if (MonitorADBConnected(strPanel) == false)
+        //            {
+        //                string strStatus = m_dic_UnitDevice[strPanel].Status;
+        //                if (strStatus == "P" || strStatus == "F")
+        //                {
+        //                    // 测试完成设备会重启，不检测断开
+        //                }
+        //                else
+        //                {
+        //                    UnitDeviceInfo stUnit = new UnitDeviceInfo();     
+        //                    stUnit.Panel = m_dic_UnitDevice[strPanel].Panel;
+        //                    stUnit.PhysicalAddress = m_dic_UnitDevice[strPanel].PhysicalAddress;
+        //                    stUnit.SN = m_dic_UnitDevice[strPanel].SN;
+        //                    stUnit.SKU = "";
+        //                    stUnit.Model = "";
+        //                    stUnit.EID = "";
+        //                    stUnit.WorkOrder = "";
+        //                    stUnit.OSPN = "";
+        //                    stUnit.OSVersion = "";
+        //                    stUnit.Status = "0";
+        //                    m_dic_UnitDevice[strPanel] = stUnit;
 
-                            DisplayUnit(strPanel, m_dic_UnitDevice[strPanel].SN, Color.White);
-                            DisplayUnitStatus(strPanel, STATUS_DISCONNECTED, Color.Orange);
-                        }
-                    }
-                    else
-                    {
-                    }
-                }
+        //                    DisplayUnit(strPanel, m_dic_UnitDevice[strPanel].SN, Color.White);
+        //                    DisplayUnitStatus(strPanel, STATUS_DISCONNECTED, Color.Orange);
+        //                }
+        //            }
+        //            else
+        //            {
+        //            }
+        //        }
 
-                #endregion
+        //        #endregion
 
-                #region EDLMODE
+        //        #region EDLMODE
 
-                if (m_st_OptionData.FlashMode == EDLMODE)
-                {
-                    if (MonitorADBConnected(strPanel) == false && MonitorPortConnected(strPanel) == false)
-                    {
-                        string strStatus = m_dic_UnitDevice[strPanel].Status;
-                        if (strStatus == "P" || strStatus == "F")
-                        {
-                            // 测试完成设备会重启，不检测断开
-                        }
-                        else
-                        {
-                            UnitDeviceInfo stUnit = new UnitDeviceInfo();
-                            stUnit.Panel = m_dic_UnitDevice[strPanel].Panel;
-                            stUnit.PhysicalAddress = m_dic_UnitDevice[strPanel].PhysicalAddress;
-                            stUnit.SN = m_dic_UnitDevice[strPanel].SN;
-                            stUnit.SKU = "";
-                            stUnit.Model = "";
-                            stUnit.EID = "";
-                            stUnit.WorkOrder = "";
-                            stUnit.OSPN = "";
-                            stUnit.OSVersion = "";
-                            stUnit.Status = "0";
-                            m_dic_UnitDevice[strPanel] = stUnit;
+        //        if (m_st_OptionData.FlashMode == EDLMODE)
+        //        {
+        //            if (MonitorADBConnected(strPanel) == false && MonitorPortConnected(strPanel) == false)
+        //            {
+        //                string strStatus = m_dic_UnitDevice[strPanel].Status;
+        //                if (strStatus == "P" || strStatus == "F")
+        //                {
+        //                    // 测试完成设备会重启，不检测断开
+        //                }
+        //                else
+        //                {
+        //                    UnitDeviceInfo stUnit = new UnitDeviceInfo();
+        //                    stUnit.Panel = m_dic_UnitDevice[strPanel].Panel;
+        //                    stUnit.PhysicalAddress = m_dic_UnitDevice[strPanel].PhysicalAddress;
+        //                    stUnit.SN = m_dic_UnitDevice[strPanel].SN;
+        //                    stUnit.SKU = "";
+        //                    stUnit.Model = "";
+        //                    stUnit.EID = "";
+        //                    stUnit.WorkOrder = "";
+        //                    stUnit.OSPN = "";
+        //                    stUnit.OSVersion = "";
+        //                    stUnit.Status = "0";
+        //                    m_dic_UnitDevice[strPanel] = stUnit;
 
-                            DisplayUnit(strPanel, m_dic_UnitDevice[strPanel].SN, Color.White);
-                            DisplayUnitStatus(strPanel, STATUS_DISCONNECTED, Color.Orange);
-                        }
-                    }
-                    else
-                    {
-                    }
-                }
+        //                    DisplayUnit(strPanel, m_dic_UnitDevice[strPanel].SN, Color.White);
+        //                    DisplayUnitStatus(strPanel, STATUS_DISCONNECTED, Color.Orange);
+        //                }
+        //            }
+        //            else
+        //            {
+        //            }
+        //        }
 
-                #endregion
-            }
-            catch (Exception ex)
-            {
-                string strr = ex.Message;
-                DisplayMessage("Monitor device connected Exception:" + strr);
-                return false;
-            }
+        //        #endregion
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        string strr = ex.Message;
+        //        DisplayMessage("Monitor device connected Exception:" + strr);
+        //        return false;
+        //    }
 
-            return true;
-        }
+        //    return true;
+        //}
 
         private bool MonitorADBConnected(string strPanel)
         {
@@ -1055,7 +1056,7 @@ namespace F002461
 
                 #endregion
 
-                #region Copy Image
+                #region Test Copy Image
 
                 lock(ThreadLocker)
                 {
@@ -1075,8 +1076,6 @@ namespace F002461
                         }
                     }
                 }
-
-
 
                 #endregion
 
@@ -1250,9 +1249,9 @@ namespace F002461
                 objSaveData.TestRecord.ToolNumber = Program.g_str_ToolNumber;
                 objSaveData.TestRecord.ToolRev = Program.g_str_ToolRev;
                 objSaveData.TestRecord.SN = m_dic_UnitDevice[strPanel].SN;
-                objSaveData.TestRecord.Model = m_str_Model;
-                objSaveData.TestRecord.SKU = m_st_MCFData.SKU;
-                objSaveData.TestRecord.OSVersion = m_st_MCFData.OSVersion;
+                objSaveData.TestRecord.Model = m_dic_UnitDevice[strPanel].Model;
+                objSaveData.TestRecord.SKU = m_dic_UnitDevice[strPanel].SKU;
+                objSaveData.TestRecord.OSVersion = m_dic_UnitDevice[strPanel].OSVersion;
                 objSaveData.TestRecord.TestTotalTime = dTotalTestTime;
 
                 if (bRes == true)
@@ -1281,10 +1280,10 @@ namespace F002461
                     if (bUpdateMDCS == true)
                     {
                         bool bSaveMDCS = false;
-                        bSaveMDCS = SaveMDCS(objSaveData);
+                        bSaveMDCS = SaveMDCS(strPanel, objSaveData);
                         if (bSaveMDCS == false)
                         {
-                            bSaveMDCS = SaveMDCS(objSaveData);
+                            bSaveMDCS = SaveMDCS(strPanel, objSaveData);
                         }
                         if (bSaveMDCS == false)
                         {
@@ -1689,41 +1688,82 @@ namespace F002461
             {
                 this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Copy Image."); });
 
-                #region Check Image File Exist
+                #region Check Image File Exist (OSVersion Folder)
 
-                string strLocalPath = m_dic_ModelOption[strPanel].ImageLocalPath;
-                string strOsFileName = m_dic_UnitDevice[strPanel].OSVersion;
-                string strLocalImagePath = strLocalPath + "\\" + strOsFileName + ".zip";
+                //string strLocalPath = m_dic_ModelOption[strPanel].ImageLocalPath;
+                //string strOsFileName = m_dic_UnitDevice[strPanel].OSVersion;
+                //string strLocalImagePath = strLocalPath + "\\" + strOsFileName + ".zip";
 
-                if (File.Exists(strLocalImagePath))
-                {
-                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Already exist, Skip to copy."); });
-                    return true;
-                }
+                //if (File.Exists(strLocalImagePath))
+                //{
+                //    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Already exist, Skip to copy."); });
+                //    return true;
+                //}
 
                 #endregion
 
-
                 string CopyMode = m_dic_ModelOption[strPanel].ImageCopyMode;
+                string FlashMode = m_dic_ModelOption[strPanel].FlashMode;
 
                 if (CopyMode == "1")
                 {
                     this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Copy image."); });
-
-                    DisplayMessage("Copy image.");
-
-                    Thread thread = new Thread(this.CopyProcess);
-                    thread.Start();
+          
+                    // Start a thread to copy OS
+                    Thread thread = new Thread(new ParameterizedThreadStart(this.CopyProcess));
+                    thread.Start(strPanel);
                     m_b_Running = true;
                     m_b_RunReslut = false;
 
-                    #region Timer
+                    // Waiting copy finish (use timer)
+                    while (m_b_Running == true)
+                    {
+                        DisplayMessage("Copying ......");
+                        Thread.Sleep(10000);             
+                        Application.DoEvents();
+                    }
 
-                    timerCopyImage.Interval = 10000;
-                    timerCopyImage.Enabled = true;  // Start
-                    timerCopyImage.Tick += new EventHandler(timerCopyImage_Tick);
+                    if (m_b_RunReslut == false)
+                    {
+                        DisplayMessage("Failed to copy image.");
+                        return false;
+                    }
+
+                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Copy image successfully."); });
+
+
+                    #region Copy Bat file from server to local
+
+                    if (FlashMode == FASTBOOTMODE)
+                    {
+                        strErrorMessage = "";
+                        DisplayMessage("Copy bat file from server to local.");
+                        if (CopyBatFileFromServerToLocal(strPanel, ref strErrorMessage) == false)
+                        {
+                            DisplayMessage("Failed to copy bat file from server." + strErrorMessage);
+                            return false;
+                        }
+                        DisplayMessage("Copy bat file from server to local successfully.");
+                    }
 
                     #endregion
+
+                    #region Copy Bat file to Image path
+
+                    if (FlashMode == FASTBOOTMODE)
+                    {
+                        strErrorMessage = "";
+                        DisplayMessage("Copy bat file to image path.");
+                        if (CopyBatFile(strPanel, ref strErrorMessage) == false)
+                        {
+                            DisplayMessage("Failed to copy bat file to image path." + strErrorMessage);
+                            return false;
+                        }
+                        DisplayMessage("Copy bat file to image path successfully.");
+                    }
+
+                    #endregion
+      
                 }
                 else
                 {
@@ -1732,11 +1772,7 @@ namespace F002461
                     return true;
                 }
 
-         
-
- 
-
-                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get EID: " + strEID); });
+                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Copy Image Success."); });
             }
             catch (Exception ex)
             {
@@ -2315,21 +2351,26 @@ namespace F002461
             return true;
         }
 
-        private bool CopyBatFile(ref string strErrorMessage)
+        private bool CopyBatFile(string strPanel, ref string strErrorMessage)
         {
             string strSrcFile = "";
             string strDestFile = "";
+            string FlashMode = m_dic_ModelOption[strPanel].FlashMode;
+            string Model = m_dic_UnitDevice[strPanel].Model;
+            string FastbootBatFile = m_dic_ModelOption[strPanel].FASTBOOTBatFile;
+            string ImageLocalPath = m_dic_ModelOption[strPanel].ImageLocalPath;
+            string strOSVersion = m_dic_UnitDevice[strPanel].OSVersion;
 
             try
             {
-                if (m_st_OptionData.FlashMode == FASTBOOTMODE)
+                if (FlashMode == FASTBOOTMODE)
                 {
                     string strSrcDir = Application.StartupPath;
 
                     #region flash bat
 
-                    strSrcFile = strSrcDir + "\\" + m_str_Model + "\\" + m_st_OptionData.FASTBOOTBatFile;
-                    strDestFile = m_st_OptionData.ImageLocalPath + "\\" + m_st_OptionData.FASTBOOTBatFile;
+                    strSrcFile = strSrcDir + "\\" + Model + "\\" + FastbootBatFile;
+                    strDestFile = ImageLocalPath + "\\" + strOSVersion + "\\" + FastbootBatFile;
                     if (CopyFile(strSrcFile, strDestFile, true, ref strErrorMessage) == false)
                     {
                         return false;
@@ -2340,7 +2381,7 @@ namespace F002461
                     #region adb.exe
 
                     strSrcFile = strSrcDir + "\\" + "BAT" + "\\" + "adb.exe";
-                    strDestFile = m_st_OptionData.ImageLocalPath + "\\" + "adb.exe";
+                    strDestFile = ImageLocalPath + "\\" + strOSVersion + "\\" + "adb.exe";
                     if (File.Exists(strSrcFile) == false)
                     {
                         strErrorMessage = "Failed to file exist." + strSrcFile;
@@ -2359,7 +2400,7 @@ namespace F002461
                     #region AdbWinApi.dll
 
                     strSrcFile = strSrcDir + "\\" + "BAT" + "\\" + "AdbWinApi.dll";
-                    strDestFile = m_st_OptionData.ImageLocalPath + "\\" + "AdbWinApi.dll";
+                    strDestFile = ImageLocalPath + "\\" + strOSVersion + "\\" + "AdbWinApi.dll";
                     if (File.Exists(strSrcFile) == false)
                     {
                         strErrorMessage = "Failed to file exist." + strSrcFile;
@@ -2378,7 +2419,7 @@ namespace F002461
                     #region AdbWinUsbApi.dll
 
                     strSrcFile = strSrcDir + "\\" + "BAT" + "\\" + "AdbWinUsbApi.dll";
-                    strDestFile = m_st_OptionData.ImageLocalPath + "\\" + "AdbWinUsbApi.dll";
+                    strDestFile = ImageLocalPath + "\\" + strOSVersion + "\\" + "AdbWinUsbApi.dll";
                     if (File.Exists(strSrcFile) == false)
                     {
                         strErrorMessage = "Failed to file exist." + strSrcFile;
@@ -2397,7 +2438,7 @@ namespace F002461
                     #region fastboot.exe
 
                     strSrcFile = strSrcDir + "\\" + "BAT" + "\\" + "fastboot.exe";
-                    strDestFile = m_st_OptionData.ImageLocalPath + "\\" + "fastboot.exe";
+                    strDestFile = ImageLocalPath + "\\" + strOSVersion + "\\" + "fastboot.exe";
                     if (File.Exists(strSrcFile) == false)
                     {
                         strErrorMessage = "Failed to file exist." + strSrcFile;
@@ -2424,16 +2465,22 @@ namespace F002461
             return true;
         }
 
-        private bool CopyBatFileFromServerToLocal(ref string strErrorMessage)
+        private bool CopyBatFileFromServerToLocal(string strPanel, ref string strErrorMessage)
         {
             try
             {
-                if (m_st_OptionData.FlashMode == FASTBOOTMODE)
+                string FlashMode = m_dic_ModelOption[strPanel].FlashMode;
+                string FastbootEnable = m_dic_ModelOption[strPanel].FASTBOOTEnable;
+                string FastbootBatServerPath = m_dic_ModelOption[strPanel].FASTBOOTBatServerPath;
+                string FastbootBatFile = m_dic_ModelOption[strPanel].FASTBOOTBatFile;
+                string Model = m_dic_UnitDevice[strPanel].Model;
+
+                if (FlashMode == FASTBOOTMODE)
                 {
-                    if (m_st_OptionData.FASTBOOTEnable == "1")
+                    if (FastbootEnable == "1")
                     {
-                        string strServerFile = m_st_OptionData.FASTBOOTBatServerPath + "\\" + m_st_OptionData.FASTBOOTBatFile;
-                        string strLocalFile = Application.StartupPath + "\\" + m_str_Model + "\\" + m_st_OptionData.FASTBOOTBatFile;
+                        string strServerFile = FastbootBatServerPath + "\\" + FastbootBatFile;
+                        string strLocalFile = Application.StartupPath + "\\" + Model + "\\" + FastbootBatFile;
                         if (CopyFile(strServerFile, strLocalFile, true, ref strErrorMessage) == false)
                         {
                             return false;
@@ -2451,55 +2498,55 @@ namespace F002461
             return true;
         }
 
-        private bool SaveMDCS()
+        //private bool SaveMDCS(string strPanel)
+        //{
+        //    try
+        //    {
+        //        if (m_dic_ModelOption[strPanel].MDCSEnable == "1")
+        //        {
+        //            string str_ErrorMessage = "";
+        //            clsMDCS obj_SaveMDCS = new clsMDCS();
+        //            obj_SaveMDCS.ServerName = m_dic_ModelOption[strPanel].MDCSURL;
+        //            obj_SaveMDCS.DeviceName = m_dic_ModelOption[strPanel].MDCSDeviceName;
+        //            obj_SaveMDCS.UseModeProduction = true;
+        //            obj_SaveMDCS.p_TestData = m_st_TestSaveData;
+        //            bool bRes = false;
+        //            for (int i = 0; i < 5; i++)
+        //            {
+        //                bRes = obj_SaveMDCS.SendMDCSData(ref str_ErrorMessage);
+        //                if (bRes == false)
+        //                {
+        //                    Dly(1);
+        //                    continue;
+        //                }
+        //                bRes = true;
+        //                break;
+        //            }
+        //            if (bRes == false)
+        //            {
+        //                return false;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        string strr = ex.Message;
+        //        return false;
+        //    }
+
+        //    return true;
+        //}
+
+        private bool SaveMDCS(string strPanel, TestSaveData objSaveData)
         {
             try
             {
-                if (m_st_OptionData.MDCSEnable == "1")
-                {
-                    //string str_ErrorMessage = "";
-                    //clsMDCS obj_SaveMDCS = new clsMDCS();
-                    //obj_SaveMDCS.ServerName = m_st_OptionData.MDCSURL;
-                    //obj_SaveMDCS.DeviceName = m_st_OptionData.MDCSDeviceName;
-                    //obj_SaveMDCS.UseModeProduction = true;
-                    //obj_SaveMDCS.p_TestData = m_st_TestSaveData;
-                    //bool bRes = false;
-                    //for (int i = 0; i < 5; i++)
-                    //{
-                    //    bRes = obj_SaveMDCS.SendMDCSData(ref str_ErrorMessage);
-                    //    if (bRes == false)
-                    //    {
-                    //        Dly(1);
-                    //        continue;
-                    //    }
-                    //    bRes = true;
-                    //    break;
-                    //}
-                    //if (bRes == false)
-                    //{
-                    //    return false;
-                    //}
-                }
-            }
-            catch (Exception ex)
-            {
-                string strr = ex.Message;
-                return false;
-            }
-
-            return true;
-        }
-
-        private bool SaveMDCS(TestSaveData objSaveData)
-        {
-            try
-            {
-                if (m_st_OptionData.MDCSEnable == "1")
+                if (m_dic_ModelOption[strPanel].MDCSEnable == "1")
                 {
                     string str_ErrorMessage = "";
                     clsMDCS obj_SaveMDCS = new clsMDCS();
-                    obj_SaveMDCS.ServerName = m_st_OptionData.MDCSURL;
-                    obj_SaveMDCS.DeviceName = m_st_OptionData.MDCSDeviceName;
+                    obj_SaveMDCS.ServerName = m_dic_ModelOption[strPanel].MDCSURL;
+                    obj_SaveMDCS.DeviceName = m_dic_ModelOption[strPanel].MDCSDeviceName;
                     obj_SaveMDCS.UseModeProduction = true;
                     obj_SaveMDCS.p_TestData = objSaveData;
 
@@ -3243,12 +3290,12 @@ namespace F002461
         private bool CheckSKU(string strPanel, ref string strErrorMessage)
         {
             strErrorMessage = "";
-
+            
             try
             {
                 bool bRes = false;
                 string strSN = m_dic_UnitDevice[strPanel].SN;
-                string strSKU = m_st_MCFData.SKU;
+                string strSKU = m_dic_UnitDevice[strPanel].SKU;
                 string strBatDir = Application.StartupPath + "\\" + "BAT";
                 string strBatFile = strBatDir + "\\" + "CheckSKU.bat";
                 int iTimeout = 15 * 1000;
@@ -3361,7 +3408,7 @@ namespace F002461
                 }
 
                 string strBatParameter = "";
-                strBatParameter = strSN + " " + m_st_MCFData.SKU;
+                strBatParameter = strSN + " " + m_dic_UnitDevice[strPanel].SKU;
                 for (int i = 0; i < 6; i++)
                 {
                     bRes = ExcuteBat(strPanel, strBatDir, strBatFile, strBatParameter, iTimeout, strSearchResult, ref strErrorMessage);
@@ -3716,10 +3763,10 @@ namespace F002461
             {
                 bool bRes = false;
                 string strSN = m_dic_UnitDevice[strPanel].SN;
-                string strBatDir = m_st_OptionData.ImageLocalPath;
-                string strBatFile = strBatDir + "\\" + m_st_OptionData.FASTBOOTBatFile;
-                int iTimeout = m_st_OptionData.FASTBOOTTimeout * 1000;
-                string strSearchResult = m_st_OptionData.FASTBOOTSuccessFlag;
+                string strBatDir = m_dic_ModelOption[strPanel].ImageLocalPath;
+                string strBatFile = strBatDir + "\\" + m_dic_ModelOption[strPanel].FASTBOOTBatFile;
+                int iTimeout = m_dic_ModelOption[strPanel].FASTBOOTTimeout * 1000;
+                string strSearchResult = m_dic_ModelOption[strPanel].FASTBOOTSuccessFlag;
                 if (File.Exists(strBatFile) == false)
                 {
                     strErrorMessage = "Check file exist fail." + strBatFile;
@@ -3795,14 +3842,26 @@ namespace F002461
         {
             strErrorMessage = "";
 
+            int EDLTimeout = m_dic_ModelOption[strPanel].EDLTimeout;
+            string EDLSuccessFlag = m_dic_ModelOption[strPanel].EDLSuccessFlag;
+            string EDLDeviceType = m_dic_ModelOption[strPanel].EDLDeviceType;
+            string ImageLocalPath = m_dic_ModelOption[strPanel].ImageLocalPath;
+            string strOSVersion = m_dic_UnitDevice[strPanel].OSVersion;
+            string EDLELF = m_dic_ModelOption[strPanel].EDLELF;
+            string EDLPatch = m_dic_ModelOption[strPanel].EDLPatch;
+            string EDLRawProgram = m_dic_ModelOption[strPanel].EDLRawProgram;
+            string EDLFlashType = m_dic_ModelOption[strPanel].EDLFlashType;
+
+            ImageLocalPath = ImageLocalPath + "\\" + strOSVersion;
+
             try
             {
                 bool bRes = false;
                 string strSN = m_dic_UnitDevice[strPanel].SN;
                 string strBatDir = Application.StartupPath + "\\QFIL";
                 string strBatFile = "";
-                int iTimeout = m_st_OptionData.EDLTimeout * 1000;
-                string strSearchResult = m_st_OptionData.EDLSuccessFlag;
+                int iTimeout = EDLTimeout * 1000;
+                string strSearchResult = EDLSuccessFlag;
                 string strCmd = "";
                 string strQFIL = "";
                 string strSearchPath = "";
@@ -3813,22 +3872,22 @@ namespace F002461
 
                 #region strCmd
 
-                if (m_st_OptionData.EDLDeviceType == "")
+                if (EDLDeviceType == "")
                 {
-                    strSearchPath = m_st_OptionData.ImageLocalPath;
-                    strelf = m_st_OptionData.ImageLocalPath + "\\" + m_st_OptionData.EDLELF;
-                    strPatch = m_st_OptionData.ImageLocalPath + "\\" + m_st_OptionData.EDLPatch;
-                    strRawProgram = m_st_OptionData.ImageLocalPath + "\\" + m_st_OptionData.EDLRawProgram;
+                    strSearchPath = ImageLocalPath;
+                    strelf = ImageLocalPath + "\\" + EDLELF;
+                    strPatch = ImageLocalPath + "\\" + EDLPatch;
+                    strRawProgram = ImageLocalPath + "\\" + EDLRawProgram;
                 }
                 else
                 {
-                    strSearchPath = m_st_OptionData.ImageLocalPath + "\\" + m_st_OptionData.EDLDeviceType;
-                    strelf = m_st_OptionData.ImageLocalPath + "\\" + m_st_OptionData.EDLDeviceType + "\\" + m_st_OptionData.EDLELF;
-                    strPatch = m_st_OptionData.ImageLocalPath + "\\" + m_st_OptionData.EDLDeviceType + "\\" + m_st_OptionData.EDLPatch;
-                    strRawProgram = m_st_OptionData.ImageLocalPath + "\\" + m_st_OptionData.EDLDeviceType + "\\" + m_st_OptionData.EDLRawProgram;
+                    strSearchPath = ImageLocalPath + "\\" + EDLDeviceType;
+                    strelf = ImageLocalPath + "\\" + EDLDeviceType + "\\" + EDLELF;
+                    strPatch = ImageLocalPath + "\\" + EDLDeviceType + "\\" + EDLPatch;
+                    strRawProgram = ImageLocalPath + "\\" + EDLDeviceType + "\\" + EDLRawProgram;
                 }
 
-                strQFIL = m_st_OptionData.EDLQFIL;
+                strQFIL = m_dic_ModelOption[strPanel].EDLQFIL;
                 if (File.Exists(strQFIL) == false)
                 {
                     strErrorMessage = "Failed to check exist." + strQFIL;
@@ -3859,7 +3918,7 @@ namespace F002461
                     return false;
                 }
 
-                strReset = m_st_OptionData.EDLReset;
+                strReset = m_dic_ModelOption[strPanel].EDLReset;
                 if (strReset == "1")
                 {
                     strReset = "true";
@@ -3884,16 +3943,16 @@ namespace F002461
                 strCmd += " -downloadflat";
                 strCmd += " -Programmer=true;" + "\"" + strelf + "\"";
                 strCmd += " -SEARCHPATH=" + "\"" + strSearchPath + "\"";
-                strCmd += " -RawProgram=" + m_st_OptionData.EDLRawProgram;
+                strCmd += " -RawProgram=" + EDLRawProgram;
 
                 //Select Flash Type: emmc/ufs
-                if (m_st_OptionData.EDLFlashType != "")     
+                if (EDLFlashType != "")     
                 {
-                    strCmd += " -DEVICETYPE=" + m_st_OptionData.EDLFlashType;
+                    strCmd += " -DEVICETYPE=" + EDLFlashType;
                 }
 
                 strCmd += " -";
-                strCmd += " -patch=" + m_st_OptionData.EDLPatch;
+                strCmd += " -patch=" + EDLPatch;
                 strCmd += " -RESETAFTERDOWNLOAD=" + strReset;
                 strCmd += " -consolelog -LOGFILEPATH=" + "\"" + strLogFilePathName + "\"";
 
@@ -4132,10 +4191,10 @@ namespace F002461
             int iTimeout = 15 * 1000;
             string strSearchResult = "SUCCESS";
             string strBatParameter = "";
-
+            
             string strKeyboxDir = Application.StartupPath + "\\" + m_str_Model;
-            string strKeyboxFile = m_st_OptionData.KeyboxFile;
-            string strKeyboxDevice = m_st_OptionData.KeyboxDevice;
+            string strKeyboxFile = m_dic_ModelOption[strPanel].KeyboxFile;
+            string strKeyboxDevice = m_dic_ModelOption[strPanel].KeyboxDevice;
             strBatParameter = strSN + " " + strKeyboxDir + " " + strKeyboxFile + " " + strKeyboxDevice;
             if (File.Exists(strBatFile) == false)
             {
@@ -4187,7 +4246,7 @@ namespace F002461
 
                 #region Delete HonEdge Local Path (SN)
 
-                strDicName = m_st_OptionData.SentienceKeyHonEdgeProductName + "_" + DateTime.Now.ToString("MM-dd-yyyy");
+                strDicName = m_dic_ModelOption[strPanel].SentienceKeyHonEdgeProductName + "_" + DateTime.Now.ToString("MM-dd-yyyy");
 
                 if (Directory.Exists(strHonEdgeLocalPath))
                 {
@@ -4245,7 +4304,7 @@ namespace F002461
 
                 #region Copy to server
 
-                if (m_st_OptionData.SentienceKeyUploadEnable == "1")
+                if (m_dic_ModelOption[strPanel].SentienceKeyUploadEnable == "1")
                 {
                     strFolderName = "";
                     if (Directory.Exists(strHonEdgeLocalPath))
@@ -4268,7 +4327,7 @@ namespace F002461
                         return false;
                     }
 
-                    string strServerFolderPath = m_st_OptionData.SentienceKeyUploadServerPath + "\\" + strFolderName;
+                    string strServerFolderPath = m_dic_ModelOption[strPanel].SentienceKeyUploadServerPath + "\\" + strFolderName;
                     if (!Directory.Exists(strServerFolderPath))
                     {
                         Directory.CreateDirectory(strServerFolderPath);
@@ -4385,9 +4444,9 @@ namespace F002461
                 objSaveData.TestRecord.ToolNumber = Program.g_str_ToolNumber;
                 objSaveData.TestRecord.ToolRev = Program.g_str_ToolRev;
                 objSaveData.TestRecord.SN = "";
-                objSaveData.TestRecord.Model = m_str_Model;
-                objSaveData.TestRecord.SKU = m_st_MCFData.SKU;
-                objSaveData.TestRecord.OSVersion = m_st_MCFData.OSVersion;
+                objSaveData.TestRecord.Model = m_dic_UnitDevice[strPanel].Model;
+                objSaveData.TestRecord.SKU = m_dic_UnitDevice[strPanel].SKU;
+                objSaveData.TestRecord.OSVersion = m_dic_UnitDevice[strPanel].OSVersion;
                 objSaveData.TestRecord.TestTotalTime = 0;
 
                 objSaveData.TestResult.TestPassed = true;
@@ -5532,7 +5591,7 @@ namespace F002461
 
                     #endregion
 
-                    #region RunTest
+                    #region 
 
                     bool bRunRes = true;
 
@@ -5854,35 +5913,36 @@ namespace F002461
 
         #region Image
 
-        private bool CopyOSImage()
+        //private bool CopyOSImage()
+        //{
+        //    Thread thread = new Thread(this.CopyProcess);
+        //    thread.Start();
+        //    m_b_Running = true;
+        //    m_b_RunReslut = false;
+
+        //    while (m_b_Running == true)
+        //    {
+        //        Application.DoEvents();
+        //    }
+
+        //    if (m_b_RunReslut == false)
+        //    {
+        //        return false;
+        //    }
+
+        //    return true;
+        //}
+
+        private void CopyProcess(object obj)
         {
-            Thread thread = new Thread(this.CopyProcess);
-            thread.Start();
-            m_b_Running = true;
-            m_b_RunReslut = false;
-
-            while (m_b_Running == true)
-            {
-                Application.DoEvents();
-            }
-
-            if (m_b_RunReslut == false)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        private void CopyProcess()
-        {
+            string strPanel = obj.ToString();            
             DisplayMessage("Copy image.");
-
+            
             bool bRes = false;
             string strErrorMessage = "";
             for (int i = 0; i < 3; i++)
             {
-                if (CopyFromServerToLacal(ref strErrorMessage) == false)
+                if (CopyFromServerToLacal(strPanel, ref strErrorMessage) == false)
                 {
                     DisplayMessage("Failed to copy image:" + strErrorMessage);
                     bRes = false;
@@ -5906,18 +5966,20 @@ namespace F002461
             return;
         }
 
-        private bool CopyFromServerToLacal(ref string strErrorMessage)
+        private bool CopyFromServerToLacal(string strPanel, ref string strErrorMessage)
         {
-            if (m_st_OptionData.FlashMode == FASTBOOTMODE)
+            string FlashMode = m_dic_ModelOption[strPanel].FlashMode;
+
+            if (FlashMode == FASTBOOTMODE)
             {
-                if (CopyFromServerToLacal_FASTBOOT(ref strErrorMessage) == false)
+                if (CopyFromServerToLacal_FASTBOOT(strPanel, ref strErrorMessage) == false)
                 {
                     return false;
                 }
             }
-            else if (m_st_OptionData.FlashMode == EDLMODE)
+            else if (FlashMode == EDLMODE)
             {
-                if (CopyFromServerToLacal_EDL(ref strErrorMessage) == false)
+                if (CopyFromServerToLacal_EDL(strPanel, ref strErrorMessage) == false)
                 {
                     return false;
                 }
@@ -5931,17 +5993,17 @@ namespace F002461
             return true;
         }
 
-        private bool CopyFromServerToLacal_FASTBOOT(ref string strErrorMessage)
+        private bool CopyFromServerToLacal_FASTBOOT(string strPanel, ref string strErrorMessage)
         {
             try
             {
                 bool bRes = false;
 
-                string strServerPath = m_st_OptionData.ImageServerPath;
-                string strLocalPath = m_st_OptionData.ImageLocalPath;
-                string strOSPN = m_st_MCFData.OSPN;
+                string strServerPath = m_dic_ModelOption[strPanel].ImageServerPath;
+                string strLocalPath = m_dic_ModelOption[strPanel].ImageLocalPath;
+                string strOSPN = m_dic_UnitDevice[strPanel].OSPN;
                 string strOSPNPre = "";
-                string strOSVersion = m_st_MCFData.OSVersion;
+                string strOSVersion = m_dic_UnitDevice[strPanel].OSVersion;
 
                 #region OSPNPre
 
@@ -5971,7 +6033,7 @@ namespace F002461
                 #endregion
 
                 strServerPath = strServerPath + "\\" + strOSPNPre + "\\" + strOSPN + "\\" + strOSVersion + "\\";
-                strLocalPath = strLocalPath + "\\";
+                strLocalPath = strLocalPath + "\\" + strOSVersion + "\\";
 
                 #region Check Server Path
 
@@ -6027,7 +6089,7 @@ namespace F002461
                     strErrorMessage = "Failed to check path exist." + strServerPath;
                     return false;
                 }
-
+ 
                 for (int i = 0; i < 3; i++)
                 {
                     if (CopyDirectory(strServerPath, strLocalPath, ref strErrorMessage) == false)
@@ -6057,17 +6119,19 @@ namespace F002461
             return true;
         }
 
-        private bool CopyFromServerToLacal_EDL(ref string strErrorMessage)
+        private bool CopyFromServerToLacal_EDL(string strPanel, ref string strErrorMessage)
         {
             try
             {
                 bool bRes = false;
 
-                string strServerPath = m_st_OptionData.ImageServerPath; //
-                string strLocalPath = m_st_OptionData.ImageLocalPath;
+                string strServerPath = m_dic_ModelOption[strPanel].ImageServerPath;
+                string strLocalPath = m_dic_ModelOption[strPanel].ImageLocalPath;
+                string strOSPN = m_dic_UnitDevice[strPanel].OSPN;
+                string strOSVersion = m_dic_UnitDevice[strPanel].OSVersion;
 
-                strServerPath = strServerPath + "\\" + m_st_MCFData.OSPN + "\\";
-                strLocalPath = strLocalPath + "\\";
+                strServerPath = strServerPath + "\\" + strOSPN + "\\";
+                strLocalPath = strLocalPath + "\\" + strOSVersion + "\\";
 
                 #region Delete Local Directory
 
@@ -6134,7 +6198,7 @@ namespace F002461
                 string strFileName = "";
                 foreach (var item in ZipFiles)
                 {
-                    if (item.Name.Contains(m_st_MCFData.OSVersion))
+                    if (item.Name.Contains(strOSVersion))
                     {
                         strFileName = item.Name;
                         break;
@@ -6165,8 +6229,8 @@ namespace F002461
 
                 #endregion
 
-                m_st_OptionData.ImageLocalPath = m_st_OptionData.ImageLocalPath + "\\" + strFileName.Substring(0, strFileName.Length - 4); // auto add os filename
-                DisplayMessage("Local image path:" + m_st_OptionData.ImageLocalPath);
+                strLocalPath = strLocalPath + "\\" + strFileName.Substring(0, strFileName.Length - 4); // auto add os filename
+                DisplayMessage("Local image path:" + strLocalPath);
             }
             catch (Exception ex)
             {
@@ -6250,8 +6314,6 @@ namespace F002461
                 return false;
             }
         }
-
-
 
         private bool DeleteFiles(string strPath, ref string strErrorMessage)
         {
@@ -6399,7 +6461,7 @@ namespace F002461
 
         private bool InitRun()
         {
-            string strOptionFileName = "";
+            //string strOptionFileName = "";
             string strErrorMessage = "";
 
             rtbTestLog.Clear();
@@ -6608,7 +6670,7 @@ namespace F002461
 
             #endregion
 
-            #region Delete Local OS File
+            #region Delete Local OS Folder
 
             DirectoryInfo appPath = new DirectoryInfo(Application.StartupPath);
             string parentPath = appPath.Parent.FullName;
@@ -6653,6 +6715,11 @@ namespace F002461
 
             #endregion
 
+            if (m_b_Setting == true)
+            {
+                DisplayMessage("Re run the test tool after config port mapping ......");
+                return false;
+            }
 
             #region Timer to Connect
 
@@ -6683,9 +6750,9 @@ namespace F002461
                 timerMonitor.Enabled = true;
                 timerMonitor.Tick += new EventHandler(timerMonitorRun_Tick);
 
-                timerDeviceConnect.Interval = 15000;
-                timerDeviceConnect.Enabled = true;
-                timerDeviceConnect.Tick += new EventHandler(timerMonitorDeviceConnect_Tick);
+                //timerDeviceConnect.Interval = 15000;
+                //timerDeviceConnect.Enabled = true;
+                //timerDeviceConnect.Tick += new EventHandler(timerMonitorDeviceConnect_Tick);
 
                 timerKillProcess.Interval = 20000;
                 timerKillProcess.Enabled = true;
@@ -6698,37 +6765,36 @@ namespace F002461
 
             #endregion
 
-
             return true;
         }
 
-        private bool ScanMCF()
-        {
-            frmMCF frmMCF = new frmMCF();
-            if (frmMCF.ShowDialog() != DialogResult.Yes)
-            {
-                return false;
-            }
-            m_st_MCFData.Model = frmMCF.Model;
-            m_st_MCFData.SKU = frmMCF.SKU;
-            m_st_MCFData.OSPN = frmMCF.OSPN;
-            m_st_MCFData.OSVersion = frmMCF.OSVersion;
+        //private bool ScanMCF()
+        //{
+        //    frmMCF frmMCF = new frmMCF();
+        //    if (frmMCF.ShowDialog() != DialogResult.Yes)
+        //    {
+        //        return false;
+        //    }
+        //    m_st_MCFData.Model = frmMCF.Model;
+        //    m_st_MCFData.SKU = frmMCF.SKU;
+        //    m_st_MCFData.OSPN = frmMCF.OSPN;
+        //    m_st_MCFData.OSVersion = frmMCF.OSVersion;
 
-            m_str_Model = m_st_MCFData.Model;
+        //    m_str_Model = m_st_MCFData.Model;
 
-            #region Get Model by SKU
+        //    #region Get Model by SKU
 
-            string strModel = "";
-            if (GetModelBySKU(ref strModel) == false)
-            {
-                return false;
-            }
-            m_str_Model = strModel;
+        //    string strModel = "";
+        //    if (GetModelBySKU(ref strModel) == false)
+        //    {
+        //        return false;
+        //    }
+        //    m_str_Model = strModel;
 
-            #endregion
+        //    #endregion
 
-            return true;
-        }
+        //    return true;
+        //}
 
         private bool SelectLine()
         {
@@ -6743,18 +6809,18 @@ namespace F002461
         }
 
 
-        private bool ScanMES()
-        {
-            FrmMES frmMES = new FrmMES();
-            if (frmMES.ShowDialog() != DialogResult.Yes)
-            {
-                return false;
-            }
-            m_st_MESData.EID = frmMES.EID;
-            m_st_MESData.WorkOrder = frmMES.WorkOrder;
+        //private bool ScanMES()
+        //{
+        //    FrmMES frmMES = new FrmMES();
+        //    if (frmMES.ShowDialog() != DialogResult.Yes)
+        //    {
+        //        return false;
+        //    }
+        //    m_st_MESData.EID = frmMES.EID;
+        //    m_st_MESData.WorkOrder = frmMES.WorkOrder;
 
-            return true;
-        }
+        //    return true;
+        //}
 
         /// <summary>
         /// Parse sku to export model config file in SKUOption.txt
@@ -7015,15 +7081,12 @@ namespace F002461
        
         }
 
-        private bool GetModelBySKU(ref string strModel)
+        private bool GetModelBySKU(string strSKU, ref string strModel)
         {
             try
             {
                 strModel = "";
-                string strSKU = m_st_MCFData.SKU;
-
                 int iIndex = strSKU.IndexOf("-");
-
                 strModel = strSKU.Substring(0, iIndex);
             }
             catch (Exception ex)
@@ -8148,9 +8211,9 @@ namespace F002461
                 objSaveData1.TestRecord.ToolNumber = Program.g_str_ToolNumber;
                 objSaveData1.TestRecord.ToolRev = Program.g_str_ToolRev;
                 objSaveData1.TestRecord.SN = "";
-                objSaveData1.TestRecord.Model = m_str_Model;
-                objSaveData1.TestRecord.SKU = m_st_MCFData.SKU;
-                objSaveData1.TestRecord.OSVersion = m_st_MCFData.OSVersion;
+                objSaveData1.TestRecord.Model = "";
+                objSaveData1.TestRecord.SKU = "";
+                objSaveData1.TestRecord.OSVersion = "";
                 objSaveData1.TestRecord.TestTotalTime = 0;
                 objSaveData1.TestResult.TestPassed = false;
                 objSaveData1.TestResult.TestFailCode = 0;
@@ -8163,9 +8226,9 @@ namespace F002461
                 objSaveData2.TestRecord.ToolNumber = Program.g_str_ToolNumber;
                 objSaveData2.TestRecord.ToolRev = Program.g_str_ToolRev;
                 objSaveData2.TestRecord.SN = "";
-                objSaveData2.TestRecord.Model = m_str_Model;
-                objSaveData2.TestRecord.SKU = m_st_MCFData.SKU;
-                objSaveData2.TestRecord.OSVersion = m_st_MCFData.OSVersion;
+                objSaveData2.TestRecord.Model = "";
+                objSaveData2.TestRecord.SKU = "";
+                objSaveData2.TestRecord.OSVersion = "";
                 objSaveData2.TestRecord.TestTotalTime = 0;
                 objSaveData2.TestResult.TestPassed = false;
                 objSaveData2.TestResult.TestFailCode = 0;
@@ -8178,9 +8241,9 @@ namespace F002461
                 objSaveData3.TestRecord.ToolNumber = Program.g_str_ToolNumber;
                 objSaveData3.TestRecord.ToolRev = Program.g_str_ToolRev;
                 objSaveData3.TestRecord.SN = "";
-                objSaveData3.TestRecord.Model = m_str_Model;
-                objSaveData3.TestRecord.SKU = m_st_MCFData.SKU;
-                objSaveData3.TestRecord.OSVersion = m_st_MCFData.OSVersion;
+                objSaveData3.TestRecord.Model = "";
+                objSaveData3.TestRecord.SKU = "";
+                objSaveData3.TestRecord.OSVersion = "";
                 objSaveData3.TestRecord.TestTotalTime = 0;
                 objSaveData3.TestResult.TestPassed = false;
                 objSaveData3.TestResult.TestFailCode = 0;
@@ -8193,9 +8256,9 @@ namespace F002461
                 objSaveData4.TestRecord.ToolNumber = Program.g_str_ToolNumber;
                 objSaveData4.TestRecord.ToolRev = Program.g_str_ToolRev;
                 objSaveData4.TestRecord.SN = "";
-                objSaveData4.TestRecord.Model = m_str_Model;
-                objSaveData4.TestRecord.SKU = m_st_MCFData.SKU;
-                objSaveData4.TestRecord.OSVersion = m_st_MCFData.OSVersion;
+                objSaveData4.TestRecord.Model = "";
+                objSaveData4.TestRecord.SKU = "";
+                objSaveData4.TestRecord.OSVersion = "";
                 objSaveData4.TestRecord.TestTotalTime = 0;
                 objSaveData4.TestResult.TestPassed = false;
                 objSaveData4.TestResult.TestFailCode = 0;
