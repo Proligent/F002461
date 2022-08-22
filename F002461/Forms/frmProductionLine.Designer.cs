@@ -41,19 +41,19 @@
             "CT40",
             "EDA51",
             "EDA52/EDA5S/EDA56"});
-            this.comboxPdLine.Location = new System.Drawing.Point(79, 93);
-            this.comboxPdLine.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboxPdLine.Location = new System.Drawing.Point(79, 94);
+            this.comboxPdLine.Margin = new System.Windows.Forms.Padding(2);
             this.comboxPdLine.Name = "comboxPdLine";
             this.comboxPdLine.Size = new System.Drawing.Size(242, 27);
             this.comboxPdLine.TabIndex = 0;
             // 
             // label1
             // 
-            this.label1.Font = new System.Drawing.Font("Century Gothic", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Century Gothic", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(9, 41);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(164, 32);
+            this.label1.Size = new System.Drawing.Size(170, 32);
             this.label1.TabIndex = 1;
             this.label1.Text = "Select Production Line:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -61,10 +61,10 @@
             // btnOK
             // 
             this.btnOK.Font = new System.Drawing.Font("Century Gothic", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOK.Location = new System.Drawing.Point(253, 182);
-            this.btnOK.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnOK.Location = new System.Drawing.Point(249, 179);
+            this.btnOK.Margin = new System.Windows.Forms.Padding(2);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(68, 31);
+            this.btnOK.Size = new System.Drawing.Size(72, 34);
             this.btnOK.TabIndex = 2;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
@@ -74,11 +74,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(364, 246);
+            this.ClientSize = new System.Drawing.Size(359, 244);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboxPdLine);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "frmProductionLine";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Production Line";

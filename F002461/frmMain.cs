@@ -114,6 +114,7 @@ namespace F002461
             public string MDCSPreStationVarValue;   
         }
 
+        #region Obsolete
         //private struct MCFData
         //{
         //    public string Model;
@@ -127,6 +128,7 @@ namespace F002461
         //    public string EID;
         //    public string WorkOrder;
         //}
+        #endregion
 
         private struct UnitDeviceInfo
         {
@@ -148,10 +150,10 @@ namespace F002461
 
         private bool m_bCollapse = true;
         private string m_str_Model = "";
-        private string m_str_PdLine = "";
-        private OptionData m_st_OptionData = new OptionData();
+        private string m_str_PdLine = "";        
         //private MCFData m_st_MCFData = new MCFData();
         //private MESData m_st_MESData = new MESData();
+        private OptionData m_st_OptionData = new OptionData();
         private Dictionary<string, UnitDeviceInfo> m_dic_UnitDevice = new Dictionary<string, UnitDeviceInfo>();
         private Dictionary<string, ModelOption> m_dic_ModelOption = new Dictionary<string, ModelOption>();
         private Dictionary<string, TestSaveData> m_dic_TestSaveData = new Dictionary<string, TestSaveData>();
@@ -170,7 +172,7 @@ namespace F002461
         private const string STATUS_SUCCESSED = "PASS";
         private const string STATUS_FAILED = "FAIL";
 
-        private bool m_b_Setting = false;
+        //private bool m_b_Setting = false;
         private bool m_b_Running = false;
         private bool m_b_RunReslut = false;
 
@@ -182,6 +184,7 @@ namespace F002461
 
         private static readonly object SaveLogLocker = new object();
         private static readonly object ThreadLocker = new object();
+
         #endregion
 
         #region Form
@@ -195,7 +198,6 @@ namespace F002461
             this.Text = string.Empty;
             this.ControlBox = false;
             this.DoubleBuffered = true;
-            //this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
             this.MaximizedBounds = Screen.PrimaryScreen.WorkingArea;
 
         }
@@ -212,12 +214,12 @@ namespace F002461
             if (m_st_OptionData.TestMode == "1")
             {
                 //lblTitleBar.Text = Program.g_str_ToolNumber + " : " + Program.g_str_ToolRev + " [Auto Test] " + m_st_MCFData.SKU + " " + m_st_MESData.EID + " " + m_st_MESData.WorkOrder;
-                lblTitleBar.Text = "[Auto Test] " + Program.g_str_ToolNumber + " : " + Program.g_str_ToolRev;
+                lblTitleBar.Text = Program.g_str_ToolNumber + " : " + Program.g_str_ToolRev + "[Auto Test]";
             }
             else
             {
                 //lblTitleBar.Text = Program.g_str_ToolNumber + " : " + Program.g_str_ToolRev + " [Manual Test] " + m_st_MCFData.SKU + " " + m_st_MESData.EID + " " + m_st_MESData.WorkOrder;
-                lblTitleBar.Text = "[Manual Test] " + Program.g_str_ToolNumber + " : " + Program.g_str_ToolRev;
+                lblTitleBar.Text = Program.g_str_ToolNumber + " : " + Program.g_str_ToolRev + "[Manual Test]";
             }
 
             return;
@@ -231,20 +233,19 @@ namespace F002461
 
             if (m_st_OptionData.TestMode == "1")
             {
-                if (m_str_Model.Contains("CT40"))
+                if (m_str_PdLine.Contains("CT40"))
                 {
                     string strErrorMessage = "";
                     USBPlugInit(ref strErrorMessage);
                     ReleaseNI6001();
                     PLCRelease();
                 }
-                else if (m_str_Model.Contains("EDA51") || m_str_Model.Contains("EDA52") || m_str_Model.Contains("EDA56") || m_str_Model.Contains("EDA5S"))
+                else if (m_str_PdLine.Contains("EDA51") || m_str_PdLine.Contains("EDA52") || m_str_PdLine.Contains("EDA56") || m_str_PdLine.Contains("EDA5S"))
                 {
                     PLCRelease();
                 }
             }
         }
-
 
         #endregion
 
@@ -252,8 +253,7 @@ namespace F002461
 
         private void PortMapping_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_b_Setting = true;
-
+            //m_b_Setting = true;
             if (m_st_OptionData.TestMode == "1")
             {
                 timerAutoTest.Enabled = false;
@@ -273,7 +273,7 @@ namespace F002461
             }
 
             frmSetupUSB frm = new frmSetupUSB();
-            frm.m_str_Model = m_str_Model;
+            frm.m_str_Model = m_str_PdLine;
             frm.ShowDialog();
         }
 
@@ -352,47 +352,47 @@ namespace F002461
         //                return;
         //            }
 
-                    //if (m_st_OptionData.TestMode == "1")
-                    //{
-                    //    // Auto Test
-                    //    #region Timer
+        //            if (m_st_OptionData.TestMode == "1")
+        //            {
+        //                // Auto Test
+        //                #region Timer
 
-                    //    // 3s
-                    //    m_timer_WatchDog = new System.Threading.Timer(Thread_Timer_WatchDog, null, 1000, 3000);
+        //                // 3s
+        //                m_timer_WatchDog = new System.Threading.Timer(Thread_Timer_WatchDog, null, 1000, 3000);
 
-                    //    timerAutoTest.Interval = 5000;
-                    //    timerAutoTest.Enabled = true;
-                    //    timerAutoTest.Tick += new EventHandler(timerAutoTest_Tick);
+        //                timerAutoTest.Interval = 5000;
+        //                timerAutoTest.Enabled = true;
+        //                timerAutoTest.Tick += new EventHandler(timerAutoTest_Tick);
 
-                    //    timerKillProcess.Interval = 20000;
-                    //    timerKillProcess.Enabled = true;
-                    //    timerKillProcess.Tick += new EventHandler(timerKillProcess_Tick);
+        //                timerKillProcess.Interval = 20000;
+        //                timerKillProcess.Enabled = true;
+        //                timerKillProcess.Tick += new EventHandler(timerKillProcess_Tick);
 
-                    //    DisplayMessage("Timer enabled sucessfully.");
+        //                DisplayMessage("Timer enabled sucessfully.");
 
-                    //    #endregion
-                    //}
-                    //else
-                    //{
-                    //    // Manual Test
-                    //    #region Timer
+        //                #endregion
+        //            }
+        //            else
+        //            {
+        //                // Manual Test
+        //                #region Timer
 
-                    //    timerMonitor.Interval = 10000;
-                    //    timerMonitor.Enabled = true;
-                    //    timerMonitor.Tick += new EventHandler(timerMonitorRun_Tick);
+        //                timerMonitor.Interval = 10000;
+        //                timerMonitor.Enabled = true;
+        //                timerMonitor.Tick += new EventHandler(timerMonitorRun_Tick);
 
-                    //    timerDeviceConnect.Interval = 15000;
-                    //    timerDeviceConnect.Enabled = true;
-                    //    timerDeviceConnect.Tick += new EventHandler(timerMonitorDeviceConnect_Tick);
+        //                timerDeviceConnect.Interval = 15000;
+        //                timerDeviceConnect.Enabled = true;
+        //                timerDeviceConnect.Tick += new EventHandler(timerMonitorDeviceConnect_Tick);
 
-                    //    timerKillProcess.Interval = 20000;
-                    //    timerKillProcess.Enabled = true;
-                    //    timerKillProcess.Tick += new EventHandler(timerKillProcess_Tick);
+        //                timerKillProcess.Interval = 20000;
+        //                timerKillProcess.Enabled = true;
+        //                timerKillProcess.Tick += new EventHandler(timerKillProcess_Tick);
 
-                    //    DisplayMessage("Timer enabled sucessfully.");
+        //                DisplayMessage("Timer enabled sucessfully.");
 
-                    //    #endregion
-                    //}
+        //                #endregion
+        //            }
         //        }
         //        else
         //        {
@@ -1412,7 +1412,7 @@ namespace F002461
                 if (m_st_OptionData.TestMode == "1")
                 {
                     string strTempErrorMessage = "";
-                    if (m_str_Model.Contains("CT40"))
+                    if (m_str_PdLine.Contains("CT40"))
                     {
                         if (UnitLocationCheckAction(strPanel, "0", ref strTempErrorMessage) == true)
                         {
@@ -1690,21 +1690,53 @@ namespace F002461
 
                 #region Check Image File Exist (OSVersion Folder)
 
-                //string strLocalPath = m_dic_ModelOption[strPanel].ImageLocalPath;
-                //string strOsFileName = m_dic_UnitDevice[strPanel].OSVersion;
-                //string strLocalImagePath = strLocalPath + "\\" + strOsFileName + ".zip";
-
-                //if (File.Exists(strLocalImagePath))
-                //{
-                //    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Already exist, Skip to copy."); });
-                //    return true;
-                //}
-
-                #endregion
-
+                string strLocalPath = m_dic_ModelOption[strPanel].ImageLocalPath;
+                string strOSVersion = m_dic_UnitDevice[strPanel].OSVersion;
                 string CopyMode = m_dic_ModelOption[strPanel].ImageCopyMode;
                 string FlashMode = m_dic_ModelOption[strPanel].FlashMode;
 
+                string strLocalImagePath = strLocalPath + "\\" + strOSVersion;
+
+                if (FlashMode == FASTBOOTMODE)
+                {
+                    if (Directory.Exists(strLocalImagePath))
+                    {
+                        this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Already exist, Skip to copy."); });
+                        return true;
+                    }
+                }
+
+                if (FlashMode == EDLMODE)
+                {
+                    DirectoryInfo dirInfo = new DirectoryInfo(strLocalImagePath);
+                    FileSystemInfo[] fsInfoArray = dirInfo.GetFileSystemInfos();
+
+                    bool bResult = false;
+                    foreach (FileSystemInfo fsinfo in fsInfoArray)
+                    {
+                        if (fsinfo is DirectoryInfo)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            if (fsinfo.Name.Contains(strOSVersion))
+                            {
+                                bResult = true;
+                                break;
+                            }
+                        }   
+                    }
+
+                    if (bResult == true)
+                    {
+                        this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Already exist, Skip to copy."); });
+                        return true;
+                    }
+                }
+
+                #endregion
+      
                 if (CopyMode == "1")
                 {
                     this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Copy image."); });
@@ -4191,8 +4223,8 @@ namespace F002461
             int iTimeout = 15 * 1000;
             string strSearchResult = "SUCCESS";
             string strBatParameter = "";
-            
-            string strKeyboxDir = Application.StartupPath + "\\" + m_str_Model;
+
+            string strKeyboxDir = Application.StartupPath + "\\" + m_dic_UnitDevice[strPanel].Model;
             string strKeyboxFile = m_dic_ModelOption[strPanel].KeyboxFile;
             string strKeyboxDevice = m_dic_ModelOption[strPanel].KeyboxDevice;
             strBatParameter = strSN + " " + strKeyboxDir + " " + strKeyboxFile + " " + strKeyboxDevice;
@@ -6287,7 +6319,6 @@ namespace F002461
                 {
                     foreach (string f in Directory.GetFileSystemEntries(dirPath))
                     {
-
                         if (File.Exists(f))
                         {
                             //如果有子文件删除文件
@@ -6299,9 +6330,7 @@ namespace F002461
                             //循环递归删除子文件夹
                             DeleteDir(f, ref strErrorMessage);
                         }
-
                     }
-
                     //删除空文件夹
                     Directory.Delete(dirPath);
                 }
@@ -6515,7 +6544,7 @@ namespace F002461
 
             #endregion
 
-            #region ScanMES
+            #region ScanMES (Obsolete)
 
             //if (m_st_OptionData.MES_Enable == "1")
             //{
@@ -6555,7 +6584,7 @@ namespace F002461
          
             #endregion
 
-            #region SKUMatrix
+            #region SKUMatrix (Obsolete)
 
             //DisplayMessage("Parse SKU matrix.");
             //if (SKUMatrix(ref strOptionFileName, ref strErrorMessage) == false)
@@ -6579,7 +6608,7 @@ namespace F002461
 
             #endregion
 
-            #region Check MES Data
+            #region Check MES Data (Obsolete)
 
             //if (m_st_OptionData.MES_Enable == "1")
             //{
@@ -6642,7 +6671,7 @@ namespace F002461
 
             #endregion
 
-            #region Copy OS Image
+            #region Copy OS Image (Obsolete)
 
             //if (m_st_OptionData.ImageCopyMode == "1")
             //{
@@ -6662,7 +6691,7 @@ namespace F002461
 
             #endregion
 
-            #region Timer
+            #region Timer (Obsolete)
 
             //timerCopyImage.Interval = 10000;
             //timerCopyImage.Enabled = true;
@@ -6674,21 +6703,22 @@ namespace F002461
 
             DirectoryInfo appPath = new DirectoryInfo(Application.StartupPath);
             string parentPath = appPath.Parent.FullName;
+
             string CT40LocalOsPath = parentPath + "\\CT40\\";
             string EDA51LocalOsPath = parentPath + "\\EDA51\\";
             string EDA52LocalOsPath = parentPath + "\\EDA52\\";
             string EDA5SLocalOsPath = parentPath + "\\EDA5S\\";
             string EDA56LocalOsPath = parentPath + "\\EDA56\\";
 
-            List<string> LocalOsPathList = new List<string>();
-            LocalOsPathList.Add(CT40LocalOsPath);
-            LocalOsPathList.Add(EDA51LocalOsPath);
-            LocalOsPathList.Add(EDA52LocalOsPath);
-            LocalOsPathList.Add(EDA5SLocalOsPath);
-            LocalOsPathList.Add(EDA56LocalOsPath);
+            List<string> LocalOSPathList = new List<string>();
+            LocalOSPathList.Add(CT40LocalOsPath);
+            LocalOSPathList.Add(EDA51LocalOsPath);
+            LocalOSPathList.Add(EDA52LocalOsPath);
+            LocalOSPathList.Add(EDA5SLocalOsPath);
+            LocalOSPathList.Add(EDA56LocalOsPath);
 
             bool bRes = false;
-            foreach(string path in LocalOsPathList)
+            foreach (string path in LocalOSPathList)
             {
                 if (Directory.Exists(path))
                 {   
@@ -6703,7 +6733,6 @@ namespace F002461
                         bRes = true;
                         break;
                     }
-
                     if (bRes == false)
                     {
                         strErrorMessage = "Failed to delete dir: " + path;
@@ -6715,11 +6744,11 @@ namespace F002461
 
             #endregion
 
-            if (m_b_Setting == true)
-            {
-                DisplayMessage("Re run the test tool after config port mapping ......");
-                return false;
-            }
+            //if (m_b_Setting == true)
+            //{
+            //    DisplayMessage("Re run the test tool after config port mapping ......");
+            //    return false;
+            //}
 
             #region Timer to Connect
 
@@ -6764,6 +6793,7 @@ namespace F002461
             DisplayMessage("Timer enabled successfully.");
 
             #endregion
+
 
             return true;
         }
@@ -7047,6 +7077,7 @@ namespace F002461
                     sr.Close();
                     sr = null;
 
+                    m_str_Model = m_dic_UnitDevice[strPanel].Model;
                     if (m_str_Model == "UL")
                     {
                         m_str_Model = "EDA56";
