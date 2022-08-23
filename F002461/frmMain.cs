@@ -1049,18 +1049,29 @@ namespace F002461
 
                 #region Get ScanSheet
 
-
-
-
-
+                if (bRes == true)
+                {
+                    bRes = TestGetScanSheet(strPanel, ref strErrorMessage);
+                    if (bRes == false)
+                    {
+                        bUpdateMDCS = false;
+                        bRes = false;
+                        strErrorMessage = "Failed to get scansheet." + strErrorMessage;
+                    }
+                    else
+                    {
+                        bUpdateMDCS = true;
+                        bRes = true;
+                    }
+                }
 
                 #endregion
 
                 #region Test Copy Image
 
-                lock(ThreadLocker)
+                if (bRes == true)
                 {
-                    if (bRes == true)
+                    lock(ThreadLocker)
                     {
                         bRes = TestCopyImage(strPanel, ref strErrorMessage);
                         if (bRes == false)
@@ -1474,10 +1485,15 @@ namespace F002461
 
             try
             {
-                if (m_dic_ModelOption[strPanel].MDCSPreStationResultCheck == "1")
+                string MDCSPreStationResultCheck = m_dic_ModelOption[strPanel].MDCSPreStationResultCheck;
+                string MDCSURL = m_dic_ModelOption[strPanel].MDCSURL;
+                string MDCSPreStationDeviceName = m_dic_ModelOption[strPanel].MDCSPreStationDeviceName;
+                string MDCSPreStationVarName = m_dic_ModelOption[strPanel].MDCSPreStationVarName;
+                string MDCSPreStationVarValue = m_dic_ModelOption[strPanel].MDCSPreStationVarValue;
+
+                if (MDCSPreStationResultCheck == "1")
                 {
                     this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Check Pre Station Result."); });
-
                     string str_SN = m_dic_UnitDevice[strPanel].SN;
                     if (str_SN == "")
                     {
@@ -1486,15 +1502,15 @@ namespace F002461
                     }
                     string str_ErrorMessage = "";
                     clsMDCS obj_SaveMDCS = new clsMDCS();
-                    obj_SaveMDCS.ServerName = m_dic_ModelOption[strPanel].MDCSURL;
-                    obj_SaveMDCS.DeviceName = m_dic_ModelOption[strPanel].MDCSPreStationDeviceName;
+                    obj_SaveMDCS.ServerName = MDCSURL;
+                    obj_SaveMDCS.DeviceName = MDCSPreStationDeviceName;
                     obj_SaveMDCS.UseModeProduction = true;
 
                     bool bRes = false;
                     string strValue = "";
                     for (int i = 0; i < 3; i++)
                     {
-                        bRes = obj_SaveMDCS.GetMDCSVariable(m_dic_ModelOption[strPanel].MDCSPreStationDeviceName, m_dic_ModelOption[strPanel].MDCSPreStationVarName, str_SN, ref strValue, ref str_ErrorMessage);
+                        bRes = obj_SaveMDCS.GetMDCSVariable(MDCSPreStationDeviceName, MDCSPreStationVarName, str_SN, ref strValue, ref str_ErrorMessage);
                         if (bRes == false)
                         {
                             bRes = false;
@@ -1504,7 +1520,7 @@ namespace F002461
                         }
                         else
                         {
-                            if (strValue != m_dic_ModelOption[strPanel].MDCSPreStationVarValue)
+                            if (strValue != MDCSPreStationVarValue)
                             {
                                 bRes = false;
                                 strErrorMessage = "Compare value fail." + strValue;
@@ -1525,7 +1541,6 @@ namespace F002461
                     }
 
                     this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Check Pre Station MDCS Test Result sucessfully."); });
-
                 }
                 else
                 {
@@ -1657,7 +1672,6 @@ namespace F002461
 
                 #endregion
 
-
                 #region Model_Option.ini
 
                 strErrorMessage = "";
@@ -1680,6 +1694,73 @@ namespace F002461
             return true;
         }
 
+        private bool TestGetScanSheet(string strPanel, ref string strErrorMessage)
+        {
+            strErrorMessage = "";
+
+            try
+            {
+                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Get ScanSheet."); });
+
+                string strSKU = m_dic_UnitDevice[strPanel].SKU; 
+                string strOSPN = "";
+                string strOSVersion = "";
+
+                ApiResult result = ScanSheet.Get(strSKU);
+                if (result.Status == 0)
+                {
+                    string Station = "";
+                    string BarcodeValue = "";
+                    string[] strArray;
+
+                    string sJasonStr = JsonConvert.SerializeObject(result);
+                    ScanSheetRes res = JsonConvert.DeserializeObject<ScanSheetRes>(sJasonStr);
+
+                    foreach(var item in res.Data)
+                    {
+                        Station = item.Station.ToString();
+                        if (Station.Contains("G2H"))
+                        {
+                            BarcodeValue = item.BarCodeValue.ToString();
+                            break;
+                        }           
+                    }
+
+                    if (BarcodeValue != "")
+                    {
+                        strArray = BarcodeValue.Split(new char[] { '\r', '\n' });
+                        strOSPN = strArray[1];
+                        strOSVersion = strArray[2];
+                    }
+                    else
+                    {
+                        this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get BarcodeValue fail."); });
+                        return false;
+                    }         
+                }
+                else
+                {
+                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get ScanSheet fail."); });
+                    return false;
+                }
+                
+                UnitDeviceInfo stUnit = m_dic_UnitDevice[strPanel];
+                stUnit.OSPN = strOSPN;
+                stUnit.OSVersion = strOSVersion;
+                m_dic_UnitDevice[strPanel] = stUnit;
+
+                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get ScanSheet OSPN: " + strOSPN); });
+                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get ScanSheet OSVersion: " + strOSVersion); });
+            }
+            catch (Exception ex)
+            {
+                strErrorMessage = "TestGetScanSheet Exception:" + ex.Message;
+                return false;
+            }
+
+            return true;
+        }
+
         private bool TestCopyImage(string strPanel, ref string strErrorMessage)
         {
             strErrorMessage = "";
@@ -1690,10 +1771,10 @@ namespace F002461
 
                 #region Check Image File Exist (OSVersion Folder)
 
-                string strLocalPath = m_dic_ModelOption[strPanel].ImageLocalPath;
-                string strOSVersion = m_dic_UnitDevice[strPanel].OSVersion;
+                string strLocalPath = m_dic_ModelOption[strPanel].ImageLocalPath;       
                 string CopyMode = m_dic_ModelOption[strPanel].ImageCopyMode;
                 string FlashMode = m_dic_ModelOption[strPanel].FlashMode;
+                string strOSVersion = m_dic_UnitDevice[strPanel].OSVersion;
 
                 string strLocalImagePath = strLocalPath + "\\" + strOSVersion;
 
@@ -1709,29 +1790,26 @@ namespace F002461
                 if (FlashMode == EDLMODE)
                 {
                     DirectoryInfo dirInfo = new DirectoryInfo(strLocalImagePath);
-                    FileSystemInfo[] fsInfoArray = dirInfo.GetFileSystemInfos();
 
-                    bool bResult = false;
-                    foreach (FileSystemInfo fsinfo in fsInfoArray)
+                    //FileInfo[] file = dirInfo.GetFiles();
+                    DirectoryInfo[] dirArray = dirInfo.GetDirectories(); // Unzipped folder
+
+                    if (dirArray.Length != 0)
                     {
-                        if (fsinfo is DirectoryInfo)
+                        bool bResult = false;
+                        foreach (DirectoryInfo d in dirArray)
                         {
-                            continue;
-                        }
-                        else
-                        {
-                            if (fsinfo.Name.Contains(strOSVersion))
+                            if (d.Name.Contains(strOSVersion))
                             {
                                 bResult = true;
                                 break;
                             }
-                        }   
-                    }
-
-                    if (bResult == true)
-                    {
-                        this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Already exist, Skip to copy."); });
-                        return true;
+                        }
+                        if (bResult == true)
+                        {
+                            this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Already exist, Skip to copy."); });
+                            return true;
+                        }
                     }
                 }
 
@@ -1744,6 +1822,7 @@ namespace F002461
                     // Start a thread to copy OS
                     Thread thread = new Thread(new ParameterizedThreadStart(this.CopyProcess));
                     thread.Start(strPanel);
+
                     m_b_Running = true;
                     m_b_RunReslut = false;
 
@@ -1762,7 +1841,6 @@ namespace F002461
                     }
 
                     this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Copy image successfully."); });
-
 
                     #region Copy Bat file from server to local
 
@@ -1795,7 +1873,6 @@ namespace F002461
                     }
 
                     #endregion
-      
                 }
                 else
                 {
@@ -6057,8 +6134,7 @@ namespace F002461
                 }
                 catch (Exception ex)
                 {
-                    string strr = ex.Message;
-                    strErrorMessage = "Failed to get os pn pre.";
+                    strErrorMessage = "Failed to get os pn pre." + ex.Message;
                     return false;
                 }
 
@@ -6098,7 +6174,7 @@ namespace F002461
                         return false;
                     }
 
-                    // Check directory empty
+                    // Check Directory Empty
                     DirectoryInfo di = new System.IO.DirectoryInfo(strLocalPath);
                     if (di.GetFiles().Length + di.GetDirectories().Length != 0)
                     {
