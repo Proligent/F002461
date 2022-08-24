@@ -4,7 +4,8 @@ echo Model:%1
 echo Sku:%2
 set model=%1
 set sku=%2
-set OptionFile=%~dp0\SKUOption.txt
+;set OptionFile=%~dp0\SKUOption.txt
+set OptionFile=%~dp0\%3
 
 :Model
 if "%model%"=="EDA51" (

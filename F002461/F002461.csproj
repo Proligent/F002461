@@ -263,7 +263,7 @@
     <None Include="BAT\GetWorkOrder.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="BAT\Keybox.bat">
+    <None Include="BAT\CheckKeybox.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="BAT\RebootBootloader.bat">

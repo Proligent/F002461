@@ -1047,6 +1047,26 @@ namespace F002461
 
                 #endregion
 
+                #region Check MES Data
+
+                if (bRes == true)
+                {
+                    bRes = TestCheckMESData(strPanel, ref strErrorMessage);
+                    if (bRes == false)
+                    {
+                        bUpdateMDCS = false;
+                        bRes = false;
+                        strErrorMessage = "Failed to check MES data." + strErrorMessage;
+                    }
+                    else
+                    {
+                        bUpdateMDCS = true;
+                        bRes = true;
+                    }
+                }
+
+                #endregion
+
                 #region Get ScanSheet
 
                 if (bRes == true)
@@ -1162,13 +1182,14 @@ namespace F002461
                     }
                     else
                     {
+                        bUpdateMDCS = true;
                         bRes = true;
                     }
                 }
 
                 #endregion
 
-                #region Test Keybox (write or check keybox whether exist)
+                #region Test Keybox (Write or Check Keybox Whether Exist)
 
                 if (bRes == true)
                 {
@@ -1176,9 +1197,11 @@ namespace F002461
                     if (bRes == false)
                     {
                         bRes = false;
+                        strErrorMessage = "Failed to write or check Keybox." + strErrorMessage;
                     }
                     else
                     {
+                        bUpdateMDCS = true;
                         bRes = true;
                     }
                 }
@@ -1330,12 +1353,27 @@ namespace F002461
                     {
                         bool bUploadMES = false;
                         string strTempErrorMsg = "";
+                        bool bPassFailFlag = false;
+                        string strEID = m_dic_UnitDevice[strPanel].EID;
+                        string strStation = m_dic_ModelOption[strPanel].StationName;
+                        string strWorkOrder = m_dic_UnitDevice[strPanel].WorkOrder;
+                        string strSN = m_dic_UnitDevice[strPanel].SN;
+
+                        if (objSaveData.TestResult.TestPassed == true)
+                        {
+                            bPassFailFlag = true;
+                        }
+                        else
+                        {
+                            bPassFailFlag = false;
+                        }
+
                         //public static bool MESUploadData(string strEID, string strStation, string strWorkOrder, string strSN, bool bPassFailFlag, ref string strErrorMessage)
-                        //bUploadMES = MESUploadData(objSaveData, ref strTempErrorMsg);
+                        bUploadMES = MESUploadData(strEID, strStation, strWorkOrder, strSN, bPassFailFlag, ref strTempErrorMsg);
 
                         if (bUploadMES == false)
                         {
-                            //bUploadMES = MESUploadData(objSaveData, ref strTempErrorMsg);
+                            bUploadMES = MESUploadData(strEID, strStation, strWorkOrder, strSN, bPassFailFlag, ref strTempErrorMsg);
                         }
                         if (bUploadMES == false)
                         {
@@ -1493,6 +1531,7 @@ namespace F002461
 
                 if (MDCSPreStationResultCheck == "1")
                 {
+                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "\r\n"); });
                     this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Check Pre Station Result."); });
                     string str_SN = m_dic_UnitDevice[strPanel].SN;
                     if (str_SN == "")
@@ -1562,7 +1601,7 @@ namespace F002461
             strErrorMessage = "";
 
             try
-            {         
+            { 
                 this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Get SKU Property."); });
 
                 string strSKU = "";
@@ -1580,7 +1619,7 @@ namespace F002461
                 stUnit.Model = strModel;
                 m_dic_UnitDevice[strPanel] = stUnit;
 
-                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get SKU: " + strSKU); });
+                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get SKU: " + strSKU + "\r\n"); });
             }
             catch (Exception ex)
             {
@@ -1609,7 +1648,7 @@ namespace F002461
                 stUnit.WorkOrder = strWorkOrder;          
                 m_dic_UnitDevice[strPanel] = stUnit;
 
-                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get WorkOrder: " + strWorkOrder); });
+                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get WorkOrder: " + strWorkOrder + "\r\n"); });
             }
             catch (Exception ex)
             {
@@ -1638,7 +1677,7 @@ namespace F002461
                 stUnit.EID = strEID;
                 m_dic_UnitDevice[strPanel] = stUnit;
 
-                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get EID: " + strEID); });
+                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get EID: " + strEID + "\r\n"); });
             }
             catch (Exception ex)
             {
@@ -1681,7 +1720,7 @@ namespace F002461
                     return false;
                 }
 
-                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Read ModelOption.ini file success"); });
+                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Read ModelOption.ini file success." + "\r\n"); });
 
                 #endregion
             }
@@ -1692,6 +1731,72 @@ namespace F002461
             }
 
             return true;
+        }
+
+        private bool TestCheckMESData(string strPanel, ref string strErrorMessage)
+        {
+            strErrorMessage = "";
+
+            try
+            {
+                string EID = m_dic_UnitDevice[strPanel].EID;
+                string StationName = m_dic_ModelOption[strPanel].StationName;
+                string WorkOrder = m_dic_UnitDevice[strPanel].WorkOrder;
+
+                if (m_st_OptionData.MES_Enable == "1")
+                {
+                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Check MES Data."); });
+
+                    UploadTestData.CheckData cd = new UploadTestData.CheckData();
+                    UploadTestData.Result result = new UploadTestData.Result();
+
+                    cd.EID = EID;
+                    cd.StationName = StationName;
+                    cd.WorkOrder = WorkOrder;
+
+                    #region Check
+
+                    if (EID == "")
+                    {
+                        strErrorMessage = "Invalid EID.";
+                        return false;
+                    }
+                    if (StationName == "")
+                    {
+                        strErrorMessage = "Invalid StationName.";
+                        return false;
+                    }
+                    if (WorkOrder == "")
+                    {
+                        strErrorMessage = "Invalid WorkOrder.";
+                        return false;
+                    }
+
+                    #endregion
+
+                    result = UploadTestData.LineDashboard.CheckTestValid(cd);
+                    if (result.code == 0)
+                    {
+                        this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "TestCheckMESData Successful." + "\r\n"); });
+                        return true;
+                    }
+                    else
+                    {
+                        strErrorMessage = "code:" + result.code.ToString() + ",message:" + result.message;
+                        return false;
+                    }
+                }
+                else
+                {
+                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Skip to check MES data." + "\r\n"); });
+                    return true;
+                }  
+            }
+            catch (Exception ex)
+            {
+                strErrorMessage = "TestCheckMESData Exception:" + ex.Message;
+                return false;
+            }
         }
 
         private bool TestGetScanSheet(string strPanel, ref string strErrorMessage)
@@ -1734,13 +1839,13 @@ namespace F002461
                     }
                     else
                     {
-                        this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get BarcodeValue fail."); });
+                        this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get BarcodeValue fail." + "\r\n"); });
                         return false;
                     }         
                 }
                 else
                 {
-                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get ScanSheet fail."); });
+                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get ScanSheet fail." + "\r\n"); });
                     return false;
                 }
                 
@@ -1767,6 +1872,7 @@ namespace F002461
 
             try
             {
+                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "\r\n"); });
                 this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Copy Image."); });
 
                 #region Check Image File Exist (OSVersion Folder)
@@ -1901,6 +2007,7 @@ namespace F002461
             {
                 if (m_dic_ModelOption[strPanel].SKUCheckEnable == "1")
                 {
+                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "\r\n"); });
                     this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Check SKU."); });
 
                     if (CheckSKU(strPanel, ref strErrorMessage) == false)
@@ -1933,6 +2040,7 @@ namespace F002461
             {
                 if (m_st_OptionData.SDCard_Enable == "1")
                 {
+                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "\r\n"); });
                     this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Check SDCard."); });
 
                     if (CheckSDCard(strPanel, ref strErrorMessage) == false)
@@ -1965,6 +2073,7 @@ namespace F002461
             {
                 if (m_dic_ModelOption[strPanel].CheckManualBITResult_Enable == "1")
                 {
+                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "\r\n"); });
                     this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Check ManualBITResult."); });
 
                     if (CheckManualBITResult(strPanel, ref strErrorMessage) == false)
@@ -1997,9 +2106,10 @@ namespace F002461
             {
                 if (m_dic_ModelOption[strPanel].KeyboxEnable == "1")
                 {
-                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Keybox."); });
+                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "\r\n"); });
+                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Check Keybox."); });
 
-                    if (WriteKeybox(strPanel, ref strErrorMessage) == false)
+                    if (CheckKeybox(strPanel, ref strErrorMessage) == false)
                     {
                         return false;
                     }
@@ -2013,8 +2123,7 @@ namespace F002461
             }
             catch (Exception ex)
             {
-                string strr = ex.Message;
-                strErrorMessage = "TestKeybox Exception:" + strr;
+                strErrorMessage = "TestKeybox Exception:" + ex.Message;
                 return false;
             }
 
@@ -2029,6 +2138,7 @@ namespace F002461
             {
                 if (m_dic_ModelOption[strPanel].SentienceKeyEnable == "1")
                 {
+                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "\r\n"); });
                     this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test SentienceKey."); });
 
                     if (WriteSentienceKey(strPanel, ref strErrorMessage) == false)
@@ -2047,7 +2157,6 @@ namespace F002461
 
 
                     #endregion
-
                 }
             }
             catch (Exception ex)
@@ -3490,7 +3599,6 @@ namespace F002461
             catch (Exception ex)
             {
                 strErrorMessage = "Check SDCard exception:" + ex.Message;
-                string strr = ex.Message;
                 return false;
             }
 
@@ -3570,7 +3678,7 @@ namespace F002461
 
                 string strBatParameter = "";
                 strBatParameter = strSN;
-                for (int i = 0; i < 6; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     strResult = "";
                     bRes = ExcuteBat(strPanel, strBatDir, strBatFile, strBatParameter, iTimeout, strSearchResult, ref strResult, ref strErrorMessage);
@@ -3590,15 +3698,13 @@ namespace F002461
                     return false;
                 }
 
-                // Truncate SKU
-                string[] lines = strResult.Split(new char[]{'\r', '\n'});
-                for (int i = 0; i < lines.Length; i++)
+                // Truncate SKU      
+                int index = strResult.IndexOf("SKU:");
+                if (index != -1)
                 {
-                    if (lines[i].Trim() == "SKU:")
-                    {
-                        strSKU = lines[i+1].Trim();
-                        break;
-                    }     
+                    strResult = strResult.Substring(index + 4);
+                    index = strResult.IndexOf("*");
+                    strSKU = strResult.Substring(0, index);
                 }
 
                 if (string.IsNullOrWhiteSpace(strSKU) || strSKU.IndexOf("-") == 0)
@@ -3639,7 +3745,7 @@ namespace F002461
 
                 string strBatParameter = "";
                 strBatParameter = strSN;
-                for (int i = 0; i < 6; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     strResult = "";
                     bRes = ExcuteBat(strPanel, strBatDir, strBatFile, strBatParameter, iTimeout, strSearchResult, ref strResult, ref strErrorMessage);
@@ -3659,15 +3765,13 @@ namespace F002461
                     return false;
                 }
 
-                // Truncate WorkOrder
-                string[] lines = strResult.Split(new char[] { '\r', '\n' });
-                for (int i = 0; i < lines.Length; i++)
+                // Truncate WorkOrder   
+                int index = strResult.IndexOf("WorkOrder:");
+                if (index != -1)
                 {
-                    if (lines[i].Trim() == "WorkOrder:")
-                    {
-                        strWorkOrder = lines[i+1].Trim();
-                        break;
-                    }
+                    strResult = strResult.Substring(index + 10);
+                    index = strResult.IndexOf("*");
+                    strWorkOrder = strResult.Substring(0, index);
                 }
 
                 if (string.IsNullOrWhiteSpace(strWorkOrder))
@@ -3708,7 +3812,7 @@ namespace F002461
 
                 string strBatParameter = "";
                 strBatParameter = strSN;
-                for (int i = 0; i < 6; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     strResult = "";
                     bRes = ExcuteBat(strPanel, strBatDir, strBatFile, strBatParameter, iTimeout, strSearchResult, ref strResult, ref strErrorMessage);
@@ -3729,14 +3833,22 @@ namespace F002461
                 }
 
                 // Truncate EID
-                string[] lines = strResult.Split(new char[] { '\r', '\n' });
-                for (int i = 0; i < lines.Length; i++)
+                //string[] lines = strResult.Split(new char[] { '\r', '\n' });
+                //for (int i = 0; i < lines.Length; i++)
+                //{
+                //    if (lines[i].Trim() == "EID:")
+                //    {
+                //        strEID = lines[i+1].Trim();
+                //        break;
+                //    }
+                //}
+
+                int index = strResult.IndexOf("EID:");
+                if (index != -1)
                 {
-                    if (lines[i].Trim() == "EID:")
-                    {
-                        strEID = lines[i+1].Trim();
-                        break;
-                    }
+                    strResult = strResult.Substring(index + 4);
+                    index = strResult.IndexOf("*");
+                    strEID = strResult.Substring(0, index);
                 }
 
                 if (string.IsNullOrWhiteSpace(strEID))
@@ -4289,14 +4401,14 @@ namespace F002461
             return true;
         }
 
-        private bool WriteKeybox(string strPanel, ref string strErrorMessage)
+        private bool CheckKeybox(string strPanel, ref string strErrorMessage)
         {
             strErrorMessage = "";
 
             bool bRes = false;
             string strSN = m_dic_UnitDevice[strPanel].SN;
             string strBatDir = Application.StartupPath + "\\" + "BAT";
-            string strBatFile = strBatDir + "\\" + "Keybox.bat";
+            string strBatFile = strBatDir + "\\" + "CheckKeybox.bat";
             int iTimeout = 15 * 1000;
             string strSearchResult = "SUCCESS";
             string strBatParameter = "";
@@ -4327,7 +4439,6 @@ namespace F002461
             }
             if (bRes == false)
             {
-                //strErrorMessage = "Failed to " + "WriteKeybox.";
                 strErrorMessage = "Failed to Check Keybox.";
                 return false;
             }
@@ -7113,7 +7224,7 @@ namespace F002461
 
                 string strModel = m_dic_UnitDevice[strPanel].Model;
                 string strSKU = m_dic_UnitDevice[strPanel].SKU;
-                strBatParameter = strModel + " " + strSKU;
+                strBatParameter = strModel + " " + strSKU + " " + strFileName;
 
                 for (int i = 0; i < 3; i++)
                 {
@@ -7121,7 +7232,7 @@ namespace F002461
                     if (bRes == false)
                     {
                         bRes = false;
-                        Dly(1);
+                        Dly(3);
                         continue;
                     }
 
@@ -7185,7 +7296,6 @@ namespace F002461
             }
 
             return true;
-       
         }
 
         private bool GetModelBySKU(string strSKU, ref string strModel)

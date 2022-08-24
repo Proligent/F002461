@@ -57,5 +57,5 @@ goto :end
 :end
 timeout /t 3 >null
 echo ***************End***************
-;pause
+pause
 exit
