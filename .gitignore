@@ -17,12 +17,12 @@
 mono_crash.*
 
 # Build results
-#[Dd]ebug/
+[Dd]ebug/
 [Dd]ebugPublic/
-#[Rr]elease/
-#[Rr]eleases/
-#x64/
-#x86/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
@@ -352,3 +352,4 @@ MigrationBackup/
 /*.suo
 /F002461/bin/x86/Release/F002461.exe
 /F002461/SKUOption.txt
+bin
