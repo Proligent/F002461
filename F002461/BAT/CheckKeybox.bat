@@ -64,6 +64,6 @@ echo *********************************
 goto :end
 
 :end
-timeout /t 3
+timeout /t 1 >null
 echo ***************End***************
 exit

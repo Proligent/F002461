@@ -88,10 +88,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Lib\MDCS.XmlSerializers.dll</HintPath>
     </Reference>
-    <Reference Include="MESWebAPI, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Lib\MESWebAPI.dll</HintPath>
-    </Reference>
     <Reference Include="NationalInstruments.Common, Version=9.0.35.610, Culture=neutral, PublicKeyToken=18cbae0f9955702a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Lib\NationalInstruments.Common.dll</HintPath>
@@ -118,10 +114,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="UploadTestData, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Lib\UploadTestData.dll</HintPath>
-    </Reference>
     <Reference Include="WinTcpS7_1K, Version=4.2.0.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Lib\WinTcpS7_1K.dll</HintPath>
