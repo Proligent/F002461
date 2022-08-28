@@ -716,9 +716,9 @@ namespace F002461
                 string strDeviceName = "";
 
                 m_List_SN.Clear();
-                strPhysicalAddress = m_dic_UnitDevice[strPanel].PhysicalAddress;
                 strDeviceName = m_st_OptionData.ADBDeviceName;
-
+                strPhysicalAddress = m_dic_UnitDevice[strPanel].PhysicalAddress;
+                
                 // Init
                 UnitDeviceInfo stUnit1 = new UnitDeviceInfo();
                 stUnit1.Panel = strPanel;
@@ -796,7 +796,6 @@ namespace F002461
             catch (Exception ex)
             {
                 strErrorMessage = "Failed to monitor device exception:" + ex.Message;
-                string strr = ex.Message;
                 return false;
             }
 
@@ -937,7 +936,7 @@ namespace F002461
         {
             bool bRes = true;
             bool bUpdateMDCS = true;
-
+         
             try
             {
                 string strErrorMessage = "";
@@ -2758,6 +2757,7 @@ namespace F002461
                         bRes = obj_SaveMDCS.SendMDCSData(ref str_ErrorMessage);
                         if (bRes == false)
                         {
+                            DeleteMDCSSqueueXmlFile();
                             Dly(1);
                             continue;
                         }
@@ -2768,6 +2768,26 @@ namespace F002461
                     {
                         return false;
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                string strr = ex.Message;
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool DeleteMDCSSqueueXmlFile()
+        {
+            try
+            {
+                string strXMLPath = System.IO.Path.GetTempPath() + "\\" + "mdcsqueue.xml";
+
+                if (File.Exists(strXMLPath) == true)
+                {
+                    File.Delete(strXMLPath);
                 }
             }
             catch (Exception ex)
@@ -3815,17 +3835,6 @@ namespace F002461
                     strErrorMessage = "Execute bat to get EID fail.";
                     return false;
                 }
-
-                // Truncate EID
-                //string[] lines = strResult.Split(new char[] { '\r', '\n' });
-                //for (int i = 0; i < lines.Length; i++)
-                //{
-                //    if (lines[i].Trim() == "EID:")
-                //    {
-                //        strEID = lines[i+1].Trim();
-                //        break;
-                //    }
-                //}
 
                 int index = strResult.IndexOf("EID:");
                 if (index != -1)
@@ -5835,7 +5844,7 @@ namespace F002461
                         {
                         }
 
-                        //m_dic_COMPort[strPanel] = "";   //Clear ComPort Record When Disconnect.
+                        //m_dic_COMPort[strPanel] = "";   //Clear ComPort Record When Disconnect. (Undefined)
 
                         m_dic_TestStatus[strPanel] = false;
                         return;
@@ -6877,7 +6886,6 @@ namespace F002461
             DisplayMessage("Timer enabled successfully.");
 
             #endregion
-
 
             return true;
         }
