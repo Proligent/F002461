@@ -3667,6 +3667,7 @@ namespace F002461
             try
             {
                 bool bRes = false;
+                bool bFlag = false;
                 string strResult = "";
                 string strSN = m_dic_UnitDevice[strPanel].SN;
                 string strBatDir = Application.StartupPath + "\\" + "BAT";
@@ -3684,36 +3685,41 @@ namespace F002461
                 strBatParameter = strSN;
                 for (int i = 0; i < 5; i++)
                 {
+                    strSKU = "";
                     strResult = "";
                     bRes = ExcuteBat(strPanel, strBatDir, strBatFile, strBatParameter, iTimeout, strSearchResult, ref strResult, ref strErrorMessage);
                     if (bRes == false)
                     {
-                        bRes = false;
+                        strErrorMessage = "Execute bat to get SKU fail.";
+                        bFlag = false;
                         Dly(10);
                         continue;
                     }
 
-                    bRes = true;
+                    // Truncate SKU      
+                    int index = strResult.IndexOf("SKU:");
+                    if (index != -1)
+                    {
+                        strResult = strResult.Substring(index + 4);
+                        index = strResult.IndexOf("*");
+                        strSKU = strResult.Substring(0, index);
+                    }
+
+                    if (string.IsNullOrWhiteSpace(strSKU) || strSKU.IndexOf("-") == -1)
+                    {
+                        strErrorMessage = "Get SKU format error !!!";
+                        bFlag = false;
+                        Dly(10);
+                        continue;
+                    }
+
+                    bFlag = true;
                     break;
                 }
-                if (bRes == false)
-                {
-                    strErrorMessage = "Execute bat to get SKU fail.";
-                    return false;
-                }
 
-                // Truncate SKU      
-                int index = strResult.IndexOf("SKU:");
-                if (index != -1)
+                if (bFlag == false)
                 {
-                    strResult = strResult.Substring(index + 4);
-                    index = strResult.IndexOf("*");
-                    strSKU = strResult.Substring(0, index);
-                }
-
-                if (string.IsNullOrWhiteSpace(strSKU) || strSKU.IndexOf("-") == 0)
-                {
-                    strErrorMessage = "Get SKU format error !!!";
+                    strErrorMessage = "Get SKU property fail.";
                     return false;
                 }
             }
@@ -3734,6 +3740,7 @@ namespace F002461
             try
             {
                 bool bRes = false;
+                bool bFlag = false;
                 string strResult = "";
                 string strSN = m_dic_UnitDevice[strPanel].SN;
                 string strBatDir = Application.StartupPath + "\\" + "BAT";
@@ -3752,35 +3759,40 @@ namespace F002461
                 for (int i = 0; i < 5; i++)
                 {
                     strResult = "";
+                    strWorkOrder = "";
                     bRes = ExcuteBat(strPanel, strBatDir, strBatFile, strBatParameter, iTimeout, strSearchResult, ref strResult, ref strErrorMessage);
                     if (bRes == false)
                     {
-                        bRes = false;
+                        strErrorMessage = "Execute bat to get WorkOrder fail.";
+                        bFlag = false;
                         Dly(10);
                         continue;
                     }
 
-                    bRes = true;
+                    // Truncate WorkOrder   
+                    int index = strResult.IndexOf("WorkOrder:");
+                    if (index != -1)
+                    {
+                        strResult = strResult.Substring(index + 10);
+                        index = strResult.IndexOf("*");
+                        strWorkOrder = strResult.Substring(0, index);
+                    }
+
+                    if (string.IsNullOrWhiteSpace(strWorkOrder))
+                    {
+                        strErrorMessage = "Get WorkOrder is empty !!!";
+                        bFlag = false;
+                        Dly(10);
+                        continue;
+                    }
+
+                    bFlag = true;
                     break;
                 }
-                if (bRes == false)
-                {
-                    strErrorMessage = "Execute bat to get WorkOrder fail.";
-                    return false;
-                }
 
-                // Truncate WorkOrder   
-                int index = strResult.IndexOf("WorkOrder:");
-                if (index != -1)
+                if (bFlag == false)
                 {
-                    strResult = strResult.Substring(index + 10);
-                    index = strResult.IndexOf("*");
-                    strWorkOrder = strResult.Substring(0, index);
-                }
-
-                if (string.IsNullOrWhiteSpace(strWorkOrder))
-                {
-                    strErrorMessage = "Get WorkOrder is empty !!!";
+                    strErrorMessage = "Get WorkOrder property fail.";
                     return false;
                 }
             }
@@ -3801,6 +3813,7 @@ namespace F002461
             try
             {
                 bool bRes = false;
+                bool bFlag = false;
                 string strResult = "";
                 string strSN = m_dic_UnitDevice[strPanel].SN;
                 string strBatDir = Application.StartupPath + "\\" + "BAT";
@@ -3818,35 +3831,40 @@ namespace F002461
                 strBatParameter = strSN;
                 for (int i = 0; i < 5; i++)
                 {
+                    strEID = "";
                     strResult = "";
                     bRes = ExcuteBat(strPanel, strBatDir, strBatFile, strBatParameter, iTimeout, strSearchResult, ref strResult, ref strErrorMessage);
                     if (bRes == false)
                     {
-                        bRes = false;
+                        strErrorMessage = "Execute bat to get EID fail.";
+                        bFlag = false;
                         Dly(10);
                         continue;
                     }
 
-                    bRes = true;
+                    int index = strResult.IndexOf("EID:");
+                    if (index != -1)
+                    {
+                        strResult = strResult.Substring(index + 4);
+                        index = strResult.IndexOf("*");
+                        strEID = strResult.Substring(0, index);
+                    }
+
+                    if (string.IsNullOrWhiteSpace(strEID))
+                    {
+                        strErrorMessage = "Get EID is empty !!!";
+                        bFlag = false;
+                        Dly(10);
+                        continue;
+                    }
+
+                    bFlag = true;
                     break;
                 }
-                if (bRes == false)
-                {
-                    strErrorMessage = "Execute bat to get EID fail.";
-                    return false;
-                }
 
-                int index = strResult.IndexOf("EID:");
-                if (index != -1)
+                if (bFlag == false)
                 {
-                    strResult = strResult.Substring(index + 4);
-                    index = strResult.IndexOf("*");
-                    strEID = strResult.Substring(0, index);
-                }
-
-                if (string.IsNullOrWhiteSpace(strEID))
-                {
-                    strErrorMessage = "Get EID is empty !!!";
+                    strErrorMessage = "Get EID property fail.";
                     return false;
                 }
             }
@@ -5609,8 +5627,7 @@ namespace F002461
             }
             catch (Exception ex)
             {
-                string strr = ex.Message;
-                DisplayMessage("timerAutoTest Exception:" + strr);
+                DisplayMessage("timerAutoTest Exception:" + ex.Message);
                 return;
             }
             finally
@@ -5725,7 +5742,6 @@ namespace F002461
                     #region 
 
                     bool bRunRes = true;
-
                     InitMDCSData(strPanel);
 
                     #region Plug USB
@@ -7071,7 +7087,7 @@ namespace F002461
             {
                 strErrorMessage = "";
                 strOptionFileName = "";
-                string strFileName;
+                string strFileName = "";
 
                 switch (strPanel)
                 {
@@ -7574,7 +7590,6 @@ namespace F002461
                 }
 
                 #endregion
-
 
                 #region Check ManualBITResult
 

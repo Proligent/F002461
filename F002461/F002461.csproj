@@ -126,6 +126,7 @@
     <Compile Include="Common\clsIPMAC.cs" />
     <Compile Include="Common\clsMDCS.cs" />
     <Compile Include="Common\clsNI6001.cs" />
+    <Compile Include="Common\clsProcess.cs" />
     <Compile Include="Common\clsScanSheet.cs" />
     <Compile Include="Common\clsStructure.cs" />
     <Compile Include="Common\clsUtil.cs" />
