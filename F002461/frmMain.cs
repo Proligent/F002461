@@ -175,7 +175,7 @@ namespace F002461
 
         //private bool m_b_Setting = false;
         private bool m_b_Running = false;
-        private bool m_b_RunReslut = false;
+        private bool m_b_RunResult = false;
 
         private clsNI6001 m_obj_Fixctrl = null;
         private CPLCDave m_obj_PLC = null;
@@ -310,7 +310,7 @@ namespace F002461
         //{
         //    if (m_b_Running == false)
         //    {
-        //        if (m_b_RunReslut == true)
+        //        if (m_b_RunResult == true)
         //        {
         //            // Image copy finished
         //            timerCopyImage.Enabled = false;
@@ -961,7 +961,7 @@ namespace F002461
 
                 #endregion
 
-                #region Clear Pannel
+                #region Clear Pannel Log
 
                 this.Invoke((MethodInvoker)delegate { ClearUnitLog(strPanel); });
 
@@ -1114,7 +1114,7 @@ namespace F002461
 
                 if (bRes == true)
                 {
-                    //bRes = TestCheckPreStationResult(strPanel, ref strErrorMessage);
+                    bRes = TestCheckPreStationResult(strPanel, ref strErrorMessage);
                     if (bRes == false)
                     {
                         bUpdateMDCS = false;
@@ -1150,7 +1150,7 @@ namespace F002461
 
                 #endregion
 
-                #region Test Check SKU
+                #region Test Check SKU (Obsolete)
 
                 //if (bRes == true)
                 //{
@@ -1234,11 +1234,13 @@ namespace F002461
                     string FlashMode = m_dic_ModelOption[strPanel].FlashMode;
                     if (FlashMode == FASTBOOTMODE)
                     {
-                        //bRes = TestFastbootFlash(strPanel, ref strErrorMessage);
+                        bRes = TestFastbootFlash(strPanel, ref strErrorMessage);
+                        //bRes = true;
                     }
                     else if (FlashMode == EDLMODE)
                     {
-                        //bRes = TestEDLFlash(strPanel, ref strErrorMessage);       
+                        bRes = TestEDLFlash(strPanel, ref strErrorMessage);
+                        //bRes = true;
                     }
                     else
                     {
@@ -1369,7 +1371,6 @@ namespace F002461
                         }
 
                         bUploadMES = MESUploadData(strEID, strStation, strWorkOrder, strSN, bPassFailFlag, ref strTempErrorMsg);
-
                         if (bUploadMES == false)
                         {
                             bUploadMES = MESUploadData(strEID, strStation, strWorkOrder, strSN, bPassFailFlag, ref strTempErrorMsg);
@@ -1531,8 +1532,8 @@ namespace F002461
 
                 if (MDCSPreStationResultCheck == "1")
                 {
-                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "\r\n"); });
                     this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Check Pre Station Result."); });
+                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Device Name:" + MDCSPreStationDeviceName); });
                     string str_SN = m_dic_UnitDevice[strPanel].SN;
                     if (str_SN == "")
                     {
@@ -1636,19 +1637,25 @@ namespace F002461
 
             try
             {
-                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Get WorkOrder Property."); });
-
-                string strWorkOrder = "";
-                if (GetWorkOrderProperty(strPanel, ref strWorkOrder, ref strErrorMessage) == false)
+                if (m_st_OptionData.MES_Enable == "1")
                 {
-                    return false;
+                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Get WorkOrder Property."); });
+                    string strWorkOrder = "";
+                    if (GetWorkOrderProperty(strPanel, ref strWorkOrder, ref strErrorMessage) == false)
+                    {
+                        return false;
+                    }
+
+                    UnitDeviceInfo stUnit = m_dic_UnitDevice[strPanel];
+                    stUnit.WorkOrder = strWorkOrder;
+                    m_dic_UnitDevice[strPanel] = stUnit;
+
+                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get WorkOrder: " + strWorkOrder + "\r\n"); });
                 }
-
-                UnitDeviceInfo stUnit = m_dic_UnitDevice[strPanel];
-                stUnit.WorkOrder = strWorkOrder;          
-                m_dic_UnitDevice[strPanel] = stUnit;
-
-                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get WorkOrder: " + strWorkOrder + "\r\n"); });
+                else
+                {
+                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "MES Disabled, Skip to Get WorkOrder." + "\r\n"); });    
+                }
             }
             catch (Exception ex)
             {
@@ -1665,19 +1672,26 @@ namespace F002461
 
             try
             {
-                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Get EID Property."); });
-
-                string strEID = "";
-                if (GetEIDProperty(strPanel, ref strEID, ref strErrorMessage) == false)
+                if (m_st_OptionData.MES_Enable == "1")
                 {
-                    return false;
+                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Test Get EID Property."); });
+
+                    string strEID = "";
+                    if (GetEIDProperty(strPanel, ref strEID, ref strErrorMessage) == false)
+                    {
+                        return false;
+                    }
+
+                    UnitDeviceInfo stUnit = m_dic_UnitDevice[strPanel];
+                    stUnit.EID = strEID;
+                    m_dic_UnitDevice[strPanel] = stUnit;
+
+                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get EID: " + strEID + "\r\n"); });
                 }
-
-                UnitDeviceInfo stUnit = m_dic_UnitDevice[strPanel];
-                stUnit.EID = strEID;
-                m_dic_UnitDevice[strPanel] = stUnit;
-
-                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Get EID: " + strEID + "\r\n"); });
+                else
+                {
+                    this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "MES Disabled, Skip to Get EID." + "\r\n"); });  
+                } 
             }
             catch (Exception ex)
             {
@@ -1726,7 +1740,7 @@ namespace F002461
             }
             catch (Exception ex)
             {
-                strErrorMessage = "TestGetEID Exception:" + ex.Message;
+                strErrorMessage = "TestReadModelOption Exception:" + ex.Message;
                 return false;
             }
 
@@ -1861,11 +1875,14 @@ namespace F002461
                 string CopyMode = m_dic_ModelOption[strPanel].ImageCopyMode;
                 string FlashMode = m_dic_ModelOption[strPanel].FlashMode;
                 string strOSVersion = m_dic_UnitDevice[strPanel].OSVersion;
+                string strOSPN = m_dic_UnitDevice[strPanel].OSPN;
 
-                string strLocalImagePath = strLocalPath + "\\" + strOSVersion;
+                string strLocalImagePath = "";
 
                 if (FlashMode == FASTBOOTMODE)
                 {
+                    strLocalImagePath = strLocalPath + "\\" + strOSVersion;
+
                     if (Directory.Exists(strLocalImagePath))
                     {
                         DirectoryInfo dir = new DirectoryInfo(strLocalImagePath);                 
@@ -1881,27 +1898,26 @@ namespace F002461
                 }
                 else if (FlashMode == EDLMODE)
                 {
-                    DirectoryInfo dirInfo = new DirectoryInfo(strLocalImagePath);
-                    //FileInfo[] file = dirInfo.GetFiles();
-                    DirectoryInfo[] dirArray = dirInfo.GetDirectories(); // Unzipped folder
+                    strLocalImagePath = strLocalPath;
 
-                    if (dirArray.Length != 0)
+                    DirectoryInfo dirInfo = new DirectoryInfo(strLocalImagePath);
+                    FileInfo[] files = dirInfo.GetFiles();       // Unzipped OS file
+
+                    bool bResult = false;
+                    foreach(FileInfo file in files)
                     {
-                        bool bResult = false;
-                        foreach (DirectoryInfo d in dirArray)
+                        if (file.Name.Contains(strOSVersion))
                         {
-                            if (d.Name.Contains(strOSVersion))
-                            {
-                                bResult = true;
-                                break;
-                            }
-                        }
-                        if (bResult == true)
-                        {
-                            this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Already exist, Skip to copy." + "\r\n"); });
-                            return true;
-                        }
+                            bResult = true;
+                            break;
+                        }             
                     }
+
+                    if (bResult == true)
+                    {
+                        this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Already exist, Skip to copy." + "\r\n"); });
+                        return true;
+                    } 
                 }
 
                 #endregion
@@ -1915,7 +1931,7 @@ namespace F002461
                     thread.Start(strPanel);
 
                     m_b_Running = true;
-                    m_b_RunReslut = false;
+                    m_b_RunResult = false;
 
                     // Waiting copy finish (use timer)
                     while (m_b_Running == true)
@@ -1924,7 +1940,7 @@ namespace F002461
                         Dly(15); 
                     }
 
-                    if (m_b_RunReslut == false)
+                    if (m_b_RunResult == false)
                     {
                         DisplayMessage("Failed to copy image.");
                         return false;
@@ -1975,7 +1991,7 @@ namespace F002461
             }
             catch (Exception ex)
             {
-                strErrorMessage = "TestGetEID Exception:" + ex.Message;
+                strErrorMessage = "TestCopyImage Exception:" + ex.Message;
                 return false;
             }
 
@@ -2214,7 +2230,7 @@ namespace F002461
 
                 #region Flash OS
 
-                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Flash OS."); });
+                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Flash OS ..."); });
                 string strTemp = "";
                 for (int i = 0; i < 3; i++)
                 {
@@ -2308,7 +2324,7 @@ namespace F002461
 
                 #region QFIL
 
-                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Flash OS."); });
+                this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Flash OS ..."); });
                 if (FlashEDL(strPanel, strCOMPort, ref strErrorMessage) == false)
                 {
                     strErrorMessage = "EDL fail." + strErrorMessage;
@@ -2384,20 +2400,18 @@ namespace F002461
                         if (DeleteDirectory(strCOMPORTDir, ref strErrorMessage) == false)
                         {
                             bRes = false;
-                            Dly(1);
+                            Dly(2.0);
                             continue;
                         }
 
                         Dly(0.5);
-
                         Directory.Delete(strCOMPORTDir);
-
                         Dly(0.5);
 
                         if (Directory.Exists(strCOMPORTDir) == true)
                         {
                             bRes = false;
-                            Dly(1);
+                            Dly(2.0);
                             continue;
                         }
                         else
@@ -2414,7 +2428,7 @@ namespace F002461
                 }
                 if (bRes == false)
                 {
-                    strErrorMessage = "Delete COMPORT_ " + strCOMPORT + " " + strErrorMessage;
+                    strErrorMessage = "Delete COMPORT_" + strCOMPORT + " " + strErrorMessage;
                     return false;
                 }
 
@@ -3995,10 +4009,11 @@ namespace F002461
             {
                 bool bRes = false;
                 string strSN = m_dic_UnitDevice[strPanel].SN;
-                string strBatDir = m_dic_ModelOption[strPanel].ImageLocalPath;
+                string strBatDir = m_dic_ModelOption[strPanel].ImageLocalPath + "\\" + m_dic_UnitDevice[strPanel].OSVersion;
                 string strBatFile = strBatDir + "\\" + m_dic_ModelOption[strPanel].FASTBOOTBatFile;
                 int iTimeout = m_dic_ModelOption[strPanel].FASTBOOTTimeout * 1000;
                 string strSearchResult = m_dic_ModelOption[strPanel].FASTBOOTSuccessFlag;
+
                 if (File.Exists(strBatFile) == false)
                 {
                     strErrorMessage = "Check file exist fail." + strBatFile;
@@ -4084,6 +4099,30 @@ namespace F002461
             string EDLRawProgram = m_dic_ModelOption[strPanel].EDLRawProgram;
             string EDLFlashType = m_dic_ModelOption[strPanel].EDLFlashType;
 
+            bool bResult = false;
+            DirectoryInfo ProjectDictory = new DirectoryInfo(ImageLocalPath);
+            DirectoryInfo[] folders = ProjectDictory.GetDirectories();
+        
+            foreach (DirectoryInfo subFolder in folders)
+            {
+                if (subFolder.Name.Contains(strOSVersion))
+                {
+                    bResult = true;
+                    strOSVersion = subFolder.Name;
+                    break;
+                }
+                else 
+                {
+                    bResult = false;
+                    continue;
+                }
+            }
+            if (bResult == false)
+            {
+                strErrorMessage = "Can't find OS version folder !";
+                return false;
+            }
+
             ImageLocalPath = ImageLocalPath + "\\" + strOSVersion;
 
             try
@@ -4124,26 +4163,22 @@ namespace F002461
                 {
                     strErrorMessage = "Failed to check exist." + strQFIL;
                     return false;
-                }
-                
+                }   
                 if (Directory.Exists(strSearchPath) == false)
                 {
                     strErrorMessage = "Failed to check exist." + strSearchPath;
                     return false;
                 }
-
                 if (File.Exists(strelf) == false)
                 {
                     strErrorMessage = "Failed to check exist." + strelf;
                     return false;
                 }
-
                 if (File.Exists(strPatch) == false)
                 {
                     strErrorMessage = "Failed to check exist." + strPatch;
                     return false;
                 }
-
                 if (File.Exists(strRawProgram) == false)
                 {
                     strErrorMessage = "Failed to check exist." + strRawProgram;
@@ -4221,18 +4256,22 @@ namespace F002461
                     #region DeleteQFILConfigFile
 
                     string strTempErrorMessage = "";
-                    if (DeleteQFILConfigFile(strCOMPort, ref strTempErrorMessage) == false)
-                    {
-                        strErrorMessage = strTempErrorMessage;
-                        bRes = false;
-                        continue;
-                    }
 
+                    lock (ThreadLocker)
+                    {
+                        if (DeleteQFILConfigFile(strCOMPort, ref strTempErrorMessage) == false)
+                        {
+                            strErrorMessage = strTempErrorMessage;
+                            bRes = false;
+                            continue;
+                        }         
+                    }
+                  
                     #endregion
 
                     bRes = ExcuteBat_QFIL(strPanel, strBatDir, strBatFile, "", iTimeout, ref strErrorMessage);
 
-                    Dly(3);
+                    Dly(3.0);
 
                     #region Check QFIL File
 
@@ -4273,8 +4312,11 @@ namespace F002461
 
                     #region DeleteQFILConfigFile
 
-                    DeleteQFILConfigFile(strCOMPort, ref strTempErrorMessage);
-
+                    lock (ThreadLocker)
+                    {
+                        DeleteQFILConfigFile(strCOMPort, ref strTempErrorMessage);
+                    }
+                    
                     #endregion
 
                     if (bRes == false)
@@ -4299,8 +4341,7 @@ namespace F002461
             }
             catch (Exception ex)
             {
-                strErrorMessage = "Flash EDL exception:" + ex.Message;
-                string strr = ex.Message;
+                strErrorMessage = "Flash EDL Exception:" + ex.Message;
                 return false;
             }
 
@@ -4482,7 +4523,7 @@ namespace F002461
                 if (Directory.Exists(strHonEdgeLocalPath))
                 {
                     ImgDictory = new DirectoryInfo(strHonEdgeLocalPath);
-                    System.IO.DirectoryInfo[] foldFiles = (System.IO.DirectoryInfo[])ImgDictory.GetDirectories().Where(x => x.Name.Contains(strDicName)).ToArray();
+                    DirectoryInfo[] foldFiles = (System.IO.DirectoryInfo[])ImgDictory.GetDirectories().Where(x => x.Name.Contains(strDicName)).ToArray();
                     if (foldFiles.Length == 1)
                     {
                         strFolderName = foldFiles[0].Name;
@@ -5644,7 +5685,7 @@ namespace F002461
             {
                 if (m_dic_TestStatus[strPanel] == false)
                 {
-                    m_dic_TestStatus[strPanel] = true;
+                    m_dic_TestStatus[strPanel] = true;   
 
                     #region Check Product (Obsolete)
 
@@ -5775,6 +5816,8 @@ namespace F002461
                         {
                             DisplayMessage("Panel:" + strPanel + " MonitorDevice fail." + strErrorMessage);
                             SaveLogFile("Panel:" + strPanel + " MonitorDevice fail." + strErrorMessage);
+                            this.Invoke((MethodInvoker)delegate { ClearUnitLog(strPanel); });
+                            this.Invoke((MethodInvoker)delegate { DisplayUnitLog(strPanel, "Monitor Device fail, Can't Connect Device."); });
                             m_dic_TestStatus[strPanel] = false;
                             bRunRes = false;
                             //return;
@@ -5807,6 +5850,7 @@ namespace F002461
 
                         #endregion
 
+                        #region Obsolote
                         //if (m_str_Model.Contains("CT40"))   // CT40
                         //{
                         //    if (UnitLocationCheckAction(strPanel, "0", ref strErrorMessage) == true)
@@ -5844,6 +5888,7 @@ namespace F002461
                         //        SaveLogFile("Panel:" + strPanel + " USB Plug Out success.");
                         //    }
                         //}
+                        #endregion
 
                         // Feedback Test Result, CT40 and EDA51
                         if (FeedbackResult(strPanel, ref strErrorMessage) == false)
@@ -5859,9 +5904,7 @@ namespace F002461
                         else
                         {
                         }
-
                         //m_dic_COMPort[strPanel] = "";   //Clear ComPort Record When Disconnect. (Undefined)
-
                         m_dic_TestStatus[strPanel] = false;
                         return;
                     }
@@ -6065,14 +6108,14 @@ namespace F002461
         //    Thread thread = new Thread(this.CopyProcess);
         //    thread.Start();
         //    m_b_Running = true;
-        //    m_b_RunReslut = false;
+        //    m_b_RunResult = false;
 
         //    while (m_b_Running == true)
         //    {
         //        Application.DoEvents();
         //    }
 
-        //    if (m_b_RunReslut == false)
+        //    if (m_b_RunResult == false)
         //    {
         //        return false;
         //    }
@@ -6101,12 +6144,12 @@ namespace F002461
             if (bRes == false)
             {
                 m_b_Running = false;
-                m_b_RunReslut = false;
+                m_b_RunResult = false;
                 return;
             }
 
             m_b_Running = false;
-            m_b_RunReslut = true;
+            m_b_RunResult = true;
 
             DisplayMessage("Copy image successfully.");
 
@@ -6272,7 +6315,7 @@ namespace F002461
                 string strOSVersion = m_dic_UnitDevice[strPanel].OSVersion;
 
                 strServerPath = strServerPath + "\\" + strOSPN + "\\";
-                strLocalPath = strLocalPath + "\\" + strOSVersion + "\\";
+                //strLocalPath = strLocalPath + "\\" + strOSVersion + "\\";
 
                 #region Delete Local Directory
 
@@ -6295,6 +6338,7 @@ namespace F002461
                         return false;
                     }
                 }
+
                 Dly(1);
                 Directory.CreateDirectory(strLocalPath);
                 if (Directory.Exists(strLocalPath) == false)
@@ -6334,8 +6378,8 @@ namespace F002461
                 #region Unzip
 
                 string strFilePath = strLocalPath;
-                System.IO.DirectoryInfo ImgDictory = new DirectoryInfo(strFilePath);
-                System.IO.FileInfo[] ZipFiles = (System.IO.FileInfo[])ImgDictory.GetFiles();
+                DirectoryInfo ImgDictory = new DirectoryInfo(strFilePath);
+                FileInfo[] ZipFiles = (FileInfo[])ImgDictory.GetFiles();
                 string strFileName = "";
                 foreach (var item in ZipFiles)
                 {
@@ -6353,7 +6397,7 @@ namespace F002461
 
                 for (int i = 0; i < 3; i++)
                 {
-                    if (UnZip(strFilePath + strFileName, strFilePath, null) == false)
+                    if (UnZip(strFilePath + "\\" + strFileName, strFilePath, null) == false)
                     {
                         strErrorMessage = "Failed to unzip." + strFileName;
                         bRes = false;
@@ -6789,13 +6833,13 @@ namespace F002461
             //    Thread thread = new Thread(this.CopyProcess);
             //    thread.Start();
             //    m_b_Running = true;
-            //    m_b_RunReslut = false;
+            //    m_b_RunResult = false;
             //}
             //else
             //{
             //    DisplayMessage("Skiped to copy image.");
             //    m_b_Running = false;
-            //    m_b_RunReslut = true;
+            //    m_b_RunResult = true;
             //}
 
             #endregion
@@ -7121,7 +7165,7 @@ namespace F002461
                 if (File.Exists(str_FilePath) == true)
                 {
                     File.Delete(str_FilePath);
-                    Dly(1);
+                    Dly(0.5);
                     if (File.Exists(str_FilePath) == true)
                     {
                         strErrorMessage = "Delete file fail." + str_FilePath;
@@ -7129,11 +7173,24 @@ namespace F002461
                     }
                 }
 
+                #region Obsolete
+                //using (File.Create(str_FilePath)) 
+                //{
+                //    Dly(0.5);
+                //    if (File.Exists(str_FilePath) == true)
+                //    {
+                //        strErrorMessage = "Create Option.ini file failed. " + strFileName;
+                //        return false;
+                //    }       
+                //};
+                #endregion
+
                 #endregion
 
                 #region Generate File
 
                 bool bRes = false;
+                bool bFlag = false;
                 string strBatDir = Application.StartupPath;
                 string strBatFile = strBatDir + "\\" + "SKUMatrix.bat";
                 string strBatParameter = "";
@@ -7152,22 +7209,28 @@ namespace F002461
                     bRes = ExcuteBat(strPanel, strBatDir, strBatFile, strBatParameter, 3000, ref strErrorMessage);
                     if (bRes == false)
                     {
-                        bRes = false;
+                        bFlag = false;
                         Dly(3);
                         continue;
                     }
 
-                    bRes = true;
-                    break;
+                    Dly(1);
+                    if (File.Exists(str_FilePath) == false)
+                    {      
+                        bFlag = false;
+                        Dly(3);
+                        continue;
+                    }
+                    else
+                    {
+                        bFlag = true;
+                        break;
+                    } 
                 }
 
-                #endregion
-
-                #region Exist File
-
-                if (File.Exists(str_FilePath) == false)
+                if (bFlag == false)
                 {
-                    strErrorMessage = "Check file exist fail." + str_FilePath;
+                    strErrorMessage = "SKUMatrix.bat create file fail. " + strFileName;
                     return false;
                 }
 
@@ -7178,7 +7241,7 @@ namespace F002461
                 StreamReader sr = null;
                 try
                 {
-                    sr = new StreamReader(str_FilePath, System.Text.Encoding.Default);
+                    sr = new StreamReader(str_FilePath, Encoding.Default);
                     string strContent = sr.ReadToEnd();
                     strContent = strContent.Replace("\r\n", "");
                     strContent = strContent.Trim();

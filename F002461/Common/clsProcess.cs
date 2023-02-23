@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,13 +47,13 @@ namespace F002461.Common
                 return false;
             }
 
+            Process process = new Process();
+            
             try
             {
-                Process process = new Process();
                 ProcessStartInfo startInfo = new ProcessStartInfo();
-
                 startInfo.FileName = @"C:\Windows\System32\cmd.exe";
-                startInfo.Arguments = " /C " + command;     //“/C”Quit after finishing cmd
+                startInfo.Arguments = "/C " + command;     //“/C”Quit after finishing cmd
                 startInfo.UseShellExecute = false;
                 startInfo.RedirectStandardInput = false;
                 startInfo.RedirectStandardOutput = true;
@@ -61,13 +62,16 @@ namespace F002461.Common
 
                 process.Start();
                 process.WaitForExit();
-                process.Close();
-                process.Dispose();
+                process.Close();       
             }
             catch (Exception ex)
             {
                 m_sErrorMessage = "Excute cmd exception: " + ex.Message;
                 return false;
+            }
+            finally
+            {
+                process.Dispose();
             }
 
             return true;

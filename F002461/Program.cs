@@ -6,13 +6,14 @@ using System.Windows.Forms;
 
 namespace F002461
 {
-    /********************************************************************
+    /****************************************************************************************
      *  
      *  History Log:
      *  REV     AUTHOR      DATE            COMMENTS
      *  A       CalvinXie   2022/06/19      First Version.
+     *  A1      CalvinXie   2023/02/23      Skip to Read WorkOrder and EID When MES Disable.
      *  
-     ********************************************************************/
+     ****************************************************************************************/
 
     static class Program
     {
@@ -27,7 +28,7 @@ namespace F002461
         static void Main()
         {
             g_str_ToolNumber = "F002461";
-            g_str_ToolRev = "A";
+            g_str_ToolRev = "A1";
 
             mutex = new System.Threading.Mutex(false, "F002461 Flash Software");
             if (!mutex.WaitOne(0, false))
@@ -46,7 +47,6 @@ namespace F002461
             {
                 MessageBox.Show("F002461 Already Running !!!");
             }
-
         }
     }
 }
